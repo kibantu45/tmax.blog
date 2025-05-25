@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu } from "lucide-react";
+import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield } from "lucide-react";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import { useCart } from "@/contexts/CartContext";
 import {
@@ -14,10 +14,15 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const Index = () => {
   const { itemCount } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
   const communityStats = [
     { label: "Active Students", value: "8.5K", icon: Users, color: "text-tmaxGreen-500" },
@@ -40,9 +45,28 @@ const Index = () => {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      // For now, redirect to second-hand marketplace with search
       window.location.href = `/second-hand?search=${encodeURIComponent(searchQuery)}`;
     }
+  };
+
+  const handleAdminLogin = () => {
+    if (adminPassword === "24216464") {
+      setIsAdminAuthenticated(true);
+    } else {
+      alert("Invalid password");
+    }
+  };
+
+  const handleDuplicateTab = () => {
+    alert("Tab duplication feature would be implemented here");
+  };
+
+  const handleDeleteProduct = () => {
+    alert("Product deletion feature would be implemented here");
+  };
+
+  const handleAddProduct = () => {
+    alert("Add product feature would be implemented here");
   };
 
   return (
@@ -126,17 +150,12 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-          {communityStats.map((stat, index) => (
-            <Card key={index} className="text-center hover:shadow-lg transition-shadow border-tmaxGreen-100 bg-white/90">
-              <CardContent className="pt-6">
-                <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <div className="text-sm text-gray-600">{stat.label}</div>
-              </CardContent>
-            </Card>
-          ))}
+        {/* Ad Space */}
+        <div className="mb-12">
+          <div className="bg-gradient-to-r from-tmaxGreen-100 to-pastelYellow-light border-2 border-dashed border-tmaxGreen-300 rounded-lg p-8 text-center">
+            <h3 className="text-2xl font-semibold text-tmaxGreen-700 mb-2">Advertisement Space</h3>
+            <p className="text-tmaxGreen-600">Your ads could be here - Contact us for advertising opportunities</p>
+          </div>
         </div>
 
         {/* All Services Listed */}
@@ -206,11 +225,76 @@ const Index = () => {
         </section>
       </div>
 
-      {/* Footer */}
+      {/* Footer with Stats and Admin Panel */}
       <footer className="mt-16 bg-white/90 backdrop-blur-sm border-t border-tmaxGreen-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-600">
-            <p>&copy; 2024 Tmax. Your trusted campus companion.</p>
+          {/* Stats Section */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            {communityStats.map((stat, index) => (
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow border-tmaxGreen-100 bg-white/90">
+                <CardContent className="pt-6">
+                  <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
+                  <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-sm text-gray-600">{stat.label}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          
+          <div className="flex justify-between items-center">
+            <div className="text-center text-gray-600">
+              <p>&copy; 2024 Tmax. Your trusted campus companion.</p>
+            </div>
+            
+            {/* Admin Panel Button */}
+            <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+                  <Shield className="w-4 h-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Admin Panel</DialogTitle>
+                </DialogHeader>
+                {!isAdminAuthenticated ? (
+                  <div className="space-y-4">
+                    <Input
+                      type="password"
+                      placeholder="Enter admin password"
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
+                    />
+                    <Button onClick={handleAdminLogin} className="w-full">
+                      Login
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <Button onClick={handleDuplicateTab} className="w-full" variant="outline">
+                      Duplicate Tab
+                    </Button>
+                    <Button onClick={handleDeleteProduct} className="w-full" variant="outline">
+                      Delete Product
+                    </Button>
+                    <Button onClick={handleAddProduct} className="w-full" variant="outline">
+                      Add New Product
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        setIsAdminAuthenticated(false);
+                        setAdminPassword("");
+                        setIsAdminOpen(false);
+                      }} 
+                      className="w-full" 
+                      variant="destructive"
+                    >
+                      Logout
+                    </Button>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </footer>
