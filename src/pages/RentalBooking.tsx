@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MapPin, Bed, Bath, Wifi, Car, Home, Users } from "lucide-react";
+import { MapPin, Bed, Bath, Wifi, Car, Home, Users, Phone, Eye } from "lucide-react";
 
 const RentalBooking = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
@@ -12,45 +12,120 @@ const RentalBooking = () => {
   const accommodations = [
     {
       id: 1,
-      title: "Modern Studio Apartment",
-      price: 450,
+      title: "Cozy Bedsitter Near Campus",
+      price: 350,
       location: "Campus West",
-      type: "studio",
-      bedrooms: 0,
+      type: "bedsitter",
+      bedrooms: 1,
       bathrooms: 1,
       amenities: ["WiFi", "Parking", "Laundry"],
       image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
-      available: true
+      available: true,
+      sellerPhone: "+254701234567",
+      photos: [
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop"
+      ]
     },
     {
       id: 2,
-      title: "Shared 2-Bedroom House",
-      price: 300,
+      title: "Modern Hostel Room",
+      price: 200,
       location: "Campus East",
-      type: "shared",
-      bedrooms: 2,
+      type: "hostel",
+      bedrooms: 1,
       bathrooms: 1,
-      amenities: ["WiFi", "Garden", "Parking"],
+      amenities: ["WiFi", "Shared Kitchen", "Security"],
       image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
-      available: true
+      available: true,
+      sellerPhone: "+254701234568",
+      photos: [
+        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop"
+      ]
     },
     {
       id: 3,
-      title: "Private 1-Bedroom Flat",
-      price: 550,
+      title: "Spacious 1-Bedroom Apartment",
+      price: 450,
       location: "City Center",
-      type: "private",
+      type: "1bedroom",
       bedrooms: 1,
       bathrooms: 1,
       amenities: ["WiFi", "Gym", "Security"],
       image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
-      available: false
+      available: true,
+      sellerPhone: "+254701234569",
+      photos: [
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop"
+      ]
+    },
+    {
+      id: 4,
+      title: "Luxury 2-Bedroom Flat",
+      price: 650,
+      location: "Westlands",
+      type: "2bedroom",
+      bedrooms: 2,
+      bathrooms: 2,
+      amenities: ["WiFi", "Gym", "Pool", "Security"],
+      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=300&fit=crop",
+      available: true,
+      sellerPhone: "+254701234570",
+      photos: [
+        "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=300&fit=crop"
+      ]
+    },
+    {
+      id: 5,
+      title: "Airbnb Studio Downtown",
+      price: 500,
+      location: "CBD",
+      type: "airbnb",
+      bedrooms: 1,
+      bathrooms: 1,
+      amenities: ["WiFi", "Kitchen", "TV", "AC"],
+      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+      available: true,
+      sellerPhone: "+254701234571",
+      photos: [
+        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop"
+      ]
+    },
+    {
+      id: 6,
+      title: "Single Room in Shared House",
+      price: 250,
+      location: "Karen",
+      type: "single",
+      bedrooms: 1,
+      bathrooms: 1,
+      amenities: ["WiFi", "Shared Kitchen", "Garden"],
+      image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop",
+      available: true,
+      sellerPhone: "+254701234572",
+      photos: [
+        "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop"
+      ]
     }
   ];
 
   const filteredAccommodations = selectedFilter === "all" 
     ? accommodations 
     : accommodations.filter(acc => acc.type === selectedFilter);
+
+  const handleWhatsAppContact = (accommodation: any) => {
+    const message = `Hi! I'm interested in your ${accommodation.title} listed for KSh ${accommodation.price}/month in ${accommodation.location}. Could you please provide more details?`;
+    const whatsappUrl = `https://wa.me/${accommodation.sellerPhone.replace('+', '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
+  const [showPhotos, setShowPhotos] = useState(false);
+
+  const viewPhotos = (photos: string[]) => {
+    setSelectedPhotos(photos);
+    setShowPhotos(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pastelYellow-light via-white to-tmaxGreen-50">
@@ -89,34 +164,48 @@ const RentalBooking = () => {
 
         {/* Filters */}
         <Tabs defaultValue="all" className="w-full mb-8">
-          <TabsList className="grid w-full grid-cols-4 bg-white/80 border border-tmaxGreen-200">
+          <TabsList className="grid w-full grid-cols-6 bg-white/80 border border-tmaxGreen-200">
             <TabsTrigger 
               value="all" 
               className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white"
               onClick={() => setSelectedFilter("all")}
             >
-              All Types
+              All
             </TabsTrigger>
             <TabsTrigger 
-              value="studio" 
+              value="bedsitter" 
               className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white"
-              onClick={() => setSelectedFilter("studio")}
+              onClick={() => setSelectedFilter("bedsitter")}
             >
-              Studios
+              Bedsitters
             </TabsTrigger>
             <TabsTrigger 
-              value="shared" 
+              value="hostel" 
               className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white"
-              onClick={() => setSelectedFilter("shared")}
+              onClick={() => setSelectedFilter("hostel")}
             >
-              Shared
+              Hostels
             </TabsTrigger>
             <TabsTrigger 
-              value="private" 
+              value="1bedroom" 
               className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white"
-              onClick={() => setSelectedFilter("private")}
+              onClick={() => setSelectedFilter("1bedroom")}
             >
-              Private
+              1 Bedroom
+            </TabsTrigger>
+            <TabsTrigger 
+              value="2bedroom" 
+              className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white"
+              onClick={() => setSelectedFilter("2bedroom")}
+            >
+              2 Bedroom
+            </TabsTrigger>
+            <TabsTrigger 
+              value="airbnb" 
+              className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white"
+              onClick={() => setSelectedFilter("airbnb")}
+            >
+              Airbnb
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -137,7 +226,7 @@ const RentalBooking = () => {
                   {accommodation.available ? 'Available' : 'Occupied'}
                 </Badge>
                 <div className="absolute top-2 left-2 bg-white/90 px-2 py-1 rounded-md">
-                  <span className="text-lg font-bold text-tmaxGreen-600">£{accommodation.price}</span>
+                  <span className="text-lg font-bold text-tmaxGreen-600">KSh {accommodation.price}</span>
                   <span className="text-sm text-gray-600">/month</span>
                 </div>
               </div>
@@ -166,17 +255,47 @@ const RentalBooking = () => {
                     </Badge>
                   ))}
                 </div>
-                <Button 
-                  className="w-full bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
-                  disabled={!accommodation.available}
-                >
-                  {accommodation.available ? 'Book Now' : 'Not Available'}
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => viewPhotos(accommodation.photos)}
+                  >
+                    <Eye className="w-4 h-4 mr-1" />
+                    View Photos
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
+                    disabled={!accommodation.available}
+                    onClick={() => handleWhatsAppContact(accommodation)}
+                  >
+                    <Phone className="w-4 h-4 mr-1" />
+                    Contact
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
       </div>
+
+      {/* Photo Viewer Modal */}
+      {showPhotos && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={() => setShowPhotos(false)}>
+          <div className="bg-white rounded-lg p-4 max-w-4xl max-h-[90vh] overflow-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Property Photos</h3>
+              <Button variant="ghost" onClick={() => setShowPhotos(false)}>×</Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {selectedPhotos.map((photo, index) => (
+                <img key={index} src={photo} alt={`Property photo ${index + 1}`} className="w-full h-64 object-cover rounded" />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

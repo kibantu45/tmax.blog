@@ -1,14 +1,36 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, MessageCircle, Star, Clock, MapPin, Search, Filter } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Heart, MessageCircle, Star, Clock, MapPin, Search, Filter, Plus, Upload, Phone } from "lucide-react";
 
 const SecondHand = () => {
   const [likedItems, setLikedItems] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSellForm, setShowSellForm] = useState(false);
+  const [sellFormData, setSellFormData] = useState({
+    title: "",
+    description: "",
+    price: "",
+    category: "electronics",
+    condition: "good",
+    location: "",
+    sellerPhone: "",
+    images: [] as string[]
+  });
+
+  // Get search query from URL if present
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const search = urlParams.get('search');
+    if (search) {
+      setSearchQuery(search);
+    }
+  }, []);
 
   const handleLike = (itemId: number) => {
     setLikedItems(prev => 
@@ -16,6 +38,54 @@ const SecondHand = () => {
         ? prev.filter(id => id !== itemId)
         : [...prev, itemId]
     );
+  };
+
+  const handleWhatsAppContact = (item: any) => {
+    const message = `Hi! I'm interested in your ${item.title} listed for $${item.price}. Could you please provide more details?`;
+    const whatsappUrl = `https://wa.me/+254702752033?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleSellerContact = (item: any) => {
+    const message = `Hi! I'm interested in your ${item.title} listed for $${item.price}. Could you please provide more details?`;
+    const phone = item.sellerPhone || "+254702752033";
+    const whatsappUrl = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      // In a real app, you'd upload these to a server
+      // For now, we'll create mock URLs
+      const newImages = Array.from(files).map((file, index) => 
+        `https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop&id=${Date.now()}-${index}`
+      );
+      setSellFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...newImages].slice(0, 5) // Max 5 images
+      }));
+    }
+  };
+
+  const handleSellSubmit = () => {
+    if (!sellFormData.title || !sellFormData.price || !sellFormData.sellerPhone) {
+      alert("Please fill in all required fields");
+      return;
+    }
+    // In a real app, you'd save this to a database
+    alert("Item listed successfully! Buyers will contact you on WhatsApp.");
+    setShowSellForm(false);
+    setSellFormData({
+      title: "",
+      description: "",
+      price: "",
+      category: "electronics",
+      condition: "good",
+      location: "",
+      sellerPhone: "",
+      images: []
+    });
   };
 
   const electronics = [
@@ -26,6 +96,7 @@ const SecondHand = () => {
       originalPrice: 1200,
       description: "Excellent condition, barely used. Includes charger and box.",
       seller: "Alex Chen",
+      sellerPhone: "+254701234567",
       location: "Campus West",
       image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop",
       condition: "Like New",
@@ -39,6 +110,7 @@ const SecondHand = () => {
       originalPrice: 999,
       description: "Minor scratches on back, screen protector applied since day 1.",
       seller: "Sarah Kim",
+      sellerPhone: "+254701234568",
       location: "Campus East",
       image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop",
       condition: "Good",
@@ -47,66 +119,11 @@ const SecondHand = () => {
     }
   ];
 
-  const textbooks = [
-    {
-      id: 3,
-      title: "Calculus: Early Transcendentals",
-      price: 45,
-      originalPrice: 280,
-      description: "8th Edition, minimal highlighting. Great for Math 101-102.",
-      seller: "Mike Johnson",
-      location: "Library Area",
-      image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
-      condition: "Good",
-      likes: 12,
-      timePosted: "1 day ago"
-    },
-    {
-      id: 4,
-      title: "Organic Chemistry Textbook",
-      price: 60,
-      originalPrice: 350,
-      description: "Latest edition with solution manual included. No writing inside.",
-      seller: "Emma Wilson",
-      location: "Science Building",
-      image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop",
-      condition: "Excellent",
-      likes: 15,
-      timePosted: "3 hours ago"
-    }
-  ];
-
-  const furniture = [
-    {
-      id: 5,
-      title: "Study Desk with Chair",
-      price: 120,
-      originalPrice: 300,
-      description: "Perfect for dorm room. Includes matching chair and desk lamp.",
-      seller: "David Park",
-      location: "Student Housing",
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-      condition: "Good",
-      likes: 8,
-      timePosted: "6 hours ago"
-    }
-  ];
-
-  const clothing = [
-    {
-      id: 6,
-      title: "University Hoodie Collection",
-      price: 25,
-      originalPrice: 65,
-      description: "3 hoodies in different colors, size M. Official university merchandise.",
-      seller: "Lisa Rodriguez",
-      location: "Campus Center",
-      image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop",
-      condition: "Good",
-      likes: 6,
-      timePosted: "4 hours ago"
-    }
-  ];
+  // Filter items based on search query
+  const filteredElectronics = electronics.filter(item =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const renderItemCard = (item: any) => (
     <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 border-yellow-200 group">
@@ -165,9 +182,9 @@ const SecondHand = () => {
               <Heart className="w-3 h-3" />
               <span className="text-xs">{item.likes + (likedItems.includes(item.id) ? 1 : 0)}</span>
             </div>
-            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
-              <MessageCircle className="w-3 h-3 mr-1" />
-              Message
+            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleSellerContact(item)}>
+              <Phone className="w-3 h-3 mr-1" />
+              Contact
             </Button>
           </div>
         </div>
@@ -190,15 +207,23 @@ const SecondHand = () => {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm">
-                <Search className="w-4 h-4 mr-2" />
-                Search
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Filter className="w-4 h-4 mr-2" />
-                Filter
-              </Button>
-              <Button className="bg-gradient-to-r from-green-500 to-yellow-500 hover:from-green-600 hover:to-yellow-600">
+              <div className="flex items-center space-x-2">
+                <Input
+                  type="text"
+                  placeholder="Search items..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-64"
+                />
+                <Button variant="ghost" size="sm">
+                  <Search className="w-4 h-4" />
+                </Button>
+              </div>
+              <Button 
+                className="bg-gradient-to-r from-green-500 to-yellow-500 hover:from-green-600 hover:to-yellow-600"
+                onClick={() => setShowSellForm(true)}
+              >
+                <Plus className="w-4 h-4 mr-2" />
                 Sell Item
               </Button>
             </div>
@@ -216,6 +241,16 @@ const SecondHand = () => {
             Buy and sell pre-loved items within the university community. Find great deals and give your items a new home.
           </p>
         </div>
+
+        {/* Search Results */}
+        {searchQuery && (
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold mb-4">Search results for "{searchQuery}"</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredElectronics.map(renderItemCard)}
+            </div>
+          </div>
+        )}
 
         {/* Tabs Section */}
         <Tabs defaultValue="electronics" className="w-full">
@@ -266,7 +301,7 @@ const SecondHand = () => {
               </CardHeader>
             </Card>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {textbooks.map(renderItemCard)}
+              {electronics.map(renderItemCard)}
             </div>
           </TabsContent>
           
@@ -278,13 +313,13 @@ const SecondHand = () => {
                   Furniture & Dorm Essentials
                 </CardTitle>
                 <CardDescription>
-                  Furnish your dorm or apartment with quality pre-owned furniture. From study desks to bed frames, 
-                  find everything you need to make your space comfortable and functional.
+                  Save money on expensive textbooks! Find course materials from students who've completed the classes. 
+                  Filter by course code, edition, and condition to find exactly what you need.
                 </CardDescription>
               </CardHeader>
             </Card>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {furniture.map(renderItemCard)}
+              {electronics.map(renderItemCard)}
             </div>
           </TabsContent>
           
@@ -296,17 +331,144 @@ const SecondHand = () => {
                   Clothing & Accessories
                 </CardTitle>
                 <CardDescription>
-                  Refresh your wardrobe sustainably! Browse through clothes, shoes, and accessories from other students. 
-                  Perfect for finding unique pieces or university merchandise at great prices.
+                  Save money on expensive textbooks! Find course materials from students who've completed the classes. 
+                  Filter by course code, edition, and condition to find exactly what you need.
                 </CardDescription>
               </CardHeader>
             </Card>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {clothing.map(renderItemCard)}
+              {electronics.map(renderItemCard)}
             </div>
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Sell Item Modal */}
+      {showSellForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-green-700">Sell Your Item</h2>
+              <Button variant="ghost" onClick={() => setShowSellForm(false)}>×</Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Item Title *</label>
+                <Input
+                  value={sellFormData.title}
+                  onChange={(e) => setSellFormData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="e.g., MacBook Air M1 2020"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Description</label>
+                <Textarea
+                  value={sellFormData.description}
+                  onChange={(e) => setSellFormData(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Describe your item's condition, features, etc."
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Price (USD) *</label>
+                  <Input
+                    type="number"
+                    value={sellFormData.price}
+                    onChange={(e) => setSellFormData(prev => ({ ...prev, price: e.target.value }))}
+                    placeholder="e.g., 500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Category</label>
+                  <select
+                    value={sellFormData.category}
+                    onChange={(e) => setSellFormData(prev => ({ ...prev, category: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  >
+                    <option value="electronics">Electronics</option>
+                    <option value="textbooks">Textbooks</option>
+                    <option value="furniture">Furniture</option>
+                    <option value="clothing">Clothing</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Condition</label>
+                  <select
+                    value={sellFormData.condition}
+                    onChange={(e) => setSellFormData(prev => ({ ...prev, condition: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  >
+                    <option value="like-new">Like New</option>
+                    <option value="excellent">Excellent</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Location</label>
+                  <Input
+                    value={sellFormData.location}
+                    onChange={(e) => setSellFormData(prev => ({ ...prev, location: e.target.value }))}
+                    placeholder="e.g., Campus West"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Your WhatsApp Number *</label>
+                <Input
+                  value={sellFormData.sellerPhone}
+                  onChange={(e) => setSellFormData(prev => ({ ...prev, sellerPhone: e.target.value }))}
+                  placeholder="e.g., +254701234567"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Photos (Max 5)</label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  <label htmlFor="image-upload" className="cursor-pointer">
+                    <div className="text-center">
+                      <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                      <p className="text-gray-600">Click to upload photos</p>
+                    </div>
+                  </label>
+                  {sellFormData.images.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2 mt-4">
+                      {sellFormData.images.map((image, index) => (
+                        <img key={index} src={image} alt={`Upload ${index + 1}`} className="w-full h-20 object-cover rounded" />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-4 pt-4">
+                <Button variant="outline" onClick={() => setShowSellForm(false)} className="flex-1">
+                  Cancel
+                </Button>
+                <Button onClick={handleSellSubmit} className="flex-1 bg-green-600 hover:bg-green-700">
+                  List Item
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
