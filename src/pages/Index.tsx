@@ -84,6 +84,9 @@ const Index = () => {
                 <Search className="w-4 h-4 mr-2" />
                 Search
               </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <a href="/second-hand">Marketplace</a>
+              </Button>
               <Button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600">
                 Join Community
               </Button>
