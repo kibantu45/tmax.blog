@@ -1,15 +1,43 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Pill, Heart, Thermometer, Shield, Search, ShoppingCart } from "lucide-react";
+import { Pill, Heart, Thermometer, Shield, Search, ShoppingCart, Edit, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 const Chemist = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { addToCart } = useCart();
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [editingTab, setEditingTab] = useState<any>(null);
+  const [newTabForm, setNewTabForm] = useState({
+    id: "",
+    name: "",
+    icon: "Pill"
+  });
+
+  // Check if admin mode is enabled
+  const checkAdminMode = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('admin') === 'true';
+  };
+
+  // Initialize admin mode check
+  useState(() => {
+    setIsAdminMode(checkAdminMode());
+  });
+
+  const [chemistTabs, setChemistTabs] = useState([
+    { id: "medications", name: "Medications", icon: "Pill" },
+    { id: "health-products", name: "Health Products", icon: "Heart" },
+    { id: "services", name: "Services", icon: "Thermometer" },
+    { id: "emergency", name: "Emergency", icon: "Shield" }
+  ]);
 
   const medications = [
     { id: "med1", name: "Paracetamol 500mg", price: 50, description: "Pain and fever relief", category: "pain-relief", prescription: false, stock: 100 },
@@ -46,6 +74,38 @@ const Chemist = () => {
     }
   };
 
+  const handleEditTab = (tab: any) => {
+    setEditingTab(tab);
+  };
+
+  const handleSaveTab = () => {
+    if (editingTab) {
+      setChemistTabs(prev => prev.map(tab => 
+        tab.id === editingTab.id ? editingTab : tab
+      ));
+      setEditingTab(null);
+    }
+  };
+
+  const handleDeleteTab = (tabId: string) => {
+    if (confirm("Are you sure you want to delete this tab?")) {
+      setChemistTabs(prev => prev.filter(tab => tab.id !== tabId));
+    }
+  };
+
+  const handleAddNewTab = () => {
+    const newTab = {
+      ...newTabForm,
+      id: newTabForm.id || `tab_${Date.now()}`
+    };
+    setChemistTabs(prev => [...prev, newTab]);
+    setNewTabForm({
+      id: "",
+      name: "",
+      icon: "Pill"
+    });
+  };
+
   const filteredMedications = medications.filter(med => 
     med.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -64,9 +124,14 @@ const Chemist = () => {
               <h1 className="text-3xl font-bold text-tmaxGreen-700">Campus Pharmacy</h1>
               <p className="text-gray-600 mt-2">Your health and wellness partner</p>
             </div>
-            <Button onClick={() => window.history.back()} variant="outline">
-              Back to Home
-            </Button>
+            <div className="flex items-center space-x-4">
+              {isAdminMode && (
+                <Badge variant="outline" className="bg-red-100 text-red-800">Admin Mode</Badge>
+              )}
+              <Button onClick={() => window.history.back()} variant="outline">
+                Back to Home
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -86,20 +151,76 @@ const Chemist = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="medications" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-white/80">
-            <TabsTrigger value="medications" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-              Medications
-            </TabsTrigger>
-            <TabsTrigger value="health-products" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-              Health Products
-            </TabsTrigger>
-            <TabsTrigger value="services" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-              Services
-            </TabsTrigger>
-            <TabsTrigger value="emergency" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-              Emergency
-            </TabsTrigger>
+        {/* Admin Add New Tab */}
+        {isAdminMode && (
+          <div className="mb-6">
+            <Card className="border-2 border-dashed border-tmaxGreen-300">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Plus className="w-5 h-5 mr-2" />
+                  Add New Category Tab
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="tab-name">Tab Name</Label>
+                  <Input
+                    id="tab-name"
+                    placeholder="Category Name"
+                    value={newTabForm.name}
+                    onChange={(e) => setNewTabForm(prev => ({ ...prev, name: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="tab-id">Tab ID</Label>
+                  <Input
+                    id="tab-id"
+                    placeholder="category-id"
+                    value={newTabForm.id}
+                    onChange={(e) => setNewTabForm(prev => ({ ...prev, id: e.target.value }))}
+                  />
+                </div>
+                <Button onClick={handleAddNewTab} className="md:col-span-2">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Category Tab
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        <Tabs defaultValue={chemistTabs[0]?.id} className="space-y-6">
+          <TabsList className="grid w-full bg-white/80" style={{ gridTemplateColumns: `repeat(${chemistTabs.length}, 1fr)` }}>
+            {chemistTabs.map((tab) => (
+              <div key={tab.id} className="relative group">
+                <TabsTrigger 
+                  value={tab.id} 
+                  className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white w-full"
+                >
+                  {tab.name}
+                </TabsTrigger>
+                {isAdminMode && (
+                  <div className="absolute top-0 right-0 flex opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-md shadow-md">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-6 w-6 p-0"
+                      onClick={() => handleEditTab(tab)}
+                    >
+                      <Edit className="w-3 h-3" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      className="h-6 w-6 p-0"
+                      onClick={() => handleDeleteTab(tab.id)}
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
           </TabsList>
 
           <TabsContent value="medications" className="space-y-6">
@@ -231,6 +352,40 @@ const Chemist = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Edit Tab Dialog */}
+      <Dialog open={!!editingTab} onOpenChange={() => setEditingTab(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Category Tab</DialogTitle>
+          </DialogHeader>
+          {editingTab && (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="edit-tab-name">Tab Name</Label>
+                <Input
+                  id="edit-tab-name"
+                  value={editingTab.name}
+                  onChange={(e) => setEditingTab(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Tab Name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-tab-id">Tab ID</Label>
+                <Input
+                  id="edit-tab-id"
+                  value={editingTab.id}
+                  onChange={(e) => setEditingTab(prev => ({ ...prev, id: e.target.value }))}
+                  placeholder="Tab ID"
+                />
+              </div>
+              <Button onClick={handleSaveTab} className="w-full">
+                Save Changes
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
