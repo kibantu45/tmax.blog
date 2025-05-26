@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield, Edit, Trash2, Plus, Eye } from "lucide-react";
+import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield, Edit, Trash2, Plus, Eye, Copy, Upload } from "lucide-react";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import { useCart } from "@/contexts/CartContext";
 import {
@@ -18,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
 
 const Index = () => {
   const { itemCount } = useCart();
@@ -34,7 +34,8 @@ const Index = () => {
     description: "",
     icon: "Home",
     link: "",
-    color: "bg-pastelYellow"
+    color: "bg-pastelYellow",
+    image: ""
   });
 
   const communityStats = [
@@ -45,15 +46,15 @@ const Index = () => {
   ];
 
   const [allServices, setAllServices] = useState([
-    { id: 1, title: "Student Accommodation", description: "Find your perfect student housing", icon: Home, link: "/rental-booking", color: "bg-pastelYellow" },
-    { id: 2, title: "Food Delivery", description: "Campus restaurants at your door", icon: Utensils, link: "/food-delivery", color: "bg-tmaxGreen-200" },
-    { id: 3, title: "University Resources", description: "Academic support and information", icon: GraduationCap, link: "/my-university", color: "bg-pastelYellow-light" },
-    { id: 4, title: "Pharmacy", description: "Healthcare and medicine delivery", icon: Pill, link: "/chemist", color: "bg-tmaxGreen-100" },
-    { id: 5, title: "Groceries", description: "Fresh groceries delivered", icon: ShoppingCart, link: "/groceries", color: "bg-pastelYellow" },
-    { id: 6, title: "Second-Hand Marketplace", description: "Buy and sell pre-loved items", icon: ShoppingCart, link: "/second-hand", color: "bg-tmaxGreen-200" },
-    { id: 7, title: "Roommate Finder", description: "Find compatible roommates", icon: UsersIcon, link: "/roommate-finder", color: "bg-pastelYellow-light" },
-    { id: 8, title: "Mobile Data", description: "Top up your mobile data", icon: Smartphone, link: "/mobile-data", color: "bg-tmaxGreen-100" },
-    { id: 9, title: "Campus Gossip", description: "Latest campus news and events", icon: MessageSquare, link: "/tum-gossip", color: "bg-pastelYellow" }
+    { id: 1, title: "Student Accommodation", description: "Find your perfect student housing", icon: Home, link: "/rental-booking", color: "bg-pastelYellow", image: "" },
+    { id: 2, title: "Food Delivery", description: "Campus restaurants at your door", icon: Utensils, link: "/food-delivery", color: "bg-tmaxGreen-200", image: "" },
+    { id: 3, title: "University Resources", description: "Academic support and information", icon: GraduationCap, link: "/my-university", color: "bg-pastelYellow-light", image: "" },
+    { id: 4, title: "Pharmacy", description: "Healthcare and medicine delivery", icon: Pill, link: "/chemist", color: "bg-tmaxGreen-100", image: "" },
+    { id: 5, title: "Groceries", description: "Fresh groceries delivered", icon: ShoppingCart, link: "/groceries", color: "bg-pastelYellow", image: "" },
+    { id: 6, title: "Second-Hand Marketplace", description: "Buy and sell pre-loved items", icon: ShoppingCart, link: "/second-hand", color: "bg-tmaxGreen-200", image: "" },
+    { id: 7, title: "Roommate Finder", description: "Find compatible roommates", icon: UsersIcon, link: "/roommate-finder", color: "bg-pastelYellow-light", image: "" },
+    { id: 8, title: "Mobile Data", description: "Top up your mobile data", icon: Smartphone, link: "/mobile-data", color: "bg-tmaxGreen-100", image: "" },
+    { id: 9, title: "Campus Gossip", description: "Latest campus news and events", icon: MessageSquare, link: "/tum-gossip", color: "bg-pastelYellow", image: "" }
   ]);
 
   const handleSearch = () => {
@@ -76,6 +77,15 @@ const Index = () => {
     }
   };
 
+  const handleDuplicateService = (service: any) => {
+    const newService = {
+      ...service,
+      id: Math.max(...allServices.map(s => s.id)) + 1,
+      title: `${service.title} (Copy)`
+    };
+    setAllServices(prev => [...prev, newService]);
+  };
+
   const handleEditService = (service: any) => {
     setEditingService(service);
   };
@@ -92,7 +102,8 @@ const Index = () => {
   const handleAddNewService = () => {
     const newService = {
       ...newServiceForm,
-      id: Math.max(...allServices.map(s => s.id)) + 1
+      id: Math.max(...allServices.map(s => s.id)) + 1,
+      icon: Home // Default icon component
     };
     setAllServices(prev => [...prev, newService]);
     setNewServiceForm({
@@ -100,137 +111,381 @@ const Index = () => {
       description: "",
       icon: "Home",
       link: "",
-      color: "bg-pastelYellow"
+      color: "bg-pastelYellow",
+      image: ""
     });
   };
 
-  const renderAdminOverview = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {communityStats.map((stat, index) => (
-          <Card key={index} className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">{stat.label}</p>
-                <p className="text-2xl font-bold">{stat.value}</p>
-              </div>
-              <stat.icon className={`w-8 h-8 ${stat.color}`} />
-            </div>
-          </Card>
-        ))}
-      </div>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-2">
-            <Button onClick={() => setActiveAdminTab("services")}>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Service
-            </Button>
-            <Button variant="outline" onClick={() => setActiveAdminTab("services")}>
-              <Edit className="w-4 h-4 mr-2" />
-              Edit Services
-            </Button>
-            <Button variant="outline">
-              <Eye className="w-4 h-4 mr-2" />
-              View Analytics
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+  const handleImageUpload = (serviceId: number, event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageUrl = e.target?.result as string;
+        setAllServices(prev => prev.map(service => 
+          service.id === serviceId ? { ...service, image: imageUrl } : service
+        ));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-  const renderAdminServices = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Add New Service</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Input
-            placeholder="Service Title"
-            value={newServiceForm.title}
-            onChange={(e) => setNewServiceForm(prev => ({ ...prev, title: e.target.value }))}
-          />
-          <Textarea
-            placeholder="Service Description"
-            value={newServiceForm.description}
-            onChange={(e) => setNewServiceForm(prev => ({ ...prev, description: e.target.value }))}
-          />
-          <Input
-            placeholder="Service Link (e.g., /new-service)"
-            value={newServiceForm.link}
-            onChange={(e) => setNewServiceForm(prev => ({ ...prev, link: e.target.value }))}
-          />
-          <Button onClick={handleAddNewService} className="w-full">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Service
+  // Regular user interface components
+  const renderServiceCard = (service: any, index: number, isAdmin = false) => {
+    const IconComponent = service.icon;
+    return (
+      <Card key={service.id || index} className="hover:shadow-lg transition-all duration-300 border-tmaxGreen-200 group bg-white/90 relative">
+        {isAdmin && (
+          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 w-8 p-0"
+              onClick={() => handleEditService(service)}
+            >
+              <Edit className="w-3 h-3" />
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 w-8 p-0"
+              onClick={() => handleDuplicateService(service)}
+            >
+              <Copy className="w-3 h-3" />
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              className="h-8 w-8 p-0"
+              onClick={() => handleDeleteService(service.id)}
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+            <div className="relative">
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 w-8 p-0"
+              >
+                <Upload className="w-3 h-3" />
+              </Button>
+              <input
+                type="file"
+                accept="image/*"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                onChange={(e) => handleImageUpload(service.id, e)}
+              />
+            </div>
+          </div>
+        )}
+        <CardContent className="p-6 text-center">
+          {service.image ? (
+            <div className="w-16 h-16 mx-auto mb-4 overflow-hidden rounded-xl">
+              <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
+            </div>
+          ) : (
+            <div className={`w-16 h-16 ${service.color} rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+              <IconComponent className="w-8 h-8 text-tmaxGreen-700" />
+            </div>
+          )}
+          <h3 className="font-semibold text-lg mb-2 text-gray-900">{service.title}</h3>
+          <p className="text-gray-600 text-sm mb-4">{service.description}</p>
+          <Button 
+            className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
+            onClick={() => !isAdmin && (window.location.href = service.link)}
+            disabled={isAdmin}
+          >
+            {isAdmin ? "Preview" : "Explore"}
           </Button>
         </CardContent>
       </Card>
+    );
+  };
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {allServices.map((service) => (
-          <Card key={service.id} className="relative">
+  const renderAdminInterface = () => (
+    <div className="min-h-screen bg-gradient-to-br from-pastelYellow via-pastelYellow-light to-pastelYellow-dark">
+      {/* Admin Header - Same as user header */}
+      <header className="bg-white/90 backdrop-blur-sm border-b border-tmaxGreen-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-pastelYellow to-tmaxGreen-500 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">T</span>
+              </div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-tmaxGreen-600 to-pastelYellow bg-clip-text text-transparent">
+                Tmax Admin
+              </h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Badge variant="outline" className="bg-red-100 text-red-800">Admin Mode</Badge>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setIsAdminAuthenticated(false);
+                  setIsAdminOpen(false);
+                }}
+              >
+                Exit Admin
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Hero Section - Same as user interface */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-tmaxGreen-600 via-white to-tmaxGreen-600 bg-clip-text text-transparent">
+            Your Campus, Simplified
+          </h2>
+          <p className="text-xl text-tmaxGreen-800 max-w-2xl mx-auto mb-8 font-medium">
+            Everything you need as a student in one place. From accommodation to food delivery, 
+            groceries to university resources - Tmax has got you covered.
+          </p>
+        </div>
+
+        {/* Ad Space - Same as user interface */}
+        <div className="mb-12">
+          <div className="bg-gradient-to-r from-tmaxGreen-100 to-pastelYellow-light border-2 border-dashed border-tmaxGreen-300 rounded-lg p-8 text-center relative">
+            <div className="absolute top-2 right-2">
+              <Button size="sm" variant="outline">
+                <Edit className="w-4 h-4 mr-1" />
+                Edit Ad
+              </Button>
+            </div>
+            <h3 className="text-2xl font-semibold text-tmaxGreen-700 mb-2">Advertisement Space</h3>
+            <p className="text-tmaxGreen-600">Your ads could be here - Contact us for advertising opportunities</p>
+          </div>
+        </div>
+
+        {/* Admin Controls for Adding New Service */}
+        <div className="mb-8">
+          <Card className="border-2 border-dashed border-tmaxGreen-300">
             <CardHeader>
-              <div className="flex justify-between items-start">
+              <CardTitle className="flex items-center">
+                <Plus className="w-5 h-5 mr-2" />
+                Add New Service
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-4">
                 <div>
-                  <CardTitle className="text-lg">{service.title}</CardTitle>
-                  <CardDescription>{service.description}</CardDescription>
+                  <Label htmlFor="new-title">Service Title</Label>
+                  <Input
+                    id="new-title"
+                    placeholder="Service Title"
+                    value={newServiceForm.title}
+                    onChange={(e) => setNewServiceForm(prev => ({ ...prev, title: e.target.value }))}
+                  />
                 </div>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => handleEditService(service)}>
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="destructive" onClick={() => handleDeleteService(service.id)}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                <div>
+                  <Label htmlFor="new-description">Description</Label>
+                  <Textarea
+                    id="new-description"
+                    placeholder="Service Description"
+                    value={newServiceForm.description}
+                    onChange={(e) => setNewServiceForm(prev => ({ ...prev, description: e.target.value }))}
+                  />
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <Badge variant="outline">{service.link}</Badge>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="new-link">Service Link</Label>
+                  <Input
+                    id="new-link"
+                    placeholder="Service Link (e.g., /new-service)"
+                    value={newServiceForm.link}
+                    onChange={(e) => setNewServiceForm(prev => ({ ...prev, link: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="new-image">Service Image</Label>
+                  <Input
+                    id="new-image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          setNewServiceForm(prev => ({ ...prev, image: event.target?.result as string }));
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                </div>
+                <Button onClick={handleAddNewService} className="w-full">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Service
+                </Button>
+              </div>
             </CardContent>
           </Card>
-        ))}
+        </div>
+
+        {/* All Services Listed - Same as user interface but with admin controls */}
+        <section className="mb-12">
+          <h3 className="text-3xl font-bold text-center mb-8 text-tmaxGreen-700">All Our Services</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allServices.map((service, index) => renderServiceCard(service, index, true))}
+          </div>
+        </section>
+
+        {/* Features Grid - Same as user interface */}
+        <section>
+          <h3 className="text-2xl font-bold mb-6 text-tmaxGreen-700">Why Choose Tmax?</h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border-tmaxGreen-100 bg-white/90 relative group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button size="sm" variant="outline">
+                  <Edit className="w-3 h-3" />
+                </Button>
+              </div>
+              <CardHeader>
+                <CardTitle className="text-tmaxGreen-700">Student-Focused</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Designed specifically for university students with services that matter to your daily life.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-tmaxGreen-100 bg-white/90 relative group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button size="sm" variant="outline">
+                  <Edit className="w-3 h-3" />
+                </Button>
+              </div>
+              <CardHeader>
+                <CardTitle className="text-tmaxGreen-700">Fast & Reliable</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Quick delivery times and reliable service you can count on for all your campus needs.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-tmaxGreen-100 bg-white/90 relative group">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button size="sm" variant="outline">
+                  <Edit className="w-3 h-3" />
+                </Button>
+              </div>
+              <CardHeader>
+                <CardTitle className="text-tmaxGreen-700">All-in-One Platform</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  From accommodation to groceries, everything you need is available in one convenient app.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
       </div>
 
-      {editingService && (
-        <Dialog open={!!editingService} onOpenChange={() => setEditingService(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Edit Service</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
+      {/* Footer with Stats - Same as user interface */}
+      <footer className="mt-16 bg-white/90 backdrop-blur-sm border-t border-tmaxGreen-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            {communityStats.map((stat, index) => (
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow border-tmaxGreen-100 bg-white/90 relative group">
+                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button size="sm" variant="outline">
+                    <Edit className="w-3 h-3" />
+                  </Button>
+                </div>
+                <CardContent className="pt-6">
+                  <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
+                  <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-sm text-gray-600">{stat.label}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+
+  // Edit Service Dialog
+  const EditServiceDialog = () => (
+    <Dialog open={!!editingService} onOpenChange={() => setEditingService(null)}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Edit Service</DialogTitle>
+        </DialogHeader>
+        {editingService && (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="edit-title">Service Title</Label>
               <Input
+                id="edit-title"
                 value={editingService.title}
                 onChange={(e) => setEditingService(prev => ({ ...prev, title: e.target.value }))}
                 placeholder="Service Title"
               />
+            </div>
+            <div>
+              <Label htmlFor="edit-description">Description</Label>
               <Textarea
+                id="edit-description"
                 value={editingService.description}
                 onChange={(e) => setEditingService(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Service Description"
               />
+            </div>
+            <div>
+              <Label htmlFor="edit-link">Service Link</Label>
               <Input
+                id="edit-link"
                 value={editingService.link}
                 onChange={(e) => setEditingService(prev => ({ ...prev, link: e.target.value }))}
                 placeholder="Service Link"
               />
-              <Button onClick={handleSaveService} className="w-full">
-                Save Changes
-              </Button>
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
-    </div>
+            <div>
+              <Label htmlFor="edit-image">Upload New Image</Label>
+              <Input
+                id="edit-image"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                      setEditingService(prev => ({ ...prev, image: event.target?.result as string }));
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </div>
+            <Button onClick={handleSaveService} className="w-full">
+              Save Changes
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 
+  // Return admin interface if authenticated, otherwise regular interface
+  if (isAdminAuthenticated) {
+    return (
+      <>
+        {renderAdminInterface()}
+        <EditServiceDialog />
+      </>
+    );
+  }
+
+  // ... keep existing code (regular user interface)
   return (
     <div className="min-h-screen bg-gradient-to-br from-pastelYellow via-pastelYellow-light to-pastelYellow-dark">
       {/* Header */}
@@ -324,26 +579,7 @@ const Index = () => {
         <section className="mb-12">
           <h3 className="text-3xl font-bold text-center mb-8 text-tmaxGreen-700">All Our Services</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allServices.map((service, index) => {
-              const IconComponent = service.icon;
-              return (
-                <Card key={index} className="hover:shadow-lg transition-all duration-300 border-tmaxGreen-200 group bg-white/90">
-                  <CardContent className="p-6 text-center">
-                    <div className={`w-16 h-16 ${service.color} rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                      <IconComponent className="w-8 h-8 text-tmaxGreen-700" />
-                    </div>
-                    <h3 className="font-semibold text-lg mb-2 text-gray-900">{service.title}</h3>
-                    <p className="text-gray-600 text-sm mb-4">{service.description}</p>
-                    <Button 
-                      className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
-                      onClick={() => window.location.href = service.link}
-                    >
-                      Explore
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
+            {allServices.map((service, index) => renderServiceCard(service, index, false))}
           </div>
         </section>
 
@@ -415,62 +651,21 @@ const Index = () => {
                   <Shield className="w-4 h-4" />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                  <DialogTitle>Admin Panel</DialogTitle>
+                  <DialogTitle>Admin Login</DialogTitle>
                 </DialogHeader>
-                {!isAdminAuthenticated ? (
-                  <div className="space-y-4">
-                    <Input
-                      type="password"
-                      placeholder="Enter admin password"
-                      value={adminPassword}
-                      onChange={(e) => setAdminPassword(e.target.value)}
-                    />
-                    <Button onClick={handleAdminLogin} className="w-full">
-                      Login
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <Tabs value={activeAdminTab} onValueChange={setActiveAdminTab}>
-                      <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="overview">Overview</TabsTrigger>
-                        <TabsTrigger value="services">Services</TabsTrigger>
-                        <TabsTrigger value="settings">Settings</TabsTrigger>
-                      </TabsList>
-                      
-                      <TabsContent value="overview" className="mt-6">
-                        {renderAdminOverview()}
-                      </TabsContent>
-                      
-                      <TabsContent value="services" className="mt-6">
-                        {renderAdminServices()}
-                      </TabsContent>
-                      
-                      <TabsContent value="settings" className="mt-6">
-                        <Card>
-                          <CardHeader>
-                            <CardTitle>Admin Settings</CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                            <Button 
-                              onClick={() => {
-                                setIsAdminAuthenticated(false);
-                                setAdminPassword("");
-                                setIsAdminOpen(false);
-                              }} 
-                              variant="destructive"
-                              className="w-full"
-                            >
-                              Logout
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      </TabsContent>
-                    </Tabs>
-                  </div>
-                )}
+                <div className="space-y-4">
+                  <Input
+                    type="password"
+                    placeholder="Enter admin password"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                  />
+                  <Button onClick={handleAdminLogin} className="w-full">
+                    Login to Admin Panel
+                  </Button>
+                </div>
               </DialogContent>
             </Dialog>
           </div>
