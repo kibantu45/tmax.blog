@@ -42,7 +42,6 @@ const Chemist = () => {
         name: item.name,
         price: item.price,
         image: "/placeholder.svg",
-        quantity: 1,
         category: "pharmacy"
       });
     }
