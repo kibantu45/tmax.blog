@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield } from "lucide-react";
+import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield, Edit, Trash2, Plus, Eye } from "lucide-react";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import { useCart } from "@/contexts/CartContext";
 import {
@@ -15,7 +15,9 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const { itemCount } = useCart();
@@ -23,6 +25,17 @@ const Index = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const [activeAdminTab, setActiveAdminTab] = useState("overview");
+
+  // Admin form states
+  const [editingService, setEditingService] = useState<any>(null);
+  const [newServiceForm, setNewServiceForm] = useState({
+    title: "",
+    description: "",
+    icon: "Home",
+    link: "",
+    color: "bg-pastelYellow"
+  });
 
   const communityStats = [
     { label: "Active Students", value: "8.5K", icon: Users, color: "text-tmaxGreen-500" },
@@ -31,17 +44,17 @@ const Index = () => {
     { label: "Weekly Orders", value: "450+", icon: Calendar, color: "text-pastelYellow-dark" }
   ];
 
-  const allServices = [
-    { title: "Student Accommodation", description: "Find your perfect student housing", icon: Home, link: "/rental-booking", color: "bg-pastelYellow" },
-    { title: "Food Delivery", description: "Campus restaurants at your door", icon: Utensils, link: "/food-delivery", color: "bg-tmaxGreen-200" },
-    { title: "University Resources", description: "Academic support and information", icon: GraduationCap, link: "/my-university", color: "bg-pastelYellow-light" },
-    { title: "Pharmacy", description: "Healthcare and medicine delivery", icon: Pill, link: "/chemist", color: "bg-tmaxGreen-100" },
-    { title: "Groceries", description: "Fresh groceries delivered", icon: ShoppingCart, link: "/groceries", color: "bg-pastelYellow" },
-    { title: "Second-Hand Marketplace", description: "Buy and sell pre-loved items", icon: ShoppingCart, link: "/second-hand", color: "bg-tmaxGreen-200" },
-    { title: "Roommate Finder", description: "Find compatible roommates", icon: UsersIcon, link: "/roommate-finder", color: "bg-pastelYellow-light" },
-    { title: "Mobile Data", description: "Top up your mobile data", icon: Smartphone, link: "/mobile-data", color: "bg-tmaxGreen-100" },
-    { title: "Campus Gossip", description: "Latest campus news and events", icon: MessageSquare, link: "/tum-gossip", color: "bg-pastelYellow" }
-  ];
+  const [allServices, setAllServices] = useState([
+    { id: 1, title: "Student Accommodation", description: "Find your perfect student housing", icon: Home, link: "/rental-booking", color: "bg-pastelYellow" },
+    { id: 2, title: "Food Delivery", description: "Campus restaurants at your door", icon: Utensils, link: "/food-delivery", color: "bg-tmaxGreen-200" },
+    { id: 3, title: "University Resources", description: "Academic support and information", icon: GraduationCap, link: "/my-university", color: "bg-pastelYellow-light" },
+    { id: 4, title: "Pharmacy", description: "Healthcare and medicine delivery", icon: Pill, link: "/chemist", color: "bg-tmaxGreen-100" },
+    { id: 5, title: "Groceries", description: "Fresh groceries delivered", icon: ShoppingCart, link: "/groceries", color: "bg-pastelYellow" },
+    { id: 6, title: "Second-Hand Marketplace", description: "Buy and sell pre-loved items", icon: ShoppingCart, link: "/second-hand", color: "bg-tmaxGreen-200" },
+    { id: 7, title: "Roommate Finder", description: "Find compatible roommates", icon: UsersIcon, link: "/roommate-finder", color: "bg-pastelYellow-light" },
+    { id: 8, title: "Mobile Data", description: "Top up your mobile data", icon: Smartphone, link: "/mobile-data", color: "bg-tmaxGreen-100" },
+    { id: 9, title: "Campus Gossip", description: "Latest campus news and events", icon: MessageSquare, link: "/tum-gossip", color: "bg-pastelYellow" }
+  ]);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -57,17 +70,166 @@ const Index = () => {
     }
   };
 
-  const handleDuplicateTab = () => {
-    alert("Tab duplication feature would be implemented here");
+  const handleDeleteService = (serviceId: number) => {
+    if (confirm("Are you sure you want to delete this service?")) {
+      setAllServices(prev => prev.filter(service => service.id !== serviceId));
+    }
   };
 
-  const handleDeleteProduct = () => {
-    alert("Product deletion feature would be implemented here");
+  const handleEditService = (service: any) => {
+    setEditingService(service);
   };
 
-  const handleAddProduct = () => {
-    alert("Add product feature would be implemented here");
+  const handleSaveService = () => {
+    if (editingService) {
+      setAllServices(prev => prev.map(service => 
+        service.id === editingService.id ? editingService : service
+      ));
+      setEditingService(null);
+    }
   };
+
+  const handleAddNewService = () => {
+    const newService = {
+      ...newServiceForm,
+      id: Math.max(...allServices.map(s => s.id)) + 1
+    };
+    setAllServices(prev => [...prev, newService]);
+    setNewServiceForm({
+      title: "",
+      description: "",
+      icon: "Home",
+      link: "",
+      color: "bg-pastelYellow"
+    });
+  };
+
+  const renderAdminOverview = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {communityStats.map((stat, index) => (
+          <Card key={index} className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">{stat.label}</p>
+                <p className="text-2xl font-bold">{stat.value}</p>
+              </div>
+              <stat.icon className={`w-8 h-8 ${stat.color}`} />
+            </div>
+          </Card>
+        ))}
+      </div>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={() => setActiveAdminTab("services")}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Service
+            </Button>
+            <Button variant="outline" onClick={() => setActiveAdminTab("services")}>
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Services
+            </Button>
+            <Button variant="outline">
+              <Eye className="w-4 h-4 mr-2" />
+              View Analytics
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderAdminServices = () => (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Add New Service</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Input
+            placeholder="Service Title"
+            value={newServiceForm.title}
+            onChange={(e) => setNewServiceForm(prev => ({ ...prev, title: e.target.value }))}
+          />
+          <Textarea
+            placeholder="Service Description"
+            value={newServiceForm.description}
+            onChange={(e) => setNewServiceForm(prev => ({ ...prev, description: e.target.value }))}
+          />
+          <Input
+            placeholder="Service Link (e.g., /new-service)"
+            value={newServiceForm.link}
+            onChange={(e) => setNewServiceForm(prev => ({ ...prev, link: e.target.value }))}
+          />
+          <Button onClick={handleAddNewService} className="w-full">
+            <Plus className="w-4 h-4 mr-2" />
+            Add Service
+          </Button>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {allServices.map((service) => (
+          <Card key={service.id} className="relative">
+            <CardHeader>
+              <div className="flex justify-between items-start">
+                <div>
+                  <CardTitle className="text-lg">{service.title}</CardTitle>
+                  <CardDescription>{service.description}</CardDescription>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => handleEditService(service)}>
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => handleDeleteService(service.id)}>
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <Badge variant="outline">{service.link}</Badge>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {editingService && (
+        <Dialog open={!!editingService} onOpenChange={() => setEditingService(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Service</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Input
+                value={editingService.title}
+                onChange={(e) => setEditingService(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Service Title"
+              />
+              <Textarea
+                value={editingService.description}
+                onChange={(e) => setEditingService(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Service Description"
+              />
+              <Input
+                value={editingService.link}
+                onChange={(e) => setEditingService(prev => ({ ...prev, link: e.target.value }))}
+                placeholder="Service Link"
+              />
+              <Button onClick={handleSaveService} className="w-full">
+                Save Changes
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pastelYellow via-pastelYellow-light to-pastelYellow-dark">
@@ -253,7 +415,7 @@ const Index = () => {
                   <Shield className="w-4 h-4" />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
+              <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Admin Panel</DialogTitle>
                 </DialogHeader>
@@ -270,27 +432,43 @@ const Index = () => {
                     </Button>
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    <Button onClick={handleDuplicateTab} className="w-full" variant="outline">
-                      Duplicate Tab
-                    </Button>
-                    <Button onClick={handleDeleteProduct} className="w-full" variant="outline">
-                      Delete Product
-                    </Button>
-                    <Button onClick={handleAddProduct} className="w-full" variant="outline">
-                      Add New Product
-                    </Button>
-                    <Button 
-                      onClick={() => {
-                        setIsAdminAuthenticated(false);
-                        setAdminPassword("");
-                        setIsAdminOpen(false);
-                      }} 
-                      className="w-full" 
-                      variant="destructive"
-                    >
-                      Logout
-                    </Button>
+                  <div className="space-y-6">
+                    <Tabs value={activeAdminTab} onValueChange={setActiveAdminTab}>
+                      <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="overview">Overview</TabsTrigger>
+                        <TabsTrigger value="services">Services</TabsTrigger>
+                        <TabsTrigger value="settings">Settings</TabsTrigger>
+                      </TabsList>
+                      
+                      <TabsContent value="overview" className="mt-6">
+                        {renderAdminOverview()}
+                      </TabsContent>
+                      
+                      <TabsContent value="services" className="mt-6">
+                        {renderAdminServices()}
+                      </TabsContent>
+                      
+                      <TabsContent value="settings" className="mt-6">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>Admin Settings</CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            <Button 
+                              onClick={() => {
+                                setIsAdminAuthenticated(false);
+                                setAdminPassword("");
+                                setIsAdminOpen(false);
+                              }} 
+                              variant="destructive"
+                              className="w-full"
+                            >
+                              Logout
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      </TabsContent>
+                    </Tabs>
                   </div>
                 )}
               </DialogContent>
