@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield, Edit, Trash2, Plus, Eye, Copy, Upload } from "lucide-react";
+import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield, Edit, Trash2, Plus, Eye, Copy, Upload, Droplets } from "lucide-react";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import { useCart } from "@/contexts/CartContext";
 import {
@@ -40,7 +40,7 @@ const Index = () => {
 
   const communityStats = [
     { label: "Active Students", value: "8.5K", icon: Users, color: "text-tmaxGreen-500" },
-    { label: "Services Available", value: "8", icon: TrendingUp, color: "text-pastelYellow-dark" },
+    { label: "Services Available", value: "10", icon: TrendingUp, color: "text-pastelYellow-dark" },
     { label: "Campus Locations", value: "12", icon: Star, color: "text-tmaxGreen-600" },
     { label: "Weekly Orders", value: "450+", icon: Calendar, color: "text-pastelYellow-dark" }
   ];
@@ -54,7 +54,8 @@ const Index = () => {
     { id: 6, title: "Second-Hand Marketplace", description: "Buy and sell pre-loved items", icon: ShoppingCart, link: "/second-hand", color: "bg-tmaxGreen-200", image: "" },
     { id: 7, title: "Roommate Finder", description: "Find compatible roommates", icon: UsersIcon, link: "/roommate-finder", color: "bg-pastelYellow-light", image: "" },
     { id: 8, title: "Mobile Data", description: "Top up your mobile data", icon: Smartphone, link: "/mobile-data", color: "bg-tmaxGreen-100", image: "" },
-    { id: 9, title: "Campus Gossip", description: "Latest campus news and events", icon: MessageSquare, link: "/tum-gossip", color: "bg-pastelYellow", image: "" }
+    { id: 9, title: "Campus Gossip", description: "Latest campus news and events", icon: MessageSquare, link: "/tum-gossip", color: "bg-pastelYellow", image: "" },
+    { id: 10, title: "Period Tracker", description: "Track your cycle with FloTracker", icon: Droplets, link: "/period-tracker", color: "bg-pink-200", image: "" }
   ]);
 
   const handleSearch = () => {
@@ -130,7 +131,6 @@ const Index = () => {
     }
   };
 
-  // Regular user interface components
   const renderServiceCard = (service: any, index: number, isAdmin = false) => {
     const IconComponent = service.icon;
     return (
@@ -204,7 +204,6 @@ const Index = () => {
 
   const renderAdminInterface = () => (
     <div className="min-h-screen bg-gradient-to-br from-pastelYellow via-pastelYellow-light to-pastelYellow-dark">
-      {/* Admin Header - Same as user header */}
       <header className="bg-white/90 backdrop-blur-sm border-b border-tmaxGreen-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -233,7 +232,6 @@ const Index = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section - Same as user interface */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-tmaxGreen-600 via-white to-tmaxGreen-600 bg-clip-text text-transparent">
             Your Campus, Simplified
@@ -244,7 +242,6 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Ad Space - Same as user interface */}
         <div className="mb-12">
           <div className="bg-gradient-to-r from-tmaxGreen-100 to-pastelYellow-light border-2 border-dashed border-tmaxGreen-300 rounded-lg p-8 text-center relative">
             <div className="absolute top-2 right-2">
@@ -258,7 +255,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Admin Controls for Adding New Service */}
         <div className="mb-8">
           <Card className="border-2 border-dashed border-tmaxGreen-300">
             <CardHeader>
@@ -325,7 +321,6 @@ const Index = () => {
           </Card>
         </div>
 
-        {/* All Services Listed - Same as user interface but with admin controls */}
         <section className="mb-12">
           <h3 className="text-3xl font-bold text-center mb-8 text-tmaxGreen-700">All Our Services</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -333,7 +328,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Features Grid - Same as user interface */}
         <section>
           <h3 className="text-2xl font-bold mb-6 text-tmaxGreen-700">Why Choose Tmax?</h3>
           <div className="grid md:grid-cols-3 gap-8">
@@ -388,7 +382,6 @@ const Index = () => {
         </section>
       </div>
 
-      {/* Footer with Stats - Same as user interface */}
       <footer className="mt-16 bg-white/90 backdrop-blur-sm border-t border-tmaxGreen-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
@@ -412,7 +405,6 @@ const Index = () => {
     </div>
   );
 
-  // Edit Service Dialog
   const EditServiceDialog = () => (
     <Dialog open={!!editingService} onOpenChange={() => setEditingService(null)}>
       <DialogContent className="sm:max-w-md">
@@ -475,7 +467,6 @@ const Index = () => {
     </Dialog>
   );
 
-  // Return admin interface if authenticated, otherwise regular interface
   if (isAdminAuthenticated) {
     return (
       <>
@@ -485,10 +476,8 @@ const Index = () => {
     );
   }
 
-  // ... keep existing code (regular user interface)
   return (
     <div className="min-h-screen bg-gradient-to-br from-pastelYellow via-pastelYellow-light to-pastelYellow-dark">
-      {/* Header */}
       <header className="bg-white/90 backdrop-blur-sm border-b border-tmaxGreen-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -556,7 +545,6 @@ const Index = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-tmaxGreen-600 via-white to-tmaxGreen-600 bg-clip-text text-transparent">
             Your Campus, Simplified
@@ -567,7 +555,6 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Ad Space */}
         <div className="mb-12">
           <div className="bg-gradient-to-r from-tmaxGreen-100 to-pastelYellow-light border-2 border-dashed border-tmaxGreen-300 rounded-lg p-8 text-center">
             <h3 className="text-2xl font-semibold text-tmaxGreen-700 mb-2">Advertisement Space</h3>
@@ -575,7 +562,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* All Services Listed */}
         <section className="mb-12">
           <h3 className="text-3xl font-bold text-center mb-8 text-tmaxGreen-700">All Our Services</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -583,7 +569,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Features Grid */}
         <section>
           <h3 className="text-2xl font-bold mb-6 text-tmaxGreen-700">Why Choose Tmax?</h3>
           <div className="grid md:grid-cols-3 gap-8">
@@ -623,10 +608,8 @@ const Index = () => {
         </section>
       </div>
 
-      {/* Footer with Stats and Admin Panel */}
       <footer className="mt-16 bg-white/90 backdrop-blur-sm border-t border-tmaxGreen-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
             {communityStats.map((stat, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow border-tmaxGreen-100 bg-white/90">
@@ -644,7 +627,6 @@ const Index = () => {
               <p>&copy; 2024 Tmax. Your trusted campus companion.</p>
             </div>
             
-            {/* Admin Panel Button */}
             <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
               <DialogTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">

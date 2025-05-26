@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Home, Utensils, GraduationCap, Pill, ShoppingCart, Users, Smartphone, MessageSquare, Edit, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Utensils, GraduationCap, Pill, ShoppingCart, Users, Smartphone, MessageSquare, Edit, Plus, Trash2, Eye } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -154,6 +154,12 @@ const ServiceCarousel = () => {
     }
   };
 
+  const handlePreviewService = (service: any) => {
+    if (isAdminMode) {
+      window.open(service.link, '_blank');
+    }
+  };
+
   const handleEditSubtab = (subtab: any) => {
     setEditingSubtab(subtab);
   };
@@ -224,16 +230,41 @@ const ServiceCarousel = () => {
                     </div>
                     <h3 className="font-semibold text-lg mb-2 text-gray-900">{service.title}</h3>
                     <p className="text-gray-600 text-sm mb-4">{service.description}</p>
-                    <Button 
-                      className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
-                      onClick={() => window.location.href = service.link}
-                    >
-                      Explore
-                    </Button>
+                    
+                    {isAdminMode ? (
+                      <div className="flex gap-2 justify-center">
+                        <Button 
+                          size="sm"
+                          variant="outline"
+                          className="bg-blue-50 hover:bg-blue-100"
+                          onClick={() => handlePreviewService(service)}
+                        >
+                          <Eye className="w-4 h-4 mr-1" />
+                          Preview
+                        </Button>
+                        <Button 
+                          size="sm"
+                          variant="outline"
+                          className="bg-gray-50 hover:bg-gray-100"
+                          onClick={() => setEditingService(service)}
+                        >
+                          <Edit className="w-4 h-4 mr-1" />
+                          Edit
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button 
+                        className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
+                        onClick={() => window.location.href = service.link}
+                      >
+                        Explore
+                      </Button>
+                    )}
+                    
                     {isAdminMode && (
                       <div className="absolute top-2 right-2">
                         <Badge variant="outline" className="bg-blue-100 text-blue-800 text-xs">
-                          Double-click to edit
+                          Double-click to edit subtabs
                         </Badge>
                       </div>
                     )}

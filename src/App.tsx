@@ -15,6 +15,7 @@ import Groceries from "./pages/Groceries";
 import RoommateFinder from "./pages/RoommateFinder";
 import TumGossip from "./pages/TumGossip";
 import Cart from "./pages/Cart";
+import PeriodTracker from "./pages/PeriodTracker";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/groceries" element={<Groceries />} />
             <Route path="/roommate-finder" element={<RoommateFinder />} />
             <Route path="/tum-gossip" element={<TumGossip />} />
+            <Route path="/period-tracker" element={<PeriodTracker />} />
             <Route path="/cart" element={<Cart />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
