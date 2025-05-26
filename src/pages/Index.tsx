@@ -32,6 +32,7 @@ const Index = () => {
   const [newServiceForm, setNewServiceForm] = useState({
     title: "",
     description: "",
+    icon: "Home",
     link: "",
     color: "bg-pastelYellow"
   });
@@ -91,13 +92,13 @@ const Index = () => {
   const handleAddNewService = () => {
     const newService = {
       ...newServiceForm,
-      id: Math.max(...allServices.map(s => s.id)) + 1,
-      icon: Home // Default icon for new services
+      id: Math.max(...allServices.map(s => s.id)) + 1
     };
     setAllServices(prev => [...prev, newService]);
     setNewServiceForm({
       title: "",
       description: "",
+      icon: "Home",
       link: "",
       color: "bg-pastelYellow"
     });

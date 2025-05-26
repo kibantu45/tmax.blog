@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,6 +45,7 @@ const Groceries = () => {
       name: item.name,
       price: item.price,
       image: "/placeholder.svg",
+      quantity: 1,
       category: "groceries"
     });
   };
