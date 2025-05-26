@@ -13,6 +13,7 @@ export type CartItem = {
 type CartContextType = {
   items: CartItem[];
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  addToCart: (item: Omit<CartItem, 'quantity'>) => void; // Add alias for addToCart
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -51,6 +52,9 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     });
   };
 
+  // Create alias for addToCart to maintain compatibility
+  const addToCart = addItem;
+
   const removeItem = (id: string) => {
     setItems(prev => prev.filter(item => item.id !== id));
   };
@@ -78,6 +82,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     <CartContext.Provider value={{
       items,
       addItem,
+      addToCart, // Include the alias
       removeItem,
       updateQuantity,
       clearCart,

@@ -1,11 +1,10 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search, ShoppingCart, Apple, Milk, Bread, Coffee } from "lucide-react";
+import { Search, ShoppingCart, Apple, Milk, Sandwich, Coffee } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 const Groceries = () => {
@@ -130,7 +129,7 @@ const Groceries = () => {
               Dairy Products
             </TabsTrigger>
             <TabsTrigger value="pantry" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-              <Bread className="w-4 h-4 mr-2" />
+              <Sandwich className="w-4 h-4 mr-2" />
               Pantry Essentials
             </TabsTrigger>
             <TabsTrigger value="beverages" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
