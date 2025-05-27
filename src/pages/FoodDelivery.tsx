@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, Star, Plus, Utensils } from "lucide-react";
+import { Clock, Star, Plus, Utensils, ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 const FoodDelivery = () => {
@@ -83,6 +83,21 @@ const FoodDelivery = () => {
       image: item.image,
       category: item.category
     });
+  };
+
+  const handleOrderNow = (item: typeof menuItems[0]) => {
+    addItem({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      category: item.category
+    });
+    
+    // Redirect to WhatsApp with order details
+    const message = `Hi! I'd like to order ${item.name} for £${item.price}. Please confirm availability and delivery time.`;
+    const whatsappUrl = `https://wa.me/+254702752033?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -199,15 +214,26 @@ const FoodDelivery = () => {
                     <CardContent className="p-4">
                       <h4 className="font-semibold mb-2">{item.name}</h4>
                       <p className="text-gray-600 text-sm mb-3">{item.description}</p>
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center mb-3">
                         <span className="text-lg font-bold text-tmaxGreen-600">£{item.price}</span>
+                      </div>
+                      <div className="flex gap-2">
                         <Button 
                           size="sm" 
-                          className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
+                          variant="outline"
+                          className="flex-1"
                           onClick={() => handleAddToCart(item)}
                         >
                           <Plus className="w-4 h-4 mr-1" />
-                          Add
+                          Add to Cart
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          className="flex-1 bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
+                          onClick={() => handleOrderNow(item)}
+                        >
+                          <ShoppingCart className="w-4 h-4 mr-1" />
+                          Order Now
                         </Button>
                       </div>
                     </CardContent>

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MapPin, Bed, Bath, Wifi, Car, Home, Users, Phone, Eye } from "lucide-react";
+import { MapPin, Bed, Bath, Wifi, Car, Home, Users, Phone, Eye, MessageCircle } from "lucide-react";
 
 const RentalBooking = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
@@ -115,6 +115,12 @@ const RentalBooking = () => {
 
   const handleWhatsAppContact = (accommodation: any) => {
     const message = `Hi! I'm interested in your ${accommodation.title} listed for KSh ${accommodation.price}/month in ${accommodation.location}. Could you please provide more details?`;
+    const whatsappUrl = `https://wa.me/${accommodation.sellerPhone.replace('+', '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleBookNow = (accommodation: any) => {
+    const message = `Hi! I'd like to book ${accommodation.title} at KSh ${accommodation.price}/month in ${accommodation.location}. Please confirm availability and booking process.`;
     const whatsappUrl = `https://wa.me/${accommodation.sellerPhone.replace('+', '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -266,12 +272,23 @@ const RentalBooking = () => {
                     View Photos
                   </Button>
                   <Button 
-                    className="flex-1 bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
+                    size="sm"
+                    variant="outline"
+                    className="flex-1"
                     disabled={!accommodation.available}
                     onClick={() => handleWhatsAppContact(accommodation)}
                   >
+                    <MessageCircle className="w-4 h-4 mr-1" />
+                    Inquire
+                  </Button>
+                  <Button 
+                    size="sm"
+                    className="flex-1 bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
+                    disabled={!accommodation.available}
+                    onClick={() => handleBookNow(accommodation)}
+                  >
                     <Phone className="w-4 h-4 mr-1" />
-                    Contact
+                    Book Now
                   </Button>
                 </div>
               </CardContent>
