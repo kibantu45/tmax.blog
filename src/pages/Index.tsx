@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -673,100 +674,23 @@ const Index = () => {
         </div>
 
         <div className="mb-12">
-          <div className="bg-gradient-to-r from-tmaxGreen-100 to-pastelYellow-light border-2 border-dashed border-tmaxGreen-300 rounded-lg p-8 text-center relative">
-            <div className="absolute top-2 right-2">
-              <Button size="sm" variant="outline">
-                <Edit className="w-4 h-4 mr-1" />
-                Edit Ad
-              </Button>
-            </div>
+          <div className="bg-gradient-to-r from-tmaxGreen-100 to-pastelYellow-light border-2 border-dashed border-tmaxGreen-300 rounded-lg p-8 text-center">
             <h3 className="text-2xl font-semibold text-tmaxGreen-700 mb-2">Advertisement Space</h3>
-            <p className="text-tmaxGreen-600 mb-4">Your ads could be here - Contact us for advertising opportunities</p>
+            <p className="text-tmaxGreen-600">Your ads could be here - Contact us for advertising opportunities</p>
           </div>
-        </div>
-
-        <div className="mb-8">
-          <Card className="border-2 border-dashed border-tmaxGreen-300">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Plus className="w-5 h-5 mr-2" />
-                Add New Service
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="new-title">Service Title</Label>
-                  <Input
-                    id="new-title"
-                    placeholder="Service Title"
-                    value={newServiceForm.title}
-                    onChange={(e) => setNewServiceForm(prev => ({ ...prev, title: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="new-description">Description</Label>
-                  <Textarea
-                    id="new-description"
-                    placeholder="Service Description"
-                    value={newServiceForm.description}
-                    onChange={(e) => setNewServiceForm(prev => ({ ...prev, description: e.target.value }))}
-                  />
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="new-link">Service Link</Label>
-                  <Input
-                    id="new-link"
-                    placeholder="Service Link (e.g., /new-service)"
-                    value={newServiceForm.link}
-                    onChange={(e) => setNewServiceForm(prev => ({ ...prev, link: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="new-image">Service Image</Label>
-                  <Input
-                    id="new-image"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                          setNewServiceForm(prev => ({ ...prev, image: event.target?.result as string }));
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                </div>
-                <Button onClick={handleAddNewService} className="w-full">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Service
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         <section className="mb-12">
           <h3 className="text-3xl font-bold text-center mb-8 text-tmaxGreen-700">All Our Services</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allServices.map((service, index) => renderServiceCard(service, index, true))}
+            {allServices.map((service, index) => renderServiceCard(service, index, false))}
           </div>
         </section>
 
         <section>
           <h3 className="text-2xl font-bold mb-6 text-tmaxGreen-700">Why Choose Tmax?</h3>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-tmaxGreen-100 bg-white/90 relative group">
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button size="sm" variant="outline">
-                  <Edit className="w-3 h-3" />
-                </Button>
-              </div>
+            <Card className="border-tmaxGreen-100 bg-white/90">
               <CardHeader>
                 <CardTitle className="text-tmaxGreen-700">Student-Focused</CardTitle>
               </CardHeader>
@@ -777,12 +701,7 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            <Card className="border-tmaxGreen-100 bg-white/90 relative group">
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button size="sm" variant="outline">
-                  <Edit className="w-3 h-3" />
-                </Button>
-              </div>
+            <Card className="border-tmaxGreen-100 bg-white/90">
               <CardHeader>
                 <CardTitle className="text-tmaxGreen-700">Fast & Reliable</CardTitle>
               </CardHeader>
@@ -793,12 +712,7 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            <Card className="border-tmaxGreen-100 bg-white/90 relative group">
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button size="sm" variant="outline">
-                  <Edit className="w-3 h-3" />
-                </Button>
-              </div>
+            <Card className="border-tmaxGreen-100 bg-white/90">
               <CardHeader>
                 <CardTitle className="text-tmaxGreen-700">All-in-One Platform</CardTitle>
               </CardHeader>
@@ -816,12 +730,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
             {communityStats.map((stat, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow border-tmaxGreen-100 bg-white/90 relative group">
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button size="sm" variant="outline">
-                    <Edit className="w-3 h-3" />
-                  </Button>
-                </div>
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow border-tmaxGreen-100 bg-white/90">
                 <CardContent className="pt-6">
                   <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
                   <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
