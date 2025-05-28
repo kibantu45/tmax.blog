@@ -48,11 +48,11 @@ const CycleTracker = () => {
   );
 };
 
-const HealthInsight = ({ title, description, icon }: { title: string; description: string; icon: any }) => (
+const HealthInsight = ({ title, description, icon: Icon }: { title: string; description: string; icon: React.ComponentType<{ className?: string }> }) => (
   <Card className="border-green-200 bg-green-50">
     <CardHeader>
       <CardTitle className="text-lg text-green-800 flex items-center">
-        {icon && <icon className="w-5 h-5 mr-2" />}
+        <Icon className="w-5 h-5 mr-2" />
         {title}
       </CardTitle>
     </CardHeader>
