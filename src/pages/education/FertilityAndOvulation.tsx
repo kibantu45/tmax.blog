@@ -280,7 +280,7 @@ const FertilityAndOvulation = () => {
             <ul className="list-disc list-inside text-red-700 space-y-1">
               <li>Under 35: No pregnancy after 1 year of trying</li>
               <li>Over 35: No pregnancy after 6 months</li>
-              <li>Irregular cycles (>35 days or <21 days)</li>
+              <li>Irregular cycles (&gt;35 days or &lt;21 days)</li>
               <li>Known conditions: PCOS, endometriosis, etc.</li>
             </ul>
           </CardContent>
