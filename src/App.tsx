@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -22,6 +21,11 @@ import BloomPeriodTracker from "./pages/BloomPeriodTracker";
 import GasDelivery from "./pages/GasDelivery";
 import LaundryServices from "./pages/LaundryServices";
 import NotFound from "./pages/NotFound";
+import MenstrualCycle from "./pages/education/MenstrualCycle";
+import NutritionDuringPeriod from "./pages/education/NutritionDuringPeriod";
+import FertilityAndOvulation from "./pages/education/FertilityAndOvulation";
+import ManagingPMS from "./pages/education/ManagingPMS";
+import ExerciseDuringCycle from "./pages/education/ExerciseDuringCycle";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +52,11 @@ const App = () => (
             <Route path="/gas-delivery" element={<GasDelivery />} />
             <Route path="/laundry" element={<LaundryServices />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/education/menstrual-cycle" element={<MenstrualCycle />} />
+            <Route path="/education/nutrition-during-period" element={<NutritionDuringPeriod />} />
+            <Route path="/education/fertility-and-ovulation" element={<FertilityAndOvulation />} />
+            <Route path="/education/managing-pms" element={<ManagingPMS />} />
+            <Route path="/education/exercise-during-cycle" element={<ExerciseDuringCycle />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

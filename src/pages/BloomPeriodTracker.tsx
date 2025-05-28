@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,8 @@ const BloomPeriodTracker = () => {
       duration: "5 min read",
       phase: "general",
       content: "Learn about the four phases of your cycle and what happens in your body.",
-      icon: "📚"
+      icon: "📚",
+      link: "/education/menstrual-cycle"
     },
     {
       title: "Nutrition During Your Period",
@@ -36,7 +36,8 @@ const BloomPeriodTracker = () => {
       duration: "8 min",
       phase: "menstrual",
       content: "Best foods to eat during menstruation to reduce cramps and boost energy.",
-      icon: "🥗"
+      icon: "🥗",
+      link: "/education/nutrition-during-period"
     },
     {
       title: "Fertility and Ovulation Explained",
@@ -44,7 +45,8 @@ const BloomPeriodTracker = () => {
       duration: "7 min read",
       phase: "ovulation",
       content: "Understanding ovulation signs and your fertile window.",
-      icon: "🌸"
+      icon: "🌸",
+      link: "/education/fertility-and-ovulation"
     },
     {
       title: "Managing PMS Symptoms",
@@ -52,7 +54,8 @@ const BloomPeriodTracker = () => {
       duration: "10 min read",
       phase: "luteal",
       content: "Natural ways to manage mood swings, bloating, and other PMS symptoms.",
-      icon: "💆‍♀️"
+      icon: "💆‍♀️",
+      link: "/education/managing-pms"
     },
     {
       title: "Exercise During Your Cycle",
@@ -60,7 +63,8 @@ const BloomPeriodTracker = () => {
       duration: "12 min",
       phase: "general",
       content: "How to adapt your workout routine to your menstrual cycle phases.",
-      icon: "🏃‍♀️"
+      icon: "🏃‍♀️",
+      link: "/education/exercise-during-cycle"
     }
   ];
 
@@ -400,7 +404,10 @@ const BloomPeriodTracker = () => {
                       </div>
                       <h3 className="font-semibold text-lg mb-2">{content.title}</h3>
                       <p className="text-gray-600 text-sm mb-4">{content.content}</p>
-                      <Button className="w-full bg-pink-600 hover:bg-pink-700 text-white">
+                      <Button 
+                        className="w-full bg-pink-600 hover:bg-pink-700 text-white"
+                        onClick={() => window.location.href = content.link}
+                      >
                         <BookOpen className="w-4 h-4 mr-2" />
                         Read More
                       </Button>
