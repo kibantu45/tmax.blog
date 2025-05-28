@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export type CartItem = {
   id: string;
@@ -39,25 +39,52 @@ type CartProviderProps = {
 export const CartProvider = ({ children }: CartProviderProps) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        setItems(parsedCart);
+        console.log('Cart loaded from localStorage:', parsedCart);
+      } catch (error) {
+        console.error('Error loading cart from localStorage:', error);
+      }
+    }
+  }, []);
+
+  // Save cart to localStorage whenever items change
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(items));
+    console.log('Cart saved to localStorage:', items);
+  }, [items]);
+
   const addItem = (newItem: Omit<CartItem, 'quantity'>) => {
     setItems(prev => {
       const existingItem = prev.find(item => item.id === newItem.id);
       if (existingItem) {
-        return prev.map(item =>
+        const updatedItems = prev.map(item =>
           item.id === newItem.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
+        console.log('Updated existing item quantity:', newItem.name);
+        return updatedItems;
       }
-      return [...prev, { ...newItem, quantity: 1 }];
+      const newItems = [...prev, { ...newItem, quantity: 1 }];
+      console.log('Added new item to cart:', newItem.name);
+      return newItems;
     });
-    console.log('Item added to cart:', newItem);
   };
 
   const addToCart = addItem;
 
   const removeItem = (id: string) => {
-    setItems(prev => prev.filter(item => item.id !== id));
+    setItems(prev => {
+      const updatedItems = prev.filter(item => item.id !== id);
+      console.log('Removed item from cart:', id);
+      return updatedItems;
+    });
   };
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -70,10 +97,13 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         item.id === id ? { ...item, quantity } : item
       )
     );
+    console.log('Updated item quantity:', id, quantity);
   };
 
   const clearCart = () => {
     setItems([]);
+    localStorage.removeItem('cart');
+    console.log('Cart cleared');
   };
 
   const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
