@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +19,8 @@ import TumGossip from "./pages/TumGossip";
 import Cart from "./pages/Cart";
 import PeriodTracker from "./pages/PeriodTracker";
 import BloomPeriodTracker from "./pages/BloomPeriodTracker";
+import GasDelivery from "./pages/GasDelivery";
+import LaundryServices from "./pages/LaundryServices";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +45,8 @@ const App = () => (
             <Route path="/roommate-finder" element={<RoommateFinder />} />
             <Route path="/tum-gossip" element={<TumGossip />} />
             <Route path="/period-tracker" element={<BloomPeriodTracker />} />
+            <Route path="/gas-delivery" element={<GasDelivery />} />
+            <Route path="/laundry" element={<LaundryServices />} />
             <Route path="/cart" element={<Cart />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

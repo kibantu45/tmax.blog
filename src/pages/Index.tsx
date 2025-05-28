@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield, Edit, Trash2, Plus, Eye, Copy, Upload, Droplets } from "lucide-react";
+import { Users, TrendingUp, Star, Calendar, Search, ShoppingCart, Home, Utensils, GraduationCap, Pill, Users as UsersIcon, Smartphone, MessageSquare, Menu, Shield, Edit, Trash2, Plus, Eye, Copy, Upload, Droplets, Fuel, Shirt, Bike, Cake, Palette, Camera, Car, Scissors, Sparkles, Mail, Phone, MapPin } from "lucide-react";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import { useCart } from "@/contexts/CartContext";
 import {
@@ -19,8 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import Login from "./Login";
-import SignUp from "./SignUp";
+import { Slider } from "@/components/ui/slider";
 
 const Index = () => {
   const { itemCount } = useCart();
@@ -28,7 +26,9 @@ const Index = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-  const [activeAdminTab, setActiveAdminTab] = useState("overview");
+  const [showContactUs, setShowContactUs] = useState(false);
+  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   // Admin form states
   const [editingService, setEditingService] = useState<any>(null);
@@ -43,23 +43,38 @@ const Index = () => {
 
   const communityStats = [
     { label: "Active Students", value: "8.5K", icon: Users, color: "text-tmaxGreen-500" },
-    { label: "Services Available", value: "10", icon: TrendingUp, color: "text-pastelYellow-dark" },
+    { label: "Services Available", value: "18", icon: TrendingUp, color: "text-pastelYellow-dark" },
     { label: "Campus Locations", value: "12", icon: Star, color: "text-tmaxGreen-600" },
     { label: "Weekly Orders", value: "450+", icon: Calendar, color: "text-pastelYellow-dark" }
   ];
 
   const [allServices, setAllServices] = useState([
-    { id: 1, title: "Student Accommodation", description: "Find your perfect student housing", icon: Home, link: "/rental-booking", color: "bg-pastelYellow", image: "" },
-    { id: 2, title: "Food Delivery", description: "Campus restaurants at your door", icon: Utensils, link: "/food-delivery", color: "bg-tmaxGreen-200", image: "" },
-    { id: 3, title: "University Resources", description: "Academic support and information", icon: GraduationCap, link: "/my-university", color: "bg-pastelYellow-light", image: "" },
-    { id: 4, title: "Pharmacy", description: "Healthcare and medicine delivery", icon: Pill, link: "/chemist", color: "bg-tmaxGreen-100", image: "" },
-    { id: 5, title: "Groceries", description: "Fresh groceries delivered", icon: ShoppingCart, link: "/groceries", color: "bg-pastelYellow", image: "" },
-    { id: 6, title: "Second-Hand Marketplace", description: "Buy and sell pre-loved items", icon: ShoppingCart, link: "/second-hand", color: "bg-tmaxGreen-200", image: "" },
-    { id: 7, title: "Roommate Finder", description: "Find compatible roommates", icon: UsersIcon, link: "/roommate-finder", color: "bg-pastelYellow-light", image: "" },
-    { id: 8, title: "Mobile Data", description: "Top up your mobile data", icon: Smartphone, link: "/mobile-data", color: "bg-tmaxGreen-100", image: "" },
-    { id: 9, title: "Campus Gossip", description: "Latest campus news and events", icon: MessageSquare, link: "/tum-gossip", color: "bg-pastelYellow", image: "" },
-    { id: 10, title: "Period Tracker", description: "Track your cycle with Bloom", icon: Droplets, link: "/period-tracker", color: "bg-pink-200", image: "" }
+    { id: 1, title: "Student Accommodation", description: "Find your perfect student housing", icon: Home, link: "/rental-booking", color: "bg-pastelYellow", image: "", category: "Accommodation" },
+    { id: 2, title: "Food Delivery", description: "Campus restaurants at your door", icon: Utensils, link: "/food-delivery", color: "bg-tmaxGreen-200", image: "", category: "Food" },
+    { id: 3, title: "University Resources", description: "Academic support and information", icon: GraduationCap, link: "/my-university", color: "bg-pastelYellow-light", image: "", category: "Education" },
+    { id: 4, title: "Pharmacy", description: "Healthcare and medicine delivery", icon: Pill, link: "/chemist", color: "bg-tmaxGreen-100", image: "", category: "Health" },
+    { id: 5, title: "Groceries", description: "Fresh groceries delivered", icon: ShoppingCart, link: "/groceries", color: "bg-pastelYellow", image: "", category: "Shopping" },
+    { id: 6, title: "Second-Hand Marketplace", description: "Buy and sell pre-loved items", icon: ShoppingCart, link: "/second-hand", color: "bg-tmaxGreen-200", image: "", category: "Shopping" },
+    { id: 7, title: "Roommate Finder", description: "Find compatible roommates", icon: UsersIcon, link: "/roommate-finder", color: "bg-pastelYellow-light", image: "", category: "Accommodation" },
+    { id: 8, title: "Mobile Data", description: "Top up your mobile data", icon: Smartphone, link: "/mobile-data", color: "bg-tmaxGreen-100", image: "", category: "Technology" },
+    { id: 9, title: "Campus Gossip", description: "Latest campus news and events", icon: MessageSquare, link: "/tum-gossip", color: "bg-pastelYellow", image: "", category: "Social" },
+    { id: 10, title: "Period Tracker", description: "Track your cycle with Bloom", icon: Droplets, link: "/period-tracker", color: "bg-pink-200", image: "", category: "Health" },
+    { id: 11, title: "Gas Delivery", description: "Quick gas refills and delivery", icon: Fuel, link: "/gas-delivery", color: "bg-orange-200", image: "", category: "Home Services" },
+    { id: 12, title: "Laundry Services", description: "Professional washing and cleaning", icon: Shirt, link: "/laundry", color: "bg-blue-200", image: "", category: "Home Services" },
+    { id: 13, title: "Boda Boda", description: "Quick motorcycle transport", icon: Bike, link: "/boda-boda", color: "bg-green-200", image: "", category: "Transport" },
+    { id: 14, title: "Cake & Catering", description: "Custom cakes and event catering", icon: Cake, link: "/cake-catering", color: "bg-purple-200", image: "", category: "Food" },
+    { id: 15, title: "Graphic Design", description: "Professional design services", icon: Palette, link: "/graphic-design", color: "bg-indigo-200", image: "", category: "Creative" },
+    { id: 16, title: "Photoshoot Services", description: "Professional photography", icon: Camera, link: "/photoshoot", color: "bg-yellow-200", image: "", category: "Creative" },
+    { id: 17, title: "Tuktuk Services", description: "Affordable three-wheeler transport", icon: Car, link: "/tuktuk", color: "bg-teal-200", image: "", category: "Transport" },
+    { id: 18, title: "Salon & Beauty", description: "Hair, nails, and beauty services", icon: Scissors, link: "/salon-beauty", color: "bg-pink-300", image: "", category: "Beauty" }
   ]);
+
+  const categories = ["All", ...Array.from(new Set(allServices.map(service => service.category)))];
+
+  const filteredServices = allServices.filter(service => {
+    const categoryMatch = selectedCategory === "" || selectedCategory === "All" || service.category === selectedCategory;
+    return categoryMatch;
+  });
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -107,7 +122,8 @@ const Index = () => {
     const newService = {
       ...newServiceForm,
       id: Math.max(...allServices.map(s => s.id)) + 1,
-      icon: Home // Default icon component
+      icon: Home,
+      category: "General"
     };
     setAllServices(prev => [...prev, newService]);
     setNewServiceForm({
@@ -231,6 +247,8 @@ const Index = () => {
           )}
           <h3 className="font-semibold text-lg mb-2 text-gray-900">{service.title}</h3>
           <p className="text-gray-600 text-sm mb-4">{service.description}</p>
+          <Badge variant="outline" className="mb-3 text-xs">{service.category}</Badge>
+          <br />
           <Button 
             className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
             onClick={() => !isAdmin && (window.location.href = service.link)}
@@ -598,7 +616,7 @@ const Index = () => {
                       <Menu className="w-4 h-4 mr-2" />
                       Services
                     </NavigationMenuTrigger>
-                    <NavigationMenuContent className="bg-white p-4 min-w-[300px]">
+                    <NavigationMenuContent className="bg-white p-4 min-w-[300px] z-50">
                       <div className="grid gap-2">
                         {allServices.map((service, index) => (
                           <Button
@@ -671,6 +689,15 @@ const Index = () => {
             Everything you need as a student in one place. From accommodation to food delivery, 
             groceries to university resources - Tmax has got you covered.
           </p>
+          
+          <Button 
+            size="lg"
+            className="bg-gradient-to-r from-tmaxGreen-500 to-pastelYellow hover:from-tmaxGreen-600 hover:to-pastelYellow-dark text-white font-semibold px-8 py-3 text-lg"
+            onClick={() => document.getElementById('services-section')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <Star className="w-5 h-5 mr-2" />
+            Discover Our Services
+          </Button>
         </div>
 
         <div className="mb-12">
@@ -680,10 +707,64 @@ const Index = () => {
           </div>
         </div>
 
-        <section className="mb-12">
-          <h3 className="text-3xl font-bold text-center mb-8 text-tmaxGreen-700">All Our Services</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allServices.map((service, index) => renderServiceCard(service, index, false))}
+        <section id="services-section" className="mb-12">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Filter Sidebar */}
+            <div className="lg:w-1/4">
+              <Card className="border-tmaxGreen-200 sticky top-24">
+                <CardHeader>
+                  <CardTitle className="text-tmaxGreen-700">Filter Services</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label className="text-sm font-medium mb-3 block">Categories</Label>
+                    <div className="space-y-2">
+                      {categories.map(category => (
+                        <div key={category} className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id={category}
+                            name="category"
+                            checked={selectedCategory === category || (category === "All" && selectedCategory === "")}
+                            onChange={() => setSelectedCategory(category === "All" ? "" : category)}
+                            className="w-4 h-4 text-tmaxGreen-600"
+                          />
+                          <label htmlFor={category} className="text-sm text-gray-700 cursor-pointer">
+                            {category}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label className="text-sm font-medium mb-3 block">Price Range (KES)</Label>
+                    <Slider
+                      value={priceRange}
+                      onValueChange={setPriceRange}
+                      max={10000}
+                      min={0}
+                      step={100}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-2">
+                      <span>KES {priceRange[0]}</span>
+                      <span>KES {priceRange[1]}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Services Grid */}
+            <div className="lg:w-3/4">
+              <h3 className="text-3xl font-bold text-center mb-8 text-tmaxGreen-700">
+                {selectedCategory ? `${selectedCategory} Services` : "All Our Services"}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredServices.map((service, index) => renderServiceCard(service, index, false))}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -740,7 +821,73 @@ const Index = () => {
             ))}
           </div>
           
-          <div className="flex justify-between items-center">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h4 className="font-semibold text-tmaxGreen-700 mb-4">Contact Us</h4>
+              <div className="space-y-2 text-sm text-gray-600">
+                <div className="flex items-center">
+                  <Mail className="w-4 h-4 mr-2" />
+                  <a href="mailto:tmax@gmail.com" className="hover:text-tmaxGreen-600">
+                    tmax@gmail.com
+                  </a>
+                </div>
+                <div className="flex items-center">
+                  <Phone className="w-4 h-4 mr-2" />
+                  <a href="tel:+254702752033" className="hover:text-tmaxGreen-600">
+                    +254 702 752 033
+                  </a>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 mr-2" />
+                  <span>Nairobi, Kenya</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-tmaxGreen-700 mb-4">Quick Links</h4>
+              <div className="space-y-2 text-sm text-gray-600">
+                <Button 
+                  variant="ghost" 
+                  className="p-0 h-auto text-left justify-start text-gray-600 hover:text-tmaxGreen-600"
+                  onClick={() => setShowContactUs(true)}
+                >
+                  Contact Us
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  className="p-0 h-auto text-left justify-start text-gray-600 hover:text-tmaxGreen-600"
+                  onClick={() => window.location.href = "/food-delivery"}
+                >
+                  Food Delivery
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  className="p-0 h-auto text-left justify-start text-gray-600 hover:text-tmaxGreen-600"
+                  onClick={() => window.location.href = "/groceries"}
+                >
+                  Groceries
+                </Button>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-tmaxGreen-700 mb-4">Follow Us</h4>
+              <div className="flex space-x-4">
+                <Button variant="outline" size="sm" className="p-2">
+                  <MessageSquare className="w-4 h-4" />
+                </Button>
+                <Button variant="outline" size="sm" className="p-2">
+                  <Phone className="w-4 h-4" />
+                </Button>
+                <Button variant="outline" size="sm" className="p-2">
+                  <Mail className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-between items-center border-t border-tmaxGreen-200 pt-6">
             <div className="text-center text-gray-600">
               <p>&copy; 2024 Tmax. Your trusted campus companion.</p>
             </div>
@@ -771,6 +918,43 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Contact Us Modal */}
+      <Dialog open={showContactUs} onOpenChange={setShowContactUs}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Contact Tmax</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="text-center space-y-4">
+              <div className="flex items-center justify-center space-x-3">
+                <Mail className="w-5 h-5 text-tmaxGreen-600" />
+                <span className="font-medium">tmax@gmail.com</span>
+              </div>
+              <div className="flex items-center justify-center space-x-3">
+                <Phone className="w-5 h-5 text-tmaxGreen-600" />
+                <span className="font-medium">+254 702 752 033</span>
+              </div>
+              <div className="flex justify-center space-x-4 pt-4">
+                <Button 
+                  variant="outline"
+                  onClick={() => window.open('mailto:tmax@gmail.com', '_blank')}
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Email Us
+                </Button>
+                <Button 
+                  onClick={() => window.open('https://wa.me/+254702752033?text=Hi! I need help with Tmax services.', '_blank')}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <Phone className="w-4 h-4 mr-2" />
+                  WhatsApp
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
