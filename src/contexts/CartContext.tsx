@@ -8,12 +8,13 @@ export type CartItem = {
   image: string;
   quantity: number;
   category: string;
+  provider?: string;
 };
 
 type CartContextType = {
   items: CartItem[];
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void; // Add alias for addToCart
+  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -50,9 +51,9 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       }
       return [...prev, { ...newItem, quantity: 1 }];
     });
+    console.log('Item added to cart:', newItem);
   };
 
-  // Create alias for addToCart to maintain compatibility
   const addToCart = addItem;
 
   const removeItem = (id: string) => {
@@ -82,7 +83,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     <CartContext.Provider value={{
       items,
       addItem,
-      addToCart, // Include the alias
+      addToCart,
       removeItem,
       updateQuantity,
       clearCart,

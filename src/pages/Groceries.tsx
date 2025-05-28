@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search, ShoppingCart, Apple, Milk, Sandwich, Coffee, Edit, Plus, Trash2 } from "lucide-react";
+import { Search, ShoppingCart, Apple, Milk, Sandwich, Coffee, Edit, Plus, Trash2, Phone } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -90,6 +90,16 @@ const Groceries = () => {
     });
   };
 
+  const handleOrderNow = (item: any) => {
+    // Add to cart first
+    handleAddToCart(item);
+    
+    // Redirect to WhatsApp with order details
+    const message = `Hi! I'd like to order ${item.name} for KSh ${item.price}. Please confirm availability and delivery time.`;
+    const whatsappUrl = `https://wa.me/+254702752033?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   const handleEditTab = (tab: any) => {
     setEditingTab(tab);
   };
@@ -147,14 +157,25 @@ const Groceries = () => {
               </div>
               <Badge variant="outline">{item.stock} in stock</Badge>
             </div>
-            <Button 
-              className="w-full bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
-              onClick={() => handleAddToCart(item)}
-              disabled={item.stock === 0}
-            >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              Add to Cart
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                className="flex-1 bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
+                onClick={() => handleAddToCart(item)}
+                disabled={item.stock === 0}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add to Cart
+              </Button>
+              <Button 
+                variant="outline"
+                className="flex-1"
+                onClick={() => handleOrderNow(item)}
+                disabled={item.stock === 0}
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                Order Now
+              </Button>
+            </div>
           </CardContent>
         </Card>
       ))}
@@ -175,6 +196,13 @@ const Groceries = () => {
               {isAdminMode && (
                 <Badge variant="outline" className="bg-red-100 text-red-800">Admin Mode</Badge>
               )}
+              <Button 
+                variant="outline"
+                onClick={() => window.location.href = "/cart"}
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                View Cart
+              </Button>
               <Button onClick={() => window.history.back()} variant="outline">
                 Back to Home
               </Button>
@@ -288,6 +316,7 @@ const Groceries = () => {
             className="bg-green-600 hover:bg-green-700"
             onClick={() => window.open('https://wa.me/254702752033?text=Hi, I would like to place a grocery order. Here is my list:', '_blank')}
           >
+            <Phone className="w-4 h-4 mr-2" />
             Order via WhatsApp
           </Button>
         </div>

@@ -1,13 +1,12 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Shirt, Clock, Star, Phone, MapPin, Droplets } from "lucide-react";
+import { Shirt, Clock, Star, Phone, MapPin, ShoppingCart, Plus } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 const LaundryServices = () => {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
   
   const laundryProviders = [
     {
@@ -18,10 +17,10 @@ const LaundryServices = () => {
       pickup: true,
       whatsapp: "+254702752033",
       services: [
-        { id: 1, name: "Wash & Fold (per kg)", price: 150, image: "👔", description: "Basic washing and folding service" },
-        { id: 2, name: "Wash & Iron (per kg)", price: 200, image: "👕", description: "Washing, drying and professional ironing" },
-        { id: 3, name: "Dry Cleaning (per item)", price: 300, image: "🧥", description: "Professional dry cleaning service" },
-        { id: 4, name: "Bedding Set Cleaning", price: 500, image: "🛏️", description: "Complete bedding set wash and dry" }
+        { id: "laundry1", name: "Wash & Fold (per kg)", price: 150, image: "👔", description: "Basic washing and folding service" },
+        { id: "laundry2", name: "Wash & Iron (per kg)", price: 200, image: "👕", description: "Washing, drying and professional ironing" },
+        { id: "laundry3", name: "Dry Cleaning (per item)", price: 300, image: "🧥", description: "Professional dry cleaning service" },
+        { id: "laundry4", name: "Bedding Set Cleaning", price: 500, image: "🛏️", description: "Complete bedding set wash and dry" }
       ]
     },
     {
@@ -30,12 +29,12 @@ const LaundryServices = () => {
       deliveryTime: "Same day",
       rating: 4.7,
       pickup: true,
-      whatsapp: "+254702752033",
+      whatsapp: "+254702752034",
       services: [
-        { id: 5, name: "Express Wash (per kg)", price: 180, image: "⚡", description: "Same day washing service" },
-        { id: 6, name: "Delicate Care (per item)", price: 250, image: "🌸", description: "Special care for delicate fabrics" },
-        { id: 7, name: "Shoe Cleaning", price: 200, image: "👟", description: "Professional shoe cleaning and care" },
-        { id: 8, name: "Blanket Cleaning", price: 400, image: "🧵", description: "Heavy blanket and comforter cleaning" }
+        { id: "laundry5", name: "Express Wash (per kg)", price: 180, image: "⚡", description: "Same day washing service" },
+        { id: "laundry6", name: "Delicate Care (per item)", price: 250, image: "🌸", description: "Special care for delicate fabrics" },
+        { id: "laundry7", name: "Shoe Cleaning", price: 200, image: "👟", description: "Professional shoe cleaning and care" },
+        { id: "laundry8", name: "Blanket Cleaning", price: 400, image: "🧵", description: "Heavy blanket and comforter cleaning" }
       ]
     },
     {
@@ -44,32 +43,30 @@ const LaundryServices = () => {
       deliveryTime: "48-72 hours",
       rating: 4.8,
       pickup: true,
-      whatsapp: "+254702752033",
+      whatsapp: "+254702752035",
       services: [
-        { id: 9, name: "Eco Wash (per kg)", price: 170, image: "🌿", description: "Environmentally friendly washing" },
-        { id: 10, name: "Stain Removal", price: 100, image: "🧽", description: "Specialized stain removal treatment" },
-        { id: 11, name: "Fabric Softening", price: 50, image: "💧", description: "Extra fabric softening treatment" },
-        { id: 12, name: "Bulk Laundry (10kg+)", price: 120, image: "📦", description: "Discounted rate for bulk washing" }
+        { id: "laundry9", name: "Eco Wash (per kg)", price: 170, image: "🌿", description: "Environmentally friendly washing" },
+        { id: "laundry10", name: "Stain Removal", price: 100, image: "🧽", description: "Specialized stain removal treatment" },
+        { id: "laundry11", name: "Fabric Softening", price: 50, image: "💧", description: "Extra fabric softening treatment" },
+        { id: "laundry12", name: "Bulk Laundry (10kg+)", price: 120, image: "📦", description: "Discounted rate for bulk washing" }
       ]
     }
   ];
 
   const handleAddToCart = (service: any, provider: any) => {
-    addItem({
-      id: service.id,
-      name: `${service.name} - ${provider.name}`,
+    addToCart({
+      id: `${service.id}_${provider.id}`,
+      name: `${service.name}`,
       price: service.price,
       image: service.image,
-      category: "Laundry Services"
+      category: "Laundry Services",
+      provider: provider.name
     });
   };
 
-  const handleWhatsAppOrder = (provider: any, service?: any) => {
-    const message = service 
-      ? `Hi ${provider.name}! I'd like to book: ${service.name} - KES ${service.price}`
-      : `Hi ${provider.name}! I'd like to inquire about your laundry services.`;
-    
-    const whatsappUrl = `https://wa.me/${provider.whatsapp}?text=${encodeURIComponent(message)}`;
+  const handleOrderNow = (provider: any, service: any) => {
+    const message = `Hi ${provider.name}! I'd like to book: ${service.name} - KES ${service.price}. Please confirm availability and pickup time.`;
+    const whatsappUrl = `https://wa.me/${provider.whatsapp.replace('+', '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -86,12 +83,21 @@ const LaundryServices = () => {
                 Laundry Services
               </h1>
             </div>
-            <Button 
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
-              onClick={() => window.location.href = "/"}
-            >
-              Back to Home
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="outline"
+                onClick={() => window.location.href = "/cart"}
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                View Cart
+              </Button>
+              <Button 
+                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
+                onClick={() => window.location.href = "/"}
+              >
+                Back to Home
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -130,7 +136,7 @@ const LaundryServices = () => {
                     )}
                   </div>
                   <Button
-                    onClick={() => handleWhatsAppOrder(provider)}
+                    onClick={() => handleOrderNow(provider, null)}
                     className="bg-green-600 hover:bg-green-700"
                   >
                     <Phone className="w-4 h-4 mr-2" />
@@ -152,12 +158,13 @@ const LaundryServices = () => {
                             className="w-full bg-blue-600 hover:bg-blue-700"
                             onClick={() => handleAddToCart(service, provider)}
                           >
+                            <Plus className="w-4 h-4 mr-2" />
                             Add to Cart
                           </Button>
                           <Button 
                             variant="outline" 
                             className="w-full"
-                            onClick={() => handleWhatsAppOrder(provider, service)}
+                            onClick={() => handleOrderNow(provider, service)}
                           >
                             <Phone className="w-4 h-4 mr-2" />
                             Book Now

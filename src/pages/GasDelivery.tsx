@@ -1,13 +1,12 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Fuel, MapPin, Clock, Phone, Star } from "lucide-react";
+import { Fuel, MapPin, Clock, Phone, Star, ShoppingCart, Plus } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 const GasDelivery = () => {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
   
   const gasProviders = [
     {
@@ -18,9 +17,9 @@ const GasDelivery = () => {
       freeDelivery: true,
       whatsapp: "+254702752033",
       products: [
-        { id: 1, name: "6kg Gas Cylinder Refill", price: 1200, image: "🔥", description: "Standard 6kg gas cylinder refill" },
-        { id: 2, name: "13kg Gas Cylinder Refill", price: 2400, image: "🔥", description: "Large 13kg gas cylinder refill" },
-        { id: 3, name: "New 6kg Cylinder + Gas", price: 3500, image: "🔥", description: "New 6kg cylinder with gas included" }
+        { id: "gas1", name: "6kg Gas Cylinder Refill", price: 1200, image: "🔥", description: "Standard 6kg gas cylinder refill" },
+        { id: "gas2", name: "13kg Gas Cylinder Refill", price: 2400, image: "🔥", description: "Large 13kg gas cylinder refill" },
+        { id: "gas3", name: "New 6kg Cylinder + Gas", price: 3500, image: "🔥", description: "New 6kg cylinder with gas included" }
       ]
     },
     {
@@ -31,9 +30,9 @@ const GasDelivery = () => {
       freeDelivery: true,
       whatsapp: "+254702752033",
       products: [
-        { id: 4, name: "6kg Gas Cylinder Refill", price: 1150, image: "🔥", description: "Quality 6kg gas cylinder refill" },
-        { id: 5, name: "13kg Gas Cylinder Refill", price: 2300, image: "🔥", description: "Large 13kg gas cylinder refill" },
-        { id: 6, name: "Gas Stove Installation", price: 1500, image: "🔧", description: "Professional gas stove installation service" }
+        { id: "gas4", name: "6kg Gas Cylinder Refill", price: 1150, image: "🔥", description: "Quality 6kg gas cylinder refill" },
+        { id: "gas5", name: "13kg Gas Cylinder Refill", price: 2300, image: "🔥", description: "Large 13kg gas cylinder refill" },
+        { id: "gas6", name: "Gas Stove Installation", price: 1500, image: "🔧", description: "Professional gas stove installation service" }
       ]
     },
     {
@@ -44,29 +43,27 @@ const GasDelivery = () => {
       freeDelivery: false,
       whatsapp: "+254702752033",
       products: [
-        { id: 7, name: "6kg Gas Cylinder Refill", price: 1180, image: "🔥", description: "Premium 6kg gas cylinder refill" },
-        { id: 8, name: "13kg Gas Cylinder Refill", price: 2350, image: "🔥", description: "Premium 13kg gas cylinder refill" },
-        { id: 9, name: "Gas Leak Detection Service", price: 800, image: "🔍", description: "Professional gas leak detection and repair" }
+        { id: "gas7", name: "6kg Gas Cylinder Refill", price: 1180, image: "🔥", description: "Premium 6kg gas cylinder refill" },
+        { id: "gas8", name: "13kg Gas Cylinder Refill", price: 2350, image: "🔥", description: "Premium 13kg gas cylinder refill" },
+        { id: "gas9", name: "Gas Leak Detection Service", price: 800, image: "🔍", description: "Professional gas leak detection and repair" }
       ]
     }
   ];
 
   const handleAddToCart = (product: any, provider: any) => {
-    addItem({
-      id: product.id,
-      name: `${product.name} - ${provider.name}`,
+    addToCart({
+      id: `${product.id}_${provider.id}`,
+      name: `${product.name}`,
       price: product.price,
       image: product.image,
-      category: "Gas Services"
+      category: "Gas Services",
+      provider: provider.name
     });
   };
 
-  const handleWhatsAppOrder = (provider: any, product?: any) => {
-    const message = product 
-      ? `Hi ${provider.name}! I'd like to order: ${product.name} - KES ${product.price}`
-      : `Hi ${provider.name}! I'd like to inquire about your gas delivery services.`;
-    
-    const whatsappUrl = `https://wa.me/${provider.whatsapp}?text=${encodeURIComponent(message)}`;
+  const handleOrderNow = (provider: any, product: any) => {
+    const message = `Hi ${provider.name}! I'd like to order: ${product.name} - KES ${product.price}. Please confirm availability and delivery time.`;
+    const whatsappUrl = `https://wa.me/${provider.whatsapp.replace('+', '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -83,12 +80,21 @@ const GasDelivery = () => {
                 Gas Delivery
               </h1>
             </div>
-            <Button 
-              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
-              onClick={() => window.location.href = "/"}
-            >
-              Back to Home
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="outline"
+                onClick={() => window.location.href = "/cart"}
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                View Cart
+              </Button>
+              <Button 
+                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                onClick={() => window.location.href = "/"}
+              >
+                Back to Home
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -127,7 +133,7 @@ const GasDelivery = () => {
                     )}
                   </div>
                   <Button
-                    onClick={() => handleWhatsAppOrder(provider)}
+                    onClick={() => handleOrderNow(provider, null)}
                     className="bg-green-600 hover:bg-green-700"
                   >
                     <Phone className="w-4 h-4 mr-2" />
@@ -149,12 +155,13 @@ const GasDelivery = () => {
                             className="w-full bg-orange-600 hover:bg-orange-700"
                             onClick={() => handleAddToCart(product, provider)}
                           >
+                            <Plus className="w-4 h-4 mr-2" />
                             Add to Cart
                           </Button>
                           <Button 
                             variant="outline" 
                             className="w-full"
-                            onClick={() => handleWhatsAppOrder(provider, product)}
+                            onClick={() => handleOrderNow(provider, product)}
                           >
                             <Phone className="w-4 h-4 mr-2" />
                             Order Now

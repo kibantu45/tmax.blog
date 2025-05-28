@@ -4,11 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, Star, Plus, Utensils, ShoppingCart } from "lucide-react";
+import { Clock, Star, Plus, Utensils, ShoppingCart, Phone } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 const FoodDelivery = () => {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   const restaurants = [
     {
@@ -76,26 +76,21 @@ const FoodDelivery = () => {
   ];
 
   const handleAddToCart = (item: typeof menuItems[0]) => {
-    addItem({
+    addToCart({
       id: item.id,
       name: item.name,
       price: item.price,
       image: item.image,
-      category: item.category
+      category: "food"
     });
   };
 
   const handleOrderNow = (item: typeof menuItems[0]) => {
-    addItem({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      image: item.image,
-      category: item.category
-    });
+    // Add to cart first
+    handleAddToCart(item);
     
     // Redirect to WhatsApp with order details
-    const message = `Hi! I'd like to order ${item.name} for £${item.price}. Please confirm availability and delivery time.`;
+    const message = `Hi! I'd like to order ${item.name} for $${item.price}. Please confirm availability and delivery time.`;
     const whatsappUrl = `https://wa.me/+254702752033?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -119,6 +114,7 @@ const FoodDelivery = () => {
                 variant="outline"
                 onClick={() => window.location.href = "/cart"}
               >
+                <ShoppingCart className="w-4 h-4 mr-2" />
                 View Cart
               </Button>
               <Button 
@@ -215,7 +211,7 @@ const FoodDelivery = () => {
                       <h4 className="font-semibold mb-2">{item.name}</h4>
                       <p className="text-gray-600 text-sm mb-3">{item.description}</p>
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-lg font-bold text-tmaxGreen-600">£{item.price}</span>
+                        <span className="text-lg font-bold text-tmaxGreen-600">${item.price}</span>
                       </div>
                       <div className="flex gap-2">
                         <Button 
@@ -232,7 +228,7 @@ const FoodDelivery = () => {
                           className="flex-1 bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
                           onClick={() => handleOrderNow(item)}
                         >
-                          <ShoppingCart className="w-4 h-4 mr-1" />
+                          <Phone className="w-4 h-4 mr-1" />
                           Order Now
                         </Button>
                       </div>
