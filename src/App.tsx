@@ -21,6 +21,7 @@ import TumGossip from '@/pages/TumGossip';
 import PeriodTracker from '@/pages/PeriodTracker';
 import BloomPeriodTracker from '@/pages/BloomPeriodTracker';
 import ErrandServices from '@/pages/ErrandServices';
+import SalonBeauty from '@/pages/SalonBeauty';
 
 // Education pages
 import MenstrualCycle from '@/pages/education/MenstrualCycle';
@@ -46,6 +47,7 @@ function App() {
             <Route path="/food-delivery" element={<FoodDelivery />} />
             <Route path="/gas-delivery" element={<GasDelivery />} />
             <Route path="/laundry-services" element={<LaundryServices />} />
+            <Route path="/salon-beauty" element={<SalonBeauty />} />
             <Route path="/roommate-finder" element={<RoommateFinder />} />
             <Route path="/rental-booking" element={<RentalBooking />} />
             <Route path="/second-hand" element={<SecondHand />} />
