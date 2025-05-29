@@ -139,7 +139,6 @@ const SalonBeauty = () => {
       id: `salon-${provider.id}-${service.id}`,
       name: `${service.name} - ${provider.name}`,
       price: service.price,
-      quantity: 1,
       image: service.image
     });
     toast({

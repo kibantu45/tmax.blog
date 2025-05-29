@@ -1,150 +1,124 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
 import { 
   ArrowLeft, 
   Heart, 
   Calendar as CalendarIcon, 
   TrendingUp, 
-  Baby, 
-  Crown, 
-  LogIn,
-  AlertCircle,
+  Moon, 
+  Droplets, 
+  Star,
+  Crown,
+  Baby,
+  Bell,
+  Plus,
   Target,
-  Clock,
-  Bell
+  Activity
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const BloomPeriodTracker = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
-  const [periodStartDate, setPeriodStartDate] = useState<Date | undefined>(new Date());
-  const [currentDay, setCurrentDay] = useState(1);
-  const [cycleLength, setCycleLength] = useState(28);
-  const [periodLength, setPeriodLength] = useState(5);
-  const [pregnancyMode, setPregnancyMode] = useState(false);
-  const [pregnancyWeek, setPregnancyWeek] = useState(1);
-  const [showPremiumDialog, setShowPremiumDialog] = useState(false);
+  const [currentDay, setCurrentDay] = useState<number>(1);
+  const [cycleLength, setCycleLength] = useState<number>(28);
+  const [periodLength, setPeriodLength] = useState<number>(5);
+  const [lastPeriodDate, setLastPeriodDate] = useState<Date | undefined>(new Date());
   const [symptoms, setSymptoms] = useState<string[]>([]);
-  const [mood, setMood] = useState("");
-  const [notes, setNotes] = useState("");
+  const [mood, setMood] = useState<string>("");
+  const [notes, setNotes] = useState<string>("");
+  const [pregnancyMode, setPregnancyMode] = useState<boolean>(false);
+  const [pregnancyWeek, setPregnancyWeek] = useState<number>(1);
+  const [isPremium, setIsPremium] = useState<boolean>(false);
+  const [showSubscriptionDialog, setShowSubscriptionDialog] = useState(false);
   const { toast } = useToast();
 
   // Calculate cycle predictions
   const calculatePredictions = () => {
-    if (!periodStartDate) return null;
+    if (!lastPeriodDate) return null;
     
-    const ovulationDay = Math.floor(cycleLength / 2);
-    const fertileStart = ovulationDay - 5;
-    const fertileEnd = ovulationDay + 1;
-    const nextPeriod = new Date(periodStartDate);
+    const nextPeriod = new Date(lastPeriodDate);
     nextPeriod.setDate(nextPeriod.getDate() + cycleLength);
     
+    const ovulationDay = new Date(lastPeriodDate);
+    ovulationDay.setDate(ovulationDay.getDate() + Math.floor(cycleLength / 2));
+    
+    const fertileStart = new Date(ovulationDay);
+    fertileStart.setDate(fertileStart.getDate() - 5);
+    
+    const fertileEnd = new Date(ovulationDay);
+    fertileEnd.setDate(fertileEnd.getDate() + 1);
+    
     return {
+      nextPeriod,
       ovulationDay,
       fertileStart,
-      fertileEnd,
-      nextPeriod,
-      daysUntilOvulation: Math.max(0, ovulationDay - currentDay),
-      daysUntilPeriod: Math.max(0, cycleLength - currentDay),
-      isInFertileWindow: currentDay >= fertileStart && currentDay <= fertileEnd,
-      currentPhase: currentDay <= periodLength ? "Menstruation" : 
-                   currentDay <= fertileStart ? "Follicular" :
-                   currentDay <= fertileEnd ? "Ovulation" : "Luteal"
+      fertileEnd
     };
   };
 
   const predictions = calculatePredictions();
 
-  const handleLoginRedirect = () => {
-    window.location.href = "/login";
+  const getCurrentPhase = () => {
+    if (currentDay <= periodLength) return "Menstrual";
+    if (currentDay <= 13) return "Follicular";
+    if (currentDay >= 14 && currentDay <= 16) return "Ovulatory";
+    return "Luteal";
   };
 
-  const handleDayUpdate = (day: number) => {
-    if (!isLoggedIn) {
-      setShowLoginPrompt(true);
-      return;
-    }
-    setCurrentDay(day);
-    // Generate notifications based on the day
-    if (predictions) {
-      if (predictions.daysUntilOvulation === 2) {
-        toast({
-          title: "Fertility Alert",
-          description: "Your fertile window is approaching in 2 days!",
-        });
-      } else if (predictions.daysUntilPeriod === 3) {
-        toast({
-          title: "Period Reminder",
-          description: "Your next period is expected in 3 days.",
-        });
-      }
+  const getPhaseColor = (phase: string) => {
+    switch (phase) {
+      case "Menstrual": return "text-red-600 bg-red-50";
+      case "Follicular": return "text-green-600 bg-green-50";
+      case "Ovulatory": return "text-orange-600 bg-orange-50";
+      case "Luteal": return "text-purple-600 bg-purple-50";
+      default: return "text-gray-600 bg-gray-50";
     }
   };
 
-  const premiumFeatures = [
-    "Advanced cycle predictions with AI",
-    "Detailed fertility analysis",
-    "Pregnancy planning tools",
-    "Export cycle data",
-    "Personalized health insights",
-    "Premium symptom tracking",
-    "Doctor consultation booking"
+  const symptomsList = [
+    "Cramps", "Headache", "Bloating", "Breast Tenderness", "Fatigue", 
+    "Mood Swings", "Acne", "Cravings", "Back Pain", "Nausea"
   ];
 
-  const pregnancyStages = [
-    { week: 1, title: "Conception", description: "Fertilization occurs" },
-    { week: 4, title: "Implantation", description: "Embryo attaches to uterine wall" },
-    { week: 8, title: "Fetal Development", description: "Major organs begin forming" },
-    { week: 12, title: "First Trimester End", description: "Risk of miscarriage decreases" },
-    { week: 20, title: "Anatomy Scan", description: "Detailed ultrasound examination" },
-    { week: 28, title: "Third Trimester", description: "Rapid fetal growth period" },
-    { week: 36, title: "Full Term Approaching", description: "Baby considered full-term soon" },
-    { week: 40, title: "Due Date", description: "Expected delivery time" }
-  ];
+  const moodOptions = ["😊 Great", "🙂 Good", "😐 Okay", "😕 Low", "😢 Terrible"];
 
-  // Mock login check
-  useEffect(() => {
-    // Check if user is logged in (this would typically check localStorage, cookies, or auth state)
-    const loginStatus = localStorage.getItem('isLoggedIn');
-    setIsLoggedIn(loginStatus === 'true');
-  }, []);
-
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-green-50 to-yellow-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="w-16 h-16 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center mx-auto mb-4">
-              <Heart className="w-8 h-8 text-white" />
-            </div>
-            <CardTitle className="text-2xl font-bold">Bloom Period Tracker</CardTitle>
-            <p className="text-gray-600">Please log in to access your period tracking data</p>
-          </CardHeader>
-          <CardContent className="text-center">
-            <Button 
-              onClick={handleLoginRedirect}
-              className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
-            >
-              <LogIn className="w-4 h-4 mr-2" />
-              Login to Continue
-            </Button>
-            <p className="text-sm text-gray-500 mt-4">
-              Your health data is private and secure
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+  const handleSymptomToggle = (symptom: string) => {
+    setSymptoms(prev => 
+      prev.includes(symptom) 
+        ? prev.filter(s => s !== symptom)
+        : [...prev, symptom]
     );
-  }
+  };
+
+  const handleSaveData = () => {
+    // Save tracking data (requires login for persistence)
+    toast({
+      title: "Data Saved",
+      description: "Your tracking data has been saved locally. Sign in to sync across devices.",
+    });
+  };
+
+  const fetalDevelopmentWeeks = {
+    1: "Fertilization occurs - your baby's journey begins!",
+    4: "Neural tube forms - brain and spinal cord development starts",
+    8: "All major organs begin forming - baby is size of a raspberry",
+    12: "Baby can make fists and has developed reflexes",
+    16: "You might feel first movements - baby is size of an avocado",
+    20: "Halfway point! Baby's hearing is developing",
+    24: "Baby's lungs are developing - viability milestone",
+    28: "Baby's eyes can open and close",
+    32: "Baby's bones are hardening",
+    36: "Baby is considered full-term soon",
+    40: "Ready for birth! Average delivery time"
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-green-50 to-yellow-100">
@@ -161,548 +135,447 @@ const BloomPeriodTracker = () => {
                 <ArrowLeft className="w-4 h-4" />
               </Button>
               <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-                <Heart className="w-6 h-6 mr-2 text-pink-500" />
+                <Heart className="w-6 h-6 text-pink-500 mr-2" />
                 Bloom Period Tracker
+                {isPremium && <Crown className="w-5 h-5 text-yellow-500 ml-2" />}
               </h1>
             </div>
-            <Button 
-              onClick={() => setShowPremiumDialog(true)}
-              className="bg-gradient-to-r from-yellow-500 to-orange-500"
-            >
-              <Crown className="w-4 h-4 mr-2" />
-              Go Premium
-            </Button>
+            <div className="flex items-center space-x-4">
+              {!isPremium && (
+                <Button 
+                  onClick={() => setShowSubscriptionDialog(true)}
+                  className="bg-gradient-to-r from-pink-500 to-purple-600 text-white"
+                >
+                  <Crown className="w-4 h-4 mr-2" />
+                  Upgrade to Premium
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Current Day Input */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
-              Current Cycle Day
+              <CalendarIcon className="w-5 h-5 mr-2" />
+              Track Your Current Day
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-4">
-              <div className="flex-1">
-                <Label htmlFor="currentDay">Enter your current cycle day</Label>
+              <div>
+                <Label htmlFor="currentDay">Current Day of Cycle</Label>
                 <Input
                   id="currentDay"
                   type="number"
                   min="1"
                   max="50"
                   value={currentDay}
-                  onChange={(e) => handleDayUpdate(parseInt(e.target.value) || 1)}
+                  onChange={(e) => setCurrentDay(parseInt(e.target.value) || 1)}
                   className="w-20"
                 />
               </div>
-              <div className="text-sm text-gray-600">
-                <p>Day {currentDay} of your cycle</p>
-                {predictions && (
-                  <p className="font-medium text-pink-600">{predictions.currentPhase} Phase</p>
-                )}
+              <div className={`px-4 py-2 rounded-lg ${getPhaseColor(getCurrentPhase())}`}>
+                <strong>{getCurrentPhase()} Phase</strong>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Fertility Status */}
-        {predictions && (
-          <Card className="mb-6">
-            <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Target className="w-6 h-6 text-green-500" />
-                  </div>
-                  <h3 className="font-semibold text-gray-800">Next Ovulation</h3>
-                  <p className="text-2xl font-bold text-green-600">{predictions.daysUntilOvulation} days</p>
-                </div>
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <CalendarIcon className="w-6 h-6 text-red-500" />
-                  </div>
-                  <h3 className="font-semibold text-gray-800">Next Period</h3>
-                  <p className="text-2xl font-bold text-red-600">{predictions.daysUntilPeriod} days</p>
-                </div>
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Bell className="w-6 h-6 text-purple-500" />
-                  </div>
-                  <h3 className="font-semibold text-gray-800">Fertile Window</h3>
-                  <Badge 
-                    className={predictions.isInFertileWindow ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}
-                  >
-                    {predictions.isInFertileWindow ? "Active" : "Inactive"}
-                  </Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        <Tabs defaultValue="cycle" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8">
-            <TabsTrigger value="cycle">Cycle Tracking</TabsTrigger>
-            <TabsTrigger value="symptoms">Symptoms</TabsTrigger>
-            <TabsTrigger value="calendar">Calendar</TabsTrigger>
-            <TabsTrigger value="insights">Insights</TabsTrigger>
-            <TabsTrigger value="pregnancy">Pregnancy</TabsTrigger>
+        <Tabs defaultValue="tracker" className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="tracker">Daily Tracker</TabsTrigger>
+            <TabsTrigger value="calendar">Calendar View</TabsTrigger>
+            <TabsTrigger value="predictions">Predictions</TabsTrigger>
+            <TabsTrigger value="insights">Smart Insights</TabsTrigger>
+            {pregnancyMode ? (
+              <TabsTrigger value="pregnancy">Pregnancy</TabsTrigger>
+            ) : (
+              <TabsTrigger value="education">Education</TabsTrigger>
+            )}
           </TabsList>
 
-          <TabsContent value="cycle" className="space-y-6">
+          {/* Daily Tracker Tab */}
+          <TabsContent value="tracker" className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Cycle Settings */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Cycle Settings</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="cycleLength">Average Cycle Length (days)</Label>
+                    <Input
+                      id="cycleLength"
+                      type="number"
+                      value={cycleLength}
+                      onChange={(e) => setCycleLength(parseInt(e.target.value) || 28)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="periodLength">Period Length (days)</Label>
+                    <Input
+                      id="periodLength"
+                      type="number"
+                      value={periodLength}
+                      onChange={(e) => setPeriodLength(parseInt(e.target.value) || 5)}
+                    />
+                  </div>
+                  <div>
+                    <Label>Last Period Start Date</Label>
+                    <Calendar
+                      mode="single"
+                      selected={lastPeriodDate}
+                      onSelect={setLastPeriodDate}
+                      className="rounded-md border"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Symptom Tracking */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Today's Symptoms</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    {symptomsList.map((symptom) => (
+                      <Button
+                        key={symptom}
+                        variant={symptoms.includes(symptom) ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleSymptomToggle(symptom)}
+                        className="text-sm"
+                      >
+                        {symptom}
+                      </Button>
+                    ))}
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <Label>Mood</Label>
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        {moodOptions.map((moodOption) => (
+                          <Button
+                            key={moodOption}
+                            variant={mood === moodOption ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setMood(moodOption)}
+                          >
+                            {moodOption}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="notes">Personal Notes</Label>
+                      <Textarea
+                        id="notes"
+                        placeholder="How are you feeling today? Any observations?"
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Button onClick={handleSaveData} className="w-full">
+              Save Today's Data
+            </Button>
+          </TabsContent>
+
+          {/* Calendar View Tab */}
+          <TabsContent value="calendar">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <CalendarIcon className="w-5 h-5 mr-2" />
-                  Cycle Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="periodStartDate">Last Period Start Date</Label>
-                    <div className="mt-2">
-                      <Calendar
-                        mode="single"
-                        selected={periodStartDate}
-                        onSelect={setPeriodStartDate}
-                        className="border rounded-md"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="cycleLength">Average Cycle Length (days)</Label>
-                      <Input
-                        id="cycleLength"
-                        type="number"
-                        min="21"
-                        max="45"
-                        value={cycleLength}
-                        onChange={(e) => setCycleLength(parseInt(e.target.value) || 28)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="periodLength">Average Period Length (days)</Label>
-                      <Input
-                        id="periodLength"
-                        type="number"
-                        min="1"
-                        max="10"
-                        value={periodLength}
-                        onChange={(e) => setPeriodLength(parseInt(e.target.value) || 5)}
-                      />
-                    </div>
-                    <Button className="w-full mt-4">Save Cycle Information</Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <TrendingUp className="w-5 h-5 mr-2" />
-                  Cycle Predictions
+                  Cycle Calendar View
+                  {!isPremium && <Badge className="ml-2 bg-yellow-500">Premium Feature</Badge>}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {predictions ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-pink-50 p-4 rounded-lg">
-                        <h3 className="font-semibold text-pink-800 mb-2">Current Phase</h3>
-                        <p className="text-lg font-medium text-pink-600">{predictions.currentPhase}</p>
-                        <p className="text-sm text-gray-600 mt-1">Day {currentDay} of your cycle</p>
-                      </div>
-                      <div className="bg-purple-50 p-4 rounded-lg">
-                        <h3 className="font-semibold text-purple-800 mb-2">Next Period</h3>
-                        <p className="text-lg font-medium text-purple-600">
-                          {predictions.nextPeriod.toLocaleDateString()}
-                        </p>
-                        <p className="text-sm text-gray-600 mt-1">In {predictions.daysUntilPeriod} days</p>
-                      </div>
-                    </div>
-
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <h3 className="font-semibold text-blue-800 mb-2">Fertility Window</h3>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-gray-600">Starts on day {predictions.fertileStart}</p>
-                          <p className="text-sm text-gray-600">Ends on day {predictions.fertileEnd}</p>
-                        </div>
-                        <Badge className={predictions.isInFertileWindow ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}>
-                          {predictions.isInFertileWindow ? "Currently Fertile" : "Not in Fertile Window"}
-                        </Badge>
-                      </div>
-                    </div>
+                {isPremium ? (
+                  <div className="text-center py-8">
+                    <CalendarIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">Enhanced calendar visualization showing period days, ovulation, and fertile windows.</p>
                   </div>
                 ) : (
-                  <p className="text-gray-600">Please enter your cycle information to see predictions.</p>
+                  <div className="text-center py-8 bg-yellow-50 rounded-lg">
+                    <Crown className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">Premium Calendar View</h3>
+                    <p className="text-gray-600 mb-4">Unlock detailed calendar visualization with color-coded cycle phases</p>
+                    <Button onClick={() => setShowSubscriptionDialog(true)}>
+                      Upgrade to Premium
+                    </Button>
+                  </div>
                 )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="symptoms" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Track Your Symptoms</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <Label>Common Symptoms</Label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-                      {["Cramps", "Headache", "Bloating", "Fatigue", "Acne", "Mood Swings", 
-                        "Breast Tenderness", "Backache", "Nausea", "Cravings", "Insomnia", "Spotting"].map((symptom) => (
-                        <Button
-                          key={symptom}
-                          variant={symptoms.includes(symptom) ? "default" : "outline"}
-                          className="justify-start"
-                          onClick={() => {
-                            if (symptoms.includes(symptom)) {
-                              setSymptoms(symptoms.filter(s => s !== symptom));
-                            } else {
-                              setSymptoms([...symptoms, symptom]);
-                            }
-                          }}
-                        >
-                          {symptom}
-                        </Button>
-                      ))}
+          {/* Predictions Tab */}
+          <TabsContent value="predictions">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <TrendingUp className="w-5 h-5 mr-2" />
+                    Cycle Predictions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {predictions && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                        <span className="font-medium">Next Period</span>
+                        <span className="text-red-600">{predictions.nextPeriod.toDateString()}</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                        <span className="font-medium">Ovulation Day</span>
+                        <span className="text-orange-600">{predictions.ovulationDay.toDateString()}</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                        <span className="font-medium">Fertile Window</span>
+                        <span className="text-green-600">
+                          {predictions.fertileStart.toDateString()} - {predictions.fertileEnd.toDateString()}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  )}
+                </CardContent>
+              </Card>
 
-                  <div>
-                    <Label htmlFor="mood">Mood</Label>
-                    <div className="grid grid-cols-4 gap-2 mt-2">
-                      {["Happy", "Sad", "Anxious", "Irritable", "Calm", "Energetic", "Tired", "Emotional"].map((moodOption) => (
-                        <Button
-                          key={moodOption}
-                          variant={mood === moodOption ? "default" : "outline"}
-                          className="justify-start"
-                          onClick={() => setMood(moodOption)}
-                        >
-                          {moodOption}
-                        </Button>
-                      ))}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Target className="w-5 h-5 mr-2" />
+                    Fertility Status
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center">
+                    <div className="text-3xl mb-2">
+                      {getCurrentPhase() === "Ovulatory" ? "🔥" : 
+                       getCurrentPhase() === "Follicular" ? "🌱" : 
+                       getCurrentPhase() === "Luteal" ? "🌙" : "💧"}
                     </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="notes">Notes</Label>
-                    <Textarea
-                      id="notes"
-                      placeholder="Add any additional notes about how you're feeling today..."
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      className="mt-2"
-                    />
-                  </div>
-
-                  <Button className="w-full">Save Today's Entry</Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="calendar" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Monthly Calendar</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-white rounded-lg p-4">
-                  <Calendar
-                    mode="single"
-                    selected={new Date()}
-                    className="border-0"
-                  />
-                </div>
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  <div className="flex items-center">
-                    <div className="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
-                    <span className="text-sm">Period Days</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-                    <span className="text-sm">Fertile Window</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-4 h-4 rounded-full bg-purple-500 mr-2"></div>
-                    <span className="text-sm">Ovulation Day</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-                    <span className="text-sm">Logged Symptoms</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="insights" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Cycle Insights</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-blue-800 mb-2">Your Cycle Summary</h3>
-                    <p className="text-gray-700">
-                      Based on your data, your average cycle length is {cycleLength} days with periods lasting around {periodLength} days.
+                    <h3 className="text-lg font-semibold mb-2">
+                      {getCurrentPhase() === "Ovulatory" ? "High Fertility" :
+                       getCurrentPhase() === "Follicular" ? "Rising Fertility" :
+                       "Low Fertility"}
+                    </h3>
+                    <p className="text-gray-600">
+                      You are currently in your {getCurrentPhase().toLowerCase()} phase
                     </p>
                   </div>
-
-                  <div className="bg-purple-50 p-4 rounded-lg">
-                    <h3 className="font-semibold text-purple-800 mb-2">Health Tips</h3>
-                    <ul className="list-disc list-inside space-y-1 text-gray-700">
-                      <li>Stay hydrated to help reduce bloating</li>
-                      <li>Regular exercise can help alleviate cramps</li>
-                      <li>Consider taking iron supplements during your period</li>
-                      <li>Heat therapy can help with menstrual pain</li>
-                    </ul>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Button className="w-full" variant="outline">
-                      View Educational Resources
-                    </Button>
-                    <Button className="w-full" variant="outline">
-                      Export Cycle Data
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Educational Resources</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <a href="/education/menstrual-cycle" className="block">
-                    <Card className="h-full hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-gray-800">Understanding Your Menstrual Cycle</h3>
-                        <p className="text-sm text-gray-600 mt-1">Learn about the four phases of your cycle</p>
-                      </CardContent>
-                    </Card>
-                  </a>
-                  <a href="/education/nutrition-during-period" className="block">
-                    <Card className="h-full hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-gray-800">Nutrition During Your Period</h3>
-                        <p className="text-sm text-gray-600 mt-1">Foods that help with period symptoms</p>
-                      </CardContent>
-                    </Card>
-                  </a>
-                  <a href="/education/fertility-and-ovulation" className="block">
-                    <Card className="h-full hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-gray-800">Fertility and Ovulation</h3>
-                        <p className="text-sm text-gray-600 mt-1">Understanding your fertile window</p>
-                      </CardContent>
-                    </Card>
-                  </a>
-                  <a href="/education/managing-pms" className="block">
-                    <Card className="h-full hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-gray-800">Managing PMS</h3>
-                        <p className="text-sm text-gray-600 mt-1">Tips for dealing with premenstrual symptoms</p>
-                      </CardContent>
-                    </Card>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
-          <TabsContent value="pregnancy" className="space-y-6">
+          {/* Smart Insights Tab */}
+          <TabsContent value="insights">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Baby className="w-5 h-5 mr-2" />
-                  Pregnancy Mode
+                  <Activity className="w-5 h-5 mr-2" />
+                  Smart Insights & Tips
+                  {!isPremium && <Badge className="ml-2 bg-yellow-500">Premium Feature</Badge>}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {!pregnancyMode ? (
-                  <div className="text-center py-6">
-                    <Baby className="w-12 h-12 mx-auto text-pink-500 mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Pregnancy Tracking</h3>
-                    <p className="text-gray-600 mb-6">
-                      Switch to pregnancy mode to track your pregnancy journey week by week.
-                    </p>
-                    <Button 
-                      onClick={() => setPregnancyMode(true)}
-                      className="bg-pink-500 hover:bg-pink-600"
-                    >
-                      Enable Pregnancy Mode
-                    </Button>
+                {isPremium ? (
+                  <div className="space-y-4">
+                    <div className="p-4 bg-blue-50 rounded-lg">
+                      <h4 className="font-semibold mb-2">Phase-Based Recommendations</h4>
+                      <p>Based on your {getCurrentPhase()} phase, we recommend gentle exercise and iron-rich foods.</p>
+                    </div>
+                    <div className="p-4 bg-green-50 rounded-lg">
+                      <h4 className="font-semibold mb-2">Symptom Patterns</h4>
+                      <p>Your data shows consistent patterns that can help predict future symptoms.</p>
+                    </div>
                   </div>
                 ) : (
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-semibold">Week {pregnancyWeek}</h3>
-                      <div className="flex items-center space-x-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setPregnancyWeek(Math.max(1, pregnancyWeek - 1))}
-                          disabled={pregnancyWeek <= 1}
-                        >
-                          Previous
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setPregnancyWeek(Math.min(40, pregnancyWeek + 1))}
-                          disabled={pregnancyWeek >= 40}
-                        >
-                          Next
-                        </Button>
-                      </div>
-                    </div>
+                  <div className="text-center py-8 bg-yellow-50 rounded-lg">
+                    <Activity className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">Personalized Insights</h3>
+                    <p className="text-gray-600 mb-4">Get AI-powered insights based on your tracking patterns</p>
+                    <Button onClick={() => setShowSubscriptionDialog(true)}>
+                      Unlock Smart Insights
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-                    <div className="bg-pink-50 p-4 rounded-lg">
-                      {pregnancyStages.find(stage => stage.week === pregnancyWeek) ? (
-                        <div>
-                          <h3 className="font-semibold text-pink-800 mb-2">
-                            {pregnancyStages.find(stage => stage.week === pregnancyWeek)?.title}
-                          </h3>
-                          <p className="text-gray-700">
-                            {pregnancyStages.find(stage => stage.week === pregnancyWeek)?.description}
-                          </p>
-                        </div>
-                      ) : (
-                        <div>
-                          <h3 className="font-semibold text-pink-800 mb-2">Week {pregnancyWeek}</h3>
-                          <p className="text-gray-700">
-                            Your baby continues to grow and develop.
-                          </p>
-                        </div>
-                      )}
+          {/* Education/Pregnancy Tab */}
+          <TabsContent value={pregnancyMode ? "pregnancy" : "education"}>
+            {pregnancyMode ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Baby className="w-5 h-5 mr-2" />
+                    Pregnancy Week {pregnancyWeek}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="pregnancyWeek">Current Week</Label>
+                      <Input
+                        id="pregnancyWeek"
+                        type="number"
+                        min="1"
+                        max="42"
+                        value={pregnancyWeek}
+                        onChange={(e) => setPregnancyWeek(parseInt(e.target.value) || 1)}
+                        className="w-24"
+                      />
                     </div>
-
-                    <div className="grid grid-cols-10 gap-1">
-                      {Array.from({ length: 40 }, (_, i) => i + 1).map((week) => (
-                        <Button
-                          key={week}
-                          variant="outline"
-                          size="sm"
-                          className={`p-1 h-8 ${week === pregnancyWeek ? 'bg-pink-500 text-white' : ''}`}
-                          onClick={() => setPregnancyWeek(week)}
-                        >
-                          {week}
-                        </Button>
-                      ))}
+                    <div className="p-4 bg-pink-50 rounded-lg">
+                      <h4 className="font-semibold mb-2">Week {pregnancyWeek} Development</h4>
+                      <p>{fetalDevelopmentWeeks[pregnancyWeek as keyof typeof fetalDevelopmentWeeks] || "Keep tracking your pregnancy journey!"}</p>
                     </div>
-
                     <Button 
-                      variant="outline" 
-                      className="w-full"
                       onClick={() => setPregnancyMode(false)}
+                      variant="outline"
                     >
                       Exit Pregnancy Mode
                     </Button>
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Educational Resources</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => window.location.href = "/education/menstrual-cycle"}
+                    >
+                      Understanding Your Menstrual Cycle
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => window.location.href = "/education/nutrition-during-period"}
+                    >
+                      Nutrition During Your Period
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => window.location.href = "/education/fertility-and-ovulation"}
+                    >
+                      Fertility & Ovulation Explained
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => window.location.href = "/education/managing-pms"}
+                    >
+                      Managing PMS Symptoms
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => window.location.href = "/education/exercise-during-cycle"}
+                    >
+                      Exercise During Your Cycle
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Pregnancy Mode</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center space-y-4">
+                      <Baby className="w-16 h-16 text-pink-500 mx-auto" />
+                      <h3 className="text-lg font-semibold">Expecting?</h3>
+                      <p className="text-gray-600">Switch to pregnancy mode for week-by-week fetal development tracking</p>
+                      <Button 
+                        onClick={() => setPregnancyMode(true)}
+                        className="bg-pink-500 hover:bg-pink-600"
+                      >
+                        <Baby className="w-4 h-4 mr-2" />
+                        Enable Pregnancy Mode
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
-      </div>
 
-      {/* Login Prompt Dialog */}
-      {showLoginPrompt && (
-        <Dialog open={showLoginPrompt} onOpenChange={setShowLoginPrompt}>
+        {/* Premium Subscription Dialog */}
+        <Dialog open={showSubscriptionDialog} onOpenChange={setShowSubscriptionDialog}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="flex items-center">
-                <AlertCircle className="w-5 h-5 mr-2 text-orange-500" />
-                Login Required
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <p className="text-gray-600">
-                Please log in to save and track your cycle data securely.
-              </p>
-              <Button 
-                onClick={handleLoginRedirect}
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-600"
-              >
-                <LogIn className="w-4 h-4 mr-2" />
-                Go to Login
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {/* Premium Dialog */}
-      {showPremiumDialog && (
-        <Dialog open={showPremiumDialog} onOpenChange={setShowPremiumDialog}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex items-center">
                 <Crown className="w-5 h-5 mr-2 text-yellow-500" />
-                Bloom Premium Features
+                Upgrade to Bloom Premium
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
-              <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-4 rounded-lg text-center">
-                <h3 className="text-xl font-bold mb-2">Upgrade to Premium</h3>
-                <p className="text-sm opacity-90">
-                  Get access to advanced features and personalized insights
-                </p>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600 mb-2">KES 100/year</div>
+                <p className="text-gray-600">Unlock all premium features</p>
               </div>
               
               <div className="space-y-2">
-                <h4 className="font-semibold text-gray-800">Premium Features:</h4>
-                <ul className="space-y-2">
-                  {premiumFeatures.map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <Crown className="w-4 h-4 text-yellow-500 mr-2" />
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-3 border rounded-lg">
-                  <h4 className="font-semibold">Monthly</h4>
-                  <p className="text-2xl font-bold">$4.99</p>
-                  <p className="text-xs text-gray-500">per month</p>
+                <div className="flex items-center">
+                  <CalendarIcon className="w-4 h-4 mr-2 text-green-600" />
+                  <span>Enhanced calendar visualization</span>
                 </div>
-                <div className="text-center p-3 border rounded-lg bg-gray-50">
-                  <h4 className="font-semibold">Yearly</h4>
-                  <p className="text-2xl font-bold">$39.99</p>
-                  <p className="text-xs text-gray-500">$3.33/month</p>
-                  <Badge className="mt-1 bg-green-100 text-green-800">Save 33%</Badge>
+                <div className="flex items-center">
+                  <Activity className="w-4 h-4 mr-2 text-green-600" />
+                  <span>AI-powered cycle insights</span>
+                </div>
+                <div className="flex items-center">
+                  <Bell className="w-4 h-4 mr-2 text-green-600" />
+                  <span>Advanced predictions & notifications</span>
+                </div>
+                <div className="flex items-center">
+                  <Target className="w-4 h-4 mr-2 text-green-600" />
+                  <span>Detailed fertility tracking</span>
                 </div>
               </div>
               
-              <Button className="w-full bg-gradient-to-r from-pink-500 to-purple-600">
-                <Crown className="w-4 h-4 mr-2" />
-                Upgrade Now
+              <Button 
+                onClick={() => {
+                  setIsPremium(true);
+                  setShowSubscriptionDialog(false);
+                  toast({
+                    title: "Welcome to Premium!",
+                    description: "All premium features are now unlocked.",
+                  });
+                }}
+                className="w-full bg-gradient-to-r from-pink-500 to-purple-600"
+              >
+                Subscribe Now - KES 100/year
               </Button>
-              
-              <p className="text-xs text-center text-gray-500">
-                Cancel anytime. No commitment required.
-              </p>
             </div>
           </DialogContent>
         </Dialog>
-      )}
+      </div>
     </div>
   );
 };
