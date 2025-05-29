@@ -4,14 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ArrowLeft, Phone, MapPin, Star, Clock, Scissors, Sparkles } from "lucide-react";
+import { ArrowLeft, Phone, MapPin, Star, Clock, Scissors, Sparkles, Search, ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
 
 const SalonBeauty = () => {
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [showProviderDialog, setShowProviderDialog] = useState(false);
-  const { addToCart } = useCart();
+  const [searchQuery, setSearchQuery] = useState("");
+  const { addToCart, itemCount } = useCart();
   const { toast } = useToast();
 
   const salonProviders = [
@@ -139,7 +141,8 @@ const SalonBeauty = () => {
       id: `salon-${provider.id}-${service.id}`,
       name: `${service.name} - ${provider.name}`,
       price: service.price,
-      image: service.image
+      image: service.image,
+      category: "salon"
     });
     toast({
       title: "Added to Cart",
@@ -155,13 +158,21 @@ const SalonBeauty = () => {
     window.open(whatsappUrl, '_blank');
   };
 
+  // Filter providers based on search query
+  const filteredProviders = salonProviders.filter(provider =>
+    provider.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    provider.services.some(service => 
+      service.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-green-50 to-yellow-100">
       {/* Header */}
       <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
+            <div className="flex items-center flex-1">
               <Button 
                 variant="ghost" 
                 onClick={() => window.history.back()}
@@ -169,10 +180,37 @@ const SalonBeauty = () => {
               >
                 <ArrowLeft className="w-4 h-4" />
               </Button>
-              <h1 className="text-2xl font-bold text-gray-800">Salon & Beauty</h1>
+              <h1 className="text-2xl font-bold text-gray-800 mr-6">Salon & Beauty</h1>
+              
+              {/* Search Bar */}
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  type="text"
+                  placeholder="Search services..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
-            <Button onClick={() => window.location.href = "/cart"} variant="outline">
+            
+            {/* Cart Button */}
+            <Button 
+              onClick={() => window.location.href = "/cart"} 
+              variant="outline"
+              className="relative"
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
               Cart
+              {itemCount > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                >
+                  {itemCount}
+                </Badge>
+              )}
             </Button>
           </div>
         </div>
@@ -196,7 +234,7 @@ const SalonBeauty = () => {
           </TabsList>
 
           <TabsContent value="all" className="space-y-6">
-            {salonProviders.map((provider) => (
+            {filteredProviders.map((provider) => (
               <Card key={provider.id} className="overflow-hidden">
                 <CardHeader>
                   <div className="flex justify-between items-start">
@@ -276,7 +314,7 @@ const SalonBeauty = () => {
           </TabsContent>
 
           <TabsContent value="hair">
-            {salonProviders.filter(p => p.name === "Glamour Salon").map((provider) => (
+            {filteredProviders.filter(p => p.name === "Glamour Salon").map((provider) => (
               <Card key={provider.id} className="overflow-hidden">
                 <CardHeader>
                   <div className="flex justify-between items-start">
@@ -356,7 +394,7 @@ const SalonBeauty = () => {
           </TabsContent>
 
           <TabsContent value="nails">
-            {salonProviders.filter(p => p.name === "Nail Tech Pro").map((provider) => (
+            {filteredProviders.filter(p => p.name === "Nail Tech Pro").map((provider) => (
               <Card key={provider.id} className="overflow-hidden">
                 <CardHeader>
                   <div className="flex justify-between items-start">
@@ -436,7 +474,7 @@ const SalonBeauty = () => {
           </TabsContent>
 
           <TabsContent value="men">
-            {salonProviders.filter(p => p.name === "Gents Barber").map((provider) => (
+            {filteredProviders.filter(p => p.name === "Gents Barber").map((provider) => (
               <Card key={provider.id} className="overflow-hidden">
                 <CardHeader>
                   <div className="flex justify-between items-start">
