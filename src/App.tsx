@@ -1,69 +1,76 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { CartProvider } from "@/contexts/CartContext";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import SecondHand from "./pages/SecondHand";
-import RentalBooking from "./pages/RentalBooking";
-import FoodDelivery from "./pages/FoodDelivery";
-import MyUniversity from "./pages/MyUniversity";
-import Chemist from "./pages/Chemist";
-import Groceries from "./pages/Groceries";
-import RoommateFinder from "./pages/RoommateFinder";
-import TumGossip from "./pages/TumGossip";
-import Cart from "./pages/Cart";
-import PeriodTracker from "./pages/PeriodTracker";
-import BloomPeriodTracker from "./pages/BloomPeriodTracker";
-import GasDelivery from "./pages/GasDelivery";
-import LaundryServices from "./pages/LaundryServices";
-import NotFound from "./pages/NotFound";
-import MenstrualCycle from "./pages/education/MenstrualCycle";
-import NutritionDuringPeriod from "./pages/education/NutritionDuringPeriod";
-import FertilityAndOvulation from "./pages/education/FertilityAndOvulation";
-import ManagingPMS from "./pages/education/ManagingPMS";
-import ExerciseDuringCycle from "./pages/education/ExerciseDuringCycle";
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
+import { CartProvider } from '@/contexts/CartContext';
+import Index from '@/pages/Index';
+import NotFound from '@/pages/NotFound';
+import Login from '@/pages/Login';
+import SignUp from '@/pages/SignUp';
+import Groceries from '@/pages/Groceries';
+import FoodDelivery from '@/pages/FoodDelivery';
+import GasDelivery from '@/pages/GasDelivery';
+import LaundryServices from '@/pages/LaundryServices';
+import RoommateFinder from '@/pages/RoommateFinder';
+import RentalBooking from '@/pages/RentalBooking';
+import SecondHand from '@/pages/SecondHand';
+import Chemist from '@/pages/Chemist';
+import MyUniversity from '@/pages/MyUniversity';
+import Cart from '@/pages/Cart';
+import TumGossip from '@/pages/TumGossip';
+import PeriodTracker from '@/pages/PeriodTracker';
+import BloomPeriodTracker from '@/pages/BloomPeriodTracker';
+import ErrandServices from '@/pages/ErrandServices';
+
+// Education pages
+import MenstrualCycle from '@/pages/education/MenstrualCycle';
+import NutritionDuringPeriod from '@/pages/education/NutritionDuringPeriod';
+import FertilityAndOvulation from '@/pages/education/FertilityAndOvulation';
+import ManagingPMS from '@/pages/education/ManagingPMS';
+import ExerciseDuringCycle from '@/pages/education/ExerciseDuringCycle';
+
+import './App.css';
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <CartProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <CartProvider>
+        <Router>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/second-hand" element={<SecondHand />} />
-            <Route path="/rental-booking" element={<RentalBooking />} />
-            <Route path="/food-delivery" element={<FoodDelivery />} />
-            <Route path="/my-university" element={<MyUniversity />} />
-            <Route path="/chemist" element={<Chemist />} />
             <Route path="/groceries" element={<Groceries />} />
-            <Route path="/roommate-finder" element={<RoommateFinder />} />
-            <Route path="/tum-gossip" element={<TumGossip />} />
-            <Route path="/period-tracker" element={<BloomPeriodTracker />} />
+            <Route path="/food-delivery" element={<FoodDelivery />} />
             <Route path="/gas-delivery" element={<GasDelivery />} />
-            <Route path="/laundry" element={<LaundryServices />} />
+            <Route path="/laundry-services" element={<LaundryServices />} />
+            <Route path="/roommate-finder" element={<RoommateFinder />} />
+            <Route path="/rental-booking" element={<RentalBooking />} />
+            <Route path="/second-hand" element={<SecondHand />} />
+            <Route path="/chemist" element={<Chemist />} />
+            <Route path="/my-university" element={<MyUniversity />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/tum-gossip" element={<TumGossip />} />
+            <Route path="/period-tracker" element={<PeriodTracker />} />
+            <Route path="/bloom-period-tracker" element={<BloomPeriodTracker />} />
+            <Route path="/errand-services" element={<ErrandServices />} />
+            
+            {/* Education routes */}
             <Route path="/education/menstrual-cycle" element={<MenstrualCycle />} />
             <Route path="/education/nutrition-during-period" element={<NutritionDuringPeriod />} />
             <Route path="/education/fertility-and-ovulation" element={<FertilityAndOvulation />} />
             <Route path="/education/managing-pms" element={<ManagingPMS />} />
             <Route path="/education/exercise-during-cycle" element={<ExerciseDuringCycle />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </CartProvider>
-  </QueryClientProvider>
-);
+          <Toaster />
+        </Router>
+      </CartProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
