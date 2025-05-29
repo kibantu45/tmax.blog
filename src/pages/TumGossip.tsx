@@ -1,16 +1,16 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search, Heart, MessageCircle, Share, Calendar, TrendingUp, Users, Star } from "lucide-react";
+import { Search, Heart, MessageCircle, Share, Calendar, TrendingUp, Users, Star, Send } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 const TumGossip = () => {
   const [searchQuery, setSearchQuery] = useState("");
-
-  const trendingStories = [
+  const [stories, setStories] = useState([
     {
       id: "story1",
       title: "New Coffee Shop Opens Near Library",
@@ -19,32 +19,48 @@ const TumGossip = () => {
       author: "Sarah M.",
       time: "2 hours ago",
       likes: 45,
-      comments: 12,
-      trending: true
+      comments: [
+        { id: 1, author: "John D.", text: "Finally! I was waiting for this!", time: "1 hour ago" },
+        { id: 2, author: "Mary K.", text: "Great location choice", time: "45 min ago" }
+      ],
+      trending: true,
+      liked: false
     },
     {
-      id: "story2",
+      id: "story2", 
       title: "Professor Spotted Dancing at Campus Event",
       content: "Prof. Johnson showed off some incredible dance moves at yesterday's cultural night. Students are calling for an encore!",
       category: "Fun",
       author: "Anonymous",
       time: "5 hours ago",
       likes: 128,
-      comments: 34,
-      trending: true
+      comments: [
+        { id: 1, author: "Alex R.", text: "I was there! It was amazing 😂", time: "4 hours ago" },
+        { id: 2, author: "Lisa M.", text: "Prof Johnson is so cool!", time: "3 hours ago" },
+        { id: 3, author: "Mike T.", text: "Video please!", time: "2 hours ago" }
+      ],
+      trending: true,
+      liked: false
     },
     {
       id: "story3",
-      title: "Lost Cat Found After Week-Long Search",
+      title: "Lost Cat Found After Week-Long Search", 
       content: "Whiskers, the campus cat that went missing last week, has been found safe and sound near the engineering building.",
       category: "Community",
       author: "Cat Rescue Team",
       time: "1 day ago",
       likes: 89,
-      comments: 23,
-      trending: false
+      comments: [
+        { id: 1, author: "Emma S.", text: "So happy Whiskers is safe! 🐱", time: "20 hours ago" },
+        { id: 2, author: "Tom W.", text: "Thanks to everyone who helped search", time: "18 hours ago" }
+      ],
+      trending: false,
+      liked: false
     }
-  ];
+  ]);
+
+  const [newComment, setNewComment] = useState<{[key: string]: string}>({});
+  const [openComments, setOpenComments] = useState<string | null>(null);
 
   const events = [
     {
@@ -59,7 +75,7 @@ const TumGossip = () => {
     {
       id: "event2",
       title: "Career Networking Night",
-      date: "December 20, 2024",
+      date: "December 20, 2024", 
       time: "6:00 PM - 9:00 PM",
       location: "Student Center",
       description: "Meet industry professionals and potential employers",
@@ -69,7 +85,7 @@ const TumGossip = () => {
       id: "event3",
       title: "End of Semester Party",
       date: "December 22, 2024",
-      time: "8:00 PM - 12:00 AM",
+      time: "8:00 PM - 12:00 AM", 
       location: "Campus Grounds",
       description: "Celebrate the end of semester with music and food",
       attendees: 567
@@ -102,8 +118,42 @@ const TumGossip = () => {
   ];
 
   const handleLike = (storyId: string) => {
-    // In a real app, this would update the backend
-    console.log(`Liked story ${storyId}`);
+    setStories(prevStories => 
+      prevStories.map(story => 
+        story.id === storyId 
+          ? { 
+              ...story, 
+              liked: !story.liked,
+              likes: story.liked ? story.likes - 1 : story.likes + 1
+            }
+          : story
+      )
+    );
+  };
+
+  const handleComment = (storyId: string) => {
+    const commentText = newComment[storyId];
+    if (!commentText || commentText.trim() === '') return;
+
+    const newCommentObj = {
+      id: Date.now(),
+      author: "You",
+      text: commentText.trim(),
+      time: "Just now"
+    };
+
+    setStories(prevStories =>
+      prevStories.map(story =>
+        story.id === storyId
+          ? {
+              ...story,
+              comments: [...story.comments, newCommentObj]
+            }
+          : story
+      )
+    );
+
+    setNewComment(prev => ({ ...prev, [storyId]: '' }));
   };
 
   const handleShare = (story: any) => {
@@ -111,7 +161,7 @@ const TumGossip = () => {
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const filteredStories = trendingStories.filter(story =>
+  const filteredStories = stories.filter(story =>
     story.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     story.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
     story.category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -190,20 +240,58 @@ const TumGossip = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-700 mb-4">{story.content}</p>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-4 mb-4">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleLike(story.id)}
-                        className="flex items-center space-x-1"
+                        className={`flex items-center space-x-1 ${story.liked ? 'text-red-500' : ''}`}
                       >
-                        <Heart className="w-4 h-4" />
+                        <Heart className={`w-4 h-4 ${story.liked ? 'fill-current' : ''}`} />
                         <span>{story.likes}</span>
                       </Button>
-                      <Button variant="ghost" size="sm" className="flex items-center space-x-1">
-                        <MessageCircle className="w-4 h-4" />
-                        <span>{story.comments}</span>
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="ghost" size="sm" className="flex items-center space-x-1">
+                            <MessageCircle className="w-4 h-4" />
+                            <span>{story.comments.length}</span>
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>Comments - {story.title}</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            {/* Existing Comments */}
+                            {story.comments.map((comment) => (
+                              <div key={comment.id} className="border-b pb-3">
+                                <div className="flex justify-between items-start mb-1">
+                                  <span className="font-semibold text-sm text-tmaxGreen-700">{comment.author}</span>
+                                  <span className="text-xs text-gray-500">{comment.time}</span>
+                                </div>
+                                <p className="text-gray-700 text-sm">{comment.text}</p>
+                              </div>
+                            ))}
+                            
+                            {/* Add New Comment */}
+                            <div className="flex space-x-2 pt-4 border-t">
+                              <Textarea
+                                placeholder="Write a comment..."
+                                value={newComment[story.id] || ''}
+                                onChange={(e) => setNewComment(prev => ({ ...prev, [story.id]: e.target.value }))}
+                                className="flex-1 min-h-[60px]"
+                              />
+                              <Button 
+                                onClick={() => handleComment(story.id)}
+                                className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
+                                disabled={!newComment[story.id]?.trim()}
+                              >
+                                <Send className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                       <Button
                         variant="ghost"
                         size="sm"

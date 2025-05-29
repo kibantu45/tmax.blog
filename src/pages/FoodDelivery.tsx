@@ -3,124 +3,164 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, Star, Plus, Utensils, ShoppingCart, Phone } from "lucide-react";
+import { Star, Clock, ShoppingCart, Plus, MapPin, Phone } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const FoodDelivery = () => {
   const { addToCart } = useCart();
 
   const restaurants = [
     {
-      id: 1,
-      name: "Campus Café",
+      id: "kfc",
+      name: "KFC",
+      image: "https://images.unsplash.com/photo-1606728035253-49e8a23146de?w=400&h=300&fit=crop",
+      cuisine: "Fast Food",
       rating: 4.5,
-      deliveryTime: "20-30 min",
-      cuisine: "International",
-      image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=200&fit=crop",
-      popular: true
-    },
-    {
-      id: 2,
-      name: "Pizza Express",
-      rating: 4.2,
       deliveryTime: "25-35 min",
-      cuisine: "Italian",
-      image: "https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=400&h=200&fit=crop",
-      popular: false
+      deliveryFee: 50,
+      location: "Main Campus",
+      phone: "254702752033",
+      menu: [
+        {
+          id: "kfc1",
+          name: "Zinger Burger Meal",
+          price: 650,
+          image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=200&fit=crop",
+          description: "Spicy chicken burger with fries and drink",
+          category: "burgers"
+        },
+        {
+          id: "kfc2", 
+          name: "8 Piece Bucket",
+          price: 1200,
+          image: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=300&h=200&fit=crop",
+          description: "8 pieces of original recipe chicken",
+          category: "chicken"
+        },
+        {
+          id: "kfc3",
+          name: "Twister Wrap",
+          price: 450,
+          image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300&h=200&fit=crop", 
+          description: "Chicken wrap with vegetables and sauce",
+          category: "wraps"
+        }
+      ]
     },
     {
-      id: 3,
-      name: "Asian Fusion",
-      rating: 4.7,
-      deliveryTime: "30-40 min",
-      cuisine: "Asian",
-      image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&h=200&fit=crop",
-      popular: true
+      id: "dominos",
+      name: "Domino's Pizza",
+      image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop",
+      cuisine: "Pizza",
+      rating: 4.3,
+      deliveryTime: "30-40 min", 
+      deliveryFee: 80,
+      location: "Town Center",
+      phone: "254702752033",
+      menu: [
+        {
+          id: "dom1",
+          name: "Margherita Pizza",
+          price: 850,
+          image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=300&h=200&fit=crop",
+          description: "Classic tomato, mozzarella and basil pizza",
+          category: "pizza"
+        },
+        {
+          id: "dom2",
+          name: "Pepperoni Pizza", 
+          price: 950,
+          image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=300&h=200&fit=crop",
+          description: "Pepperoni with mozzarella cheese",
+          category: "pizza"
+        },
+        {
+          id: "dom3",
+          name: "Chicken Wings",
+          price: 650,
+          image: "https://images.unsplash.com/photo-1608039755401-742074f0548d?w=300&h=200&fit=crop",
+          description: "8 pieces of spicy chicken wings",
+          category: "sides"
+        }
+      ]
+    },
+    {
+      id: "subway",
+      name: "Subway",
+      image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop",
+      cuisine: "Sandwiches",
+      rating: 4.4,
+      deliveryTime: "20-30 min",
+      deliveryFee: 60,
+      location: "Student Center", 
+      phone: "254702752033",
+      menu: [
+        {
+          id: "sub1",
+          name: "Italian BMT",
+          price: 550,
+          image: "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?w=300&h=200&fit=crop",
+          description: "Ham, salami, pepperoni with fresh vegetables",
+          category: "subs"
+        },
+        {
+          id: "sub2",
+          name: "Chicken Teriyaki",
+          price: 600,
+          image: "https://images.unsplash.com/photo-1627662168223-7df99068099a?w=300&h=200&fit=crop",
+          description: "Grilled chicken with teriyaki sauce",
+          category: "subs"
+        },
+        {
+          id: "sub3",
+          name: "Veggie Delite",
+          price: 450,
+          image: "https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?w=300&h=200&fit=crop",
+          description: "Fresh vegetables with your choice of sauce",
+          category: "subs"
+        }
+      ]
     }
   ];
 
-  const menuItems = [
-    {
-      id: "food1",
-      name: "Chicken Caesar Salad",
-      description: "Fresh romaine lettuce with grilled chicken and parmesan",
-      price: 8.99,
-      image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=300&h=200&fit=crop",
-      category: "salads"
-    },
-    {
-      id: "food2",
-      name: "Margherita Pizza",
-      description: "Classic pizza with tomato sauce, mozzarella and basil",
-      price: 12.99,
-      image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=300&h=200&fit=crop",
-      category: "pizza"
-    },
-    {
-      id: "food3",
-      name: "Beef Burger",
-      description: "Juicy beef patty with lettuce, tomato and cheese",
-      price: 10.99,
-      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=200&fit=crop",
-      category: "burgers"
-    },
-    {
-      id: "food4",
-      name: "Chicken Pad Thai",
-      description: "Traditional Thai noodles with chicken and vegetables",
-      price: 11.99,
-      image: "https://images.unsplash.com/photo-1559314809-0f31657def5e?w=300&h=200&fit=crop",
-      category: "asian"
-    }
-  ];
+  const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(null);
 
-  const handleAddToCart = (item: typeof menuItems[0]) => {
+  const handleAddToCart = (item: any, restaurant: any) => {
     addToCart({
       id: item.id,
       name: item.name,
       price: item.price,
       image: item.image,
-      category: "food"
+      category: "Food Delivery",
+      provider: restaurant.name
     });
   };
 
-  const handleOrderNow = (item: typeof menuItems[0]) => {
-    // Add to cart first
-    handleAddToCart(item);
-    
-    // Redirect to WhatsApp with order details
-    const message = `Hi! I'd like to order ${item.name} for $${item.price}. Please confirm availability and delivery time.`;
-    const whatsappUrl = `https://wa.me/+254702752033?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+  const handleOrderNow = (item: any, restaurant: any) => {
+    const message = `Hi! I'd like to order ${item.name} (KES ${item.price}) from ${restaurant.name}. Please confirm availability and delivery time.`;
+    window.open(`https://wa.me/${restaurant.phone}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pastelYellow-light via-white to-tmaxGreen-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-tmaxGreen-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-pastelYellow to-tmaxGreen-500 flex items-center justify-center">
-                <Utensils className="text-white font-bold text-lg w-6 h-6" />
-              </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-tmaxGreen-600 to-pastelYellow bg-clip-text text-transparent">
-                Tmax Food
-              </h1>
+      <header className="bg-white/90 backdrop-blur-sm border-b border-orange-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-orange-700">Food Delivery</h1>
+              <p className="text-gray-600 mt-2">Delicious meals delivered to your doorstep</p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex space-x-4">
               <Button 
-                variant="outline"
                 onClick={() => window.location.href = "/cart"}
+                className="bg-orange-600 hover:bg-orange-700"
               >
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 View Cart
               </Button>
-              <Button 
-                className="bg-gradient-to-r from-tmaxGreen-500 to-pastelYellow hover:from-tmaxGreen-600 hover:to-pastelYellow-dark"
-                onClick={() => window.location.href = "/"}
-              >
+              <Button onClick={() => window.history.back()} variant="outline">
                 Back to Home
               </Button>
             </div>
@@ -129,116 +169,148 @@ const FoodDelivery = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-tmaxGreen-600 via-pastelYellow to-tmaxGreen-600 bg-clip-text text-transparent">
-            Campus Food Delivery
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Delicious meals from campus restaurants delivered right to your door.
-          </p>
-        </div>
-
-        {/* Popular Restaurants */}
-        <section className="mb-8">
-          <h3 className="text-2xl font-bold mb-4 text-tmaxGreen-700">Popular Restaurants</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {!selectedRestaurant ? (
+          // Restaurant List
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {restaurants.map((restaurant) => (
-              <Card key={restaurant.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 border-tmaxGreen-200 group">
+              <Card key={restaurant.id} className="hover:shadow-lg transition-shadow cursor-pointer bg-white/90">
                 <div className="relative">
                   <img 
                     src={restaurant.image} 
                     alt={restaurant.name}
-                    className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-48 object-cover rounded-t-lg"
                   />
-                  {restaurant.popular && (
-                    <Badge className="absolute top-2 left-2 bg-pastelYellow text-tmaxGreen-700">
-                      Popular
-                    </Badge>
-                  )}
+                  <Badge className="absolute top-2 right-2 bg-orange-500">
+                    {restaurant.cuisine}
+                  </Badge>
                 </div>
-                <CardContent className="p-4">
-                  <h4 className="font-semibold text-lg mb-2">{restaurant.name}</h4>
-                  <p className="text-gray-600 text-sm mb-2">{restaurant.cuisine}</p>
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                      <span className="text-sm">{restaurant.rating}</span>
-                    </div>
-                    <div className="flex items-center space-x-1 text-gray-500">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-sm">{restaurant.deliveryTime}</span>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-xl">{restaurant.name}</CardTitle>
+                      <div className="flex items-center space-x-4 mt-2">
+                        <div className="flex items-center">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="ml-1 text-sm">{restaurant.rating}</span>
+                        </div>
+                        <div className="flex items-center text-gray-600">
+                          <Clock className="w-4 h-4 mr-1" />
+                          <span className="text-sm">{restaurant.deliveryTime}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="flex items-center text-gray-600">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      <span className="text-sm">{restaurant.location}</span>
+                    </div>
+                    <div className="flex items-center text-gray-600">
+                      <Phone className="w-4 h-4 mr-1" />
+                      <span className="text-sm">Delivery Fee: KES {restaurant.deliveryFee}</span>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full mt-4 bg-orange-600 hover:bg-orange-700"
+                    onClick={() => setSelectedRestaurant(restaurant.id)}
+                  >
+                    View Menu
+                  </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
-        </section>
-
-        {/* Menu Items */}
-        <section>
-          <h3 className="text-2xl font-bold mb-4 text-tmaxGreen-700">Featured Menu Items</h3>
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="grid w-full grid-cols-5 bg-white/80 border border-tmaxGreen-200 mb-6">
-              <TabsTrigger value="all" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-                All
-              </TabsTrigger>
-              <TabsTrigger value="salads" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-                Salads
-              </TabsTrigger>
-              <TabsTrigger value="pizza" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-                Pizza
-              </TabsTrigger>
-              <TabsTrigger value="burgers" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-                Burgers
-              </TabsTrigger>
-              <TabsTrigger value="asian" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
-                Asian
-              </TabsTrigger>
-            </TabsList>
+        ) : (
+          // Restaurant Menu
+          (() => {
+            const restaurant = restaurants.find(r => r.id === selectedRestaurant)!;
+            const menuCategories = Array.from(new Set(restaurant.menu.map(item => item.category)));
             
-            <TabsContent value="all">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {menuItems.map((item) => (
-                  <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 border-tmaxGreen-200">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-full h-32 object-cover"
-                    />
-                    <CardContent className="p-4">
-                      <h4 className="font-semibold mb-2">{item.name}</h4>
-                      <p className="text-gray-600 text-sm mb-3">{item.description}</p>
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="text-lg font-bold text-tmaxGreen-600">${item.price}</span>
+            return (
+              <div>
+                <div className="flex items-center mb-6">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setSelectedRestaurant(null)}
+                    className="mr-4"
+                  >
+                    ← Back to Restaurants
+                  </Button>
+                  <div>
+                    <h1 className="text-2xl font-bold">{restaurant.name}</h1>
+                    <div className="flex items-center space-x-4 mt-1">
+                      <div className="flex items-center">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        <span className="ml-1 text-sm">{restaurant.rating}</span>
                       </div>
-                      <div className="flex gap-2">
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="flex-1"
-                          onClick={() => handleAddToCart(item)}
-                        >
-                          <Plus className="w-4 h-4 mr-1" />
-                          Add to Cart
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          className="flex-1 bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
-                          onClick={() => handleOrderNow(item)}
-                        >
-                          <Phone className="w-4 h-4 mr-1" />
-                          Order Now
-                        </Button>
+                      <span className="text-sm text-gray-600">{restaurant.deliveryTime}</span>
+                      <span className="text-sm text-gray-600">Delivery: KES {restaurant.deliveryFee}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <Tabs defaultValue={menuCategories[0]} className="w-full">
+                  <TabsList className="grid w-full grid-cols-3 bg-white/80">
+                    {menuCategories.map(category => (
+                      <TabsTrigger 
+                        key={category} 
+                        value={category}
+                        className="data-[state=active]:bg-orange-500 data-[state=active]:text-white capitalize"
+                      >
+                        {category}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+
+                  {menuCategories.map(category => (
+                    <TabsContent key={category} value={category} className="mt-6">
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {restaurant.menu.filter(item => item.category === category).map((item) => (
+                          <Card key={item.id} className="hover:shadow-lg transition-shadow bg-white/90">
+                            <div className="relative">
+                              <img 
+                                src={item.image} 
+                                alt={item.name}
+                                className="w-full h-40 object-cover rounded-t-lg"
+                              />
+                            </div>
+                            <CardHeader>
+                              <CardTitle className="text-lg">{item.name}</CardTitle>
+                              <CardDescription>{item.description}</CardDescription>
+                              <div className="text-xl font-bold text-orange-600">
+                                KES {item.price}
+                              </div>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="flex space-x-2">
+                                <Button 
+                                  className="flex-1 bg-orange-600 hover:bg-orange-700"
+                                  onClick={() => handleAddToCart(item, restaurant)}
+                                >
+                                  <Plus className="w-4 h-4 mr-2" />
+                                  Add to Cart
+                                </Button>
+                                <Button 
+                                  variant="outline"
+                                  onClick={() => handleOrderNow(item, restaurant)}
+                                  className="border-orange-600 text-orange-600 hover:bg-orange-50"
+                                >
+                                  Order Now
+                                </Button>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                    </TabsContent>
+                  ))}
+                </Tabs>
               </div>
-            </TabsContent>
-          </Tabs>
-        </section>
+            );
+          })()
+        )}
       </div>
     </div>
   );
