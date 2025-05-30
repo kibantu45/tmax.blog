@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -130,6 +129,140 @@ const ErrandServices = () => {
           description: "Update contact information with HELB"
         }
       ]
+    },
+    {
+      id: "cyber",
+      name: "Cyber Services",
+      deliveryTime: "Same Day",
+      rating: 4.9,
+      location: "Campus Cyber Cafe",
+      phone: "+254702752033",
+      icon: FileText,
+      services: [
+        {
+          id: "cyber1",
+          name: "Document Printing",
+          price: 10,
+          image: "🖨️",
+          description: "Print assignments, documents, and reports"
+        },
+        {
+          id: "cyber2",
+          name: "Document Typing",
+          price: 50,
+          image: "⌨️",
+          description: "Professional typing services per page"
+        },
+        {
+          id: "cyber3",
+          name: "CV/Resume Design",
+          price: 300,
+          image: "📄",
+          description: "Professional CV and resume creation"
+        },
+        {
+          id: "cyber4",
+          name: "Project Binding",
+          price: 150,
+          image: "📚",
+          description: "Spiral or hardcover project binding"
+        },
+        {
+          id: "cyber5",
+          name: "Lamination Service",
+          price: 20,
+          image: "🛡️",
+          description: "Document lamination and protection"
+        },
+        {
+          id: "cyber6",
+          name: "Scanning Service",
+          price: 30,
+          image: "📱",
+          description: "Document scanning to PDF format"
+        },
+        {
+          id: "cyber7",
+          name: "Email Setup",
+          price: 100,
+          image: "📧",
+          description: "Professional email account setup"
+        },
+        {
+          id: "cyber8",
+          name: "Internet Browsing",
+          price: 5,
+          image: "🌐",
+          description: "Per minute internet access"
+        }
+      ]
+    },
+    {
+      id: "necessary",
+      name: "Necessary Services",
+      deliveryTime: "1-3 Days",
+      rating: 4.7,
+      location: "Various Locations",
+      phone: "+254702752033",
+      icon: FileText,
+      services: [
+        {
+          id: "nec1",
+          name: "Birth Certificate Collection",
+          price: 500,
+          image: "📋",
+          description: "Collect birth certificate from Huduma Centre"
+        },
+        {
+          id: "nec2",
+          name: "ID Replacement",
+          price: 800,
+          image: "🆔",
+          description: "Process national ID replacement"
+        },
+        {
+          id: "nec3",
+          name: "Passport Application",
+          price: 1200,
+          image: "📘",
+          description: "Submit passport application documents"
+        },
+        {
+          id: "nec4",
+          name: "KRA PIN Application",
+          price: 200,
+          image: "🏛️",
+          description: "Apply for KRA PIN certificate"
+        },
+        {
+          id: "nec5",
+          name: "Bank Account Opening",
+          price: 400,
+          image: "🏦",
+          description: "Open student bank account"
+        },
+        {
+          id: "nec6",
+          name: "NHIF Registration",
+          price: 300,
+          image: "🏥",
+          description: "Register for NHIF services"
+        },
+        {
+          id: "nec7",
+          name: "Clearance Certificate",
+          price: 600,
+          image: "✅",
+          description: "Obtain police clearance certificate"
+        },
+        {
+          id: "nec8",
+          name: "Academic Transcript",
+          price: 350,
+          image: "🎓",
+          description: "Collect academic transcripts"
+        }
+      ]
     }
   ];
 
@@ -151,28 +284,29 @@ const ErrandServices = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      <header className="bg-white/90 backdrop-blur-sm border-b border-blue-200 sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-yellow-50 to-green-100">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-green-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-green-500 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-yellow-500 flex items-center justify-center">
                 <FileText className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                Errand Services
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-yellow-600 bg-clip-text text-transparent">
+                Professional Errand Services
               </h1>
             </div>
             <div className="flex items-center space-x-4">
               <Button 
                 variant="outline"
                 onClick={() => window.location.href = "/cart"}
+                className="border-green-300 text-green-700 hover:bg-green-50"
               >
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 View Cart
               </Button>
               <Button 
-                className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600"
+                className="bg-gradient-to-r from-green-500 to-yellow-500 hover:from-green-600 hover:to-yellow-600"
                 onClick={() => window.location.href = "/"}
               >
                 Back to Home
@@ -184,21 +318,29 @@ const ErrandServices = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4 text-gray-900">Professional Errand Services</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold mb-4 text-green-900">Professional Errand Services</h2>
+          <p className="text-xl text-green-700 max-w-2xl mx-auto">
             Save time with our reliable errand running services for official matters
           </p>
         </div>
 
         <Tabs defaultValue="postoffice" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-2 bg-white/80">
-            <TabsTrigger value="postoffice" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+          <TabsList className="grid w-full grid-cols-4 bg-green-100">
+            <TabsTrigger value="postoffice" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
               <Package className="w-4 h-4 mr-2" />
-              Post Office Services
+              Post Office
             </TabsTrigger>
             <TabsTrigger value="helb" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
               <Building className="w-4 h-4 mr-2" />
               HELB Services
+            </TabsTrigger>
+            <TabsTrigger value="cyber" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+              <FileText className="w-4 h-4 mr-2" />
+              Cyber Services
+            </TabsTrigger>
+            <TabsTrigger value="necessary" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+              <FileText className="w-4 h-4 mr-2" />
+              Necessary Services
             </TabsTrigger>
           </TabsList>
 
@@ -206,25 +348,25 @@ const ErrandServices = () => {
             const ProviderIcon = provider.icon;
             return (
               <TabsContent key={provider.id} value={provider.id} className="space-y-6">
-                <Card className="border-blue-200 shadow-lg">
-                  <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50">
+                <Card className="border-green-200 shadow-lg">
+                  <CardHeader className="bg-gradient-to-r from-green-50 to-yellow-50">
                     <div className="flex justify-between items-start">
                       <div className="flex items-center space-x-4">
-                        <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                        <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-yellow-500 rounded-full flex items-center justify-center">
                           <ProviderIcon className="w-8 h-8 text-white" />
                         </div>
                         <div>
-                          <CardTitle className="text-2xl text-blue-800">{provider.name}</CardTitle>
+                          <CardTitle className="text-2xl text-green-800">{provider.name}</CardTitle>
                           <div className="flex items-center space-x-4 mt-2">
                             <div className="flex items-center">
                               <Star className="w-4 h-4 text-yellow-500 fill-current" />
                               <span className="ml-1 text-sm font-medium">{provider.rating}</span>
                             </div>
-                            <div className="flex items-center text-gray-600">
+                            <div className="flex items-center text-green-600">
                               <Clock className="w-4 h-4 mr-1" />
                               <span className="text-sm">{provider.deliveryTime}</span>
                             </div>
-                            <div className="flex items-center text-gray-600">
+                            <div className="flex items-center text-green-600">
                               <MapPin className="w-4 h-4 mr-1" />
                               <span className="text-sm">{provider.location}</span>
                             </div>
@@ -244,15 +386,15 @@ const ErrandServices = () => {
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {provider.services.map((service) => (
-                        <Card key={service.id} className="border-gray-200 hover:shadow-md transition-shadow">
+                        <Card key={service.id} className="border-green-200 hover:shadow-md transition-shadow">
                           <CardContent className="p-4 text-center">
                             <div className="text-4xl mb-3">{service.image}</div>
-                            <h3 className="font-semibold text-lg mb-2">{service.name}</h3>
-                            <p className="text-gray-600 text-sm mb-3">{service.description}</p>
-                            <div className="text-xl font-bold text-blue-600 mb-4">KES {service.price}</div>
+                            <h3 className="font-semibold text-lg mb-2 text-green-800">{service.name}</h3>
+                            <p className="text-green-600 text-sm mb-3">{service.description}</p>
+                            <div className="text-xl font-bold text-green-600 mb-4">KES {service.price}</div>
                             <div className="space-y-2">
                               <Button 
-                                className="w-full bg-blue-600 hover:bg-blue-700"
+                                className="w-full bg-green-600 hover:bg-green-700"
                                 onClick={() => handleAddToCart(service, provider)}
                               >
                                 <Plus className="w-4 h-4 mr-2" />
@@ -260,7 +402,7 @@ const ErrandServices = () => {
                               </Button>
                               <Button 
                                 variant="outline" 
-                                className="w-full"
+                                className="w-full border-green-300 text-green-700 hover:bg-green-50"
                                 onClick={() => handleOrderNow(provider, service)}
                               >
                                 <Phone className="w-4 h-4 mr-2" />
@@ -278,67 +420,67 @@ const ErrandServices = () => {
           })}
         </Tabs>
 
-        <Card className="mt-12 border-blue-200 bg-blue-50">
+        <Card className="mt-12 border-green-200 bg-green-50">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-blue-800 mb-4">How Our Errand Services Work</h3>
+            <h3 className="text-xl font-bold text-green-800 mb-4">How Our Errand Services Work</h3>
             <div className="grid md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-white font-bold">1</span>
                 </div>
                 <h4 className="font-semibold mb-1">Choose Service</h4>
-                <p className="text-sm text-gray-600">Select the errand service you need</p>
+                <p className="text-sm text-green-600">Select the errand service you need</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-white font-bold">2</span>
                 </div>
                 <h4 className="font-semibold mb-1">Provide Details</h4>
-                <p className="text-sm text-gray-600">Share specific requirements and documents</p>
+                <p className="text-sm text-green-600">Share specific requirements and documents</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-white font-bold">3</span>
                 </div>
                 <h4 className="font-semibold mb-1">We Handle It</h4>
-                <p className="text-sm text-gray-600">Our team completes your errand professionally</p>
+                <p className="text-sm text-green-600">Our team completes your errand professionally</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-white font-bold">4</span>
                 </div>
                 <h4 className="font-semibold mb-1">Delivery</h4>
-                <p className="text-sm text-gray-600">Receive your documents or confirmation</p>
+                <p className="text-sm text-green-600">Receive your documents or confirmation</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <div className="mt-8 grid md:grid-cols-2 gap-6">
-          <Card className="border-blue-200">
+          <Card className="border-green-200">
             <CardHeader>
-              <CardTitle className="text-blue-800">Why Choose Our Errand Services?</CardTitle>
+              <CardTitle className="text-green-800">Why Choose Our Errand Services?</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-start space-x-2">
                 <Star className="w-5 h-5 text-yellow-500 mt-0.5" />
                 <div>
                   <h4 className="font-semibold">Professional & Reliable</h4>
-                  <p className="text-sm text-gray-600">Experienced team handling official matters with care</p>
+                  <p className="text-sm text-green-600">Experienced team handling official matters with care</p>
                 </div>
               </div>
               <div className="flex items-start space-x-2">
-                <Clock className="w-5 h-5 text-blue-500 mt-0.5" />
+                <Clock className="w-5 h-5 text-green-500 mt-0.5" />
                 <div>
                   <h4 className="font-semibold">Time-Saving</h4>
-                  <p className="text-sm text-gray-600">Focus on your studies while we handle bureaucracy</p>
+                  <p className="text-sm text-green-600">Focus on your studies while we handle bureaucracy</p>
                 </div>
               </div>
               <div className="flex items-start space-x-2">
                 <Phone className="w-5 h-5 text-green-500 mt-0.5" />
                 <div>
                   <h4 className="font-semibold">Real-time Updates</h4>
-                  <p className="text-sm text-gray-600">Stay informed throughout the process</p>
+                  <p className="text-sm text-green-600">Stay informed throughout the process</p>
                 </div>
               </div>
             </CardContent>
@@ -350,7 +492,7 @@ const ErrandServices = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center space-x-2">
-                <Package className="w-5 h-5 text-blue-500" />
+                <Package className="w-5 h-5 text-green-500" />
                 <span className="text-sm">Post Office - All branches in the city</span>
               </div>
               <div className="flex items-center space-x-2">

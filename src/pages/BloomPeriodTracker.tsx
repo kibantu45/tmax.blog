@@ -8,9 +8,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Calendar as CalendarIcon, Heart, Star, Clock, Droplets, Moon, Sun, TrendingUp, User, Lock } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { ArrowLeft, Calendar as CalendarIcon, Heart, Star, Clock, Droplets, Moon, Sun, TrendingUp, User, Lock, Bell, BellOff } from "lucide-react";
 import { format, addDays, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const BloomPeriodTracker = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -20,6 +22,13 @@ const BloomPeriodTracker = () => {
   const [periodLength, setPeriodLength] = useState<number>(5);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [currentDay, setCurrentDay] = useState<number>(1);
+  const [notifications, setNotifications] = useState({
+    periodReminder: true,
+    ovulationAlert: true,
+    fertileWindow: true,
+    symptomReminder: false
+  });
+  const { toast } = useToast();
   
   // Cycle calculation
   const calculateCycleData = () => {
@@ -47,38 +56,71 @@ const BloomPeriodTracker = () => {
 
   const cycleData = calculateCycleData();
 
-  // Calendar day styling
+  // Notification system
+  useEffect(() => {
+    if (!cycleData || !notifications.periodReminder) return;
+    
+    const checkNotifications = () => {
+      const today = new Date();
+      
+      // Period reminder (3 days before)
+      if (notifications.periodReminder && cycleData.daysUntilPeriod === 3) {
+        toast({
+          title: "Period Reminder",
+          description: "Your period is expected in 3 days. Time to prepare!",
+          duration: 5000,
+        });
+      }
+      
+      // Ovulation alert
+      if (notifications.ovulationAlert && cycleData.daysUntilOvulation === 1) {
+        toast({
+          title: "Ovulation Alert",
+          description: "You're likely to ovulate tomorrow!",
+          duration: 5000,
+        });
+      }
+      
+      // Fertile window
+      if (notifications.fertileWindow && cycleData.daysUntilOvulation === 5) {
+        toast({
+          title: "Fertile Window",
+          description: "Your fertile window begins today!",
+          duration: 5000,
+        });
+      }
+    };
+    
+    checkNotifications();
+  }, [cycleData, notifications, toast]);
+
+  // Calendar day styling with enhanced visualization
   const getDayStyle = (date: Date) => {
     if (!lastPeriodDate) return "";
     
     const cycleData = calculateCycleData();
     if (!cycleData) return "";
     
-    // Period days
+    // Period days (current and next cycle)
     const periodDays = [];
     for (let i = 0; i < periodLength; i++) {
       periodDays.push(addDays(lastPeriodDate, i));
-    }
-    
-    // Next period days
-    const nextPeriodDays = [];
-    for (let i = 0; i < periodLength; i++) {
-      nextPeriodDays.push(addDays(cycleData.nextPeriodDate, i));
+      periodDays.push(addDays(cycleData.nextPeriodDate, i));
     }
     
     // Check if date is a period day
-    if (periodDays.some(day => isSameDay(day, date)) || nextPeriodDays.some(day => isSameDay(day, date))) {
-      return "bg-red-100 border-red-300 text-red-800";
+    if (periodDays.some(day => isSameDay(day, date))) {
+      return "bg-red-100 border-red-300 text-red-800 font-semibold";
     }
     
     // Check if date is ovulation day
     if (isSameDay(date, cycleData.ovulationDate)) {
-      return "bg-pink-100 border-pink-300 text-pink-800";
+      return "bg-pink-100 border-pink-300 text-pink-800 font-semibold ring-2 ring-pink-300";
     }
     
     // Check if date is in fertile window
     if (date >= cycleData.fertileStart && date <= cycleData.fertileEnd) {
-      return "bg-green-100 border-green-300 text-green-800";
+      return "bg-green-100 border-green-300 text-green-800 font-medium";
     }
     
     return "";
@@ -122,9 +164,9 @@ const BloomPeriodTracker = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-green-50 to-yellow-100">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-yellow-50 to-green-100">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-green-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -135,11 +177,11 @@ const BloomPeriodTracker = () => {
               >
                 <ArrowLeft className="w-4 h-4" />
               </Button>
-              <h1 className="text-2xl font-bold text-gray-800">Bloom Period Tracker</h1>
+              <h1 className="text-2xl font-bold text-green-800">Bloom Period Tracker</h1>
             </div>
             <Button
               onClick={() => setShowPremiumModal(true)}
-              className="bg-gradient-to-r from-pink-500 to-purple-600 text-white"
+              className="bg-gradient-to-r from-green-500 to-yellow-500 text-white"
             >
               <Star className="w-4 h-4 mr-2" />
               Go Premium
@@ -151,24 +193,24 @@ const BloomPeriodTracker = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Current Status */}
         {cycleData && (
-          <Card className="mb-8 bg-gradient-to-r from-pink-50 to-purple-50">
+          <Card className="mb-8 bg-gradient-to-r from-green-50 to-yellow-50 border-green-200">
             <CardContent className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-pink-600">{cycleData.currentCycleDay}</div>
-                  <div className="text-sm text-gray-600">Current Cycle Day</div>
+                  <div className="text-3xl font-bold text-green-600">{cycleData.currentCycleDay}</div>
+                  <div className="text-sm text-green-700">Current Cycle Day</div>
                 </div>
                 <div className="text-center">
                   <div className={`text-xl font-semibold ${getPhaseColor(getCyclePhase())}`}>
                     {getCyclePhase()} Phase
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">{getPhaseInsight()}</div>
+                  <div className="text-sm text-green-700 mt-1">{getPhaseInsight()}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-semibold text-purple-600">
+                  <div className="text-lg font-semibold text-green-600">
                     {cycleData.daysUntilPeriod > 0 ? `${cycleData.daysUntilPeriod} days` : 'Today!'}
                   </div>
-                  <div className="text-sm text-gray-600">Until Next Period</div>
+                  <div className="text-sm text-green-700">Until Next Period</div>
                 </div>
               </div>
             </CardContent>
@@ -176,29 +218,30 @@ const BloomPeriodTracker = () => {
         )}
 
         <Tabs defaultValue="calendar" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
-            <TabsTrigger value="calendar">Calendar</TabsTrigger>
-            <TabsTrigger value="symptoms">Symptoms</TabsTrigger>
-            <TabsTrigger value="insights">Insights</TabsTrigger>
-            <TabsTrigger value="education">Education</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-5 mb-8 bg-green-100">
+            <TabsTrigger value="calendar" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">Calendar</TabsTrigger>
+            <TabsTrigger value="notifications" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">Notifications</TabsTrigger>
+            <TabsTrigger value="symptoms" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">Symptoms</TabsTrigger>
+            <TabsTrigger value="insights" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">Insights</TabsTrigger>
+            <TabsTrigger value="education" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">Education</TabsTrigger>
           </TabsList>
 
           <TabsContent value="calendar" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Calendar */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
+              {/* Enhanced Calendar */}
+              <Card className="border-green-200">
+                <CardHeader className="bg-green-50">
+                  <CardTitle className="flex items-center text-green-800">
                     <CalendarIcon className="w-5 h-5 mr-2" />
-                    Cycle Calendar
+                    Interactive Cycle Calendar
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
                   <Calendar
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
-                    className="rounded-md border pointer-events-auto"
+                    className="rounded-md border border-green-200 pointer-events-auto"
                     modifiers={{
                       period: (date) => {
                         if (!lastPeriodDate) return false;
@@ -222,43 +265,62 @@ const BloomPeriodTracker = () => {
                       }
                     }}
                     modifiersStyles={{
-                      period: { backgroundColor: '#fecaca', color: '#991b1b' },
-                      ovulation: { backgroundColor: '#fbcfe8', color: '#be185d' },
-                      fertile: { backgroundColor: '#bbf7d0', color: '#065f46' }
+                      period: { 
+                        backgroundColor: '#fecaca', 
+                        color: '#991b1b',
+                        fontWeight: 'bold',
+                        border: '2px solid #f87171'
+                      },
+                      ovulation: { 
+                        backgroundColor: '#fbcfe8', 
+                        color: '#be185d',
+                        fontWeight: 'bold',
+                        border: '2px solid #f472b6',
+                        boxShadow: '0 0 0 2px #f472b6'
+                      },
+                      fertile: { 
+                        backgroundColor: '#bbf7d0', 
+                        color: '#065f46',
+                        fontWeight: '500',
+                        border: '2px solid #34d399'
+                      }
                     }}
                   />
                   
-                  {/* Legend */}
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-red-200 rounded"></div>
-                      <span className="text-sm">Period Days</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-green-200 rounded"></div>
-                      <span className="text-sm">Fertile Window</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-pink-200 rounded"></div>
-                      <span className="text-sm">Ovulation Day</span>
+                  {/* Enhanced Legend */}
+                  <div className="mt-6 space-y-3">
+                    <h4 className="font-semibold text-green-800 mb-3">Cycle Phase Legend</h4>
+                    <div className="grid grid-cols-1 gap-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-6 h-6 bg-red-200 border-2 border-red-300 rounded font-bold flex items-center justify-center text-xs text-red-800">P</div>
+                        <span className="text-sm font-medium">Period Days (Menstrual Phase)</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-6 h-6 bg-green-200 border-2 border-green-300 rounded font-medium flex items-center justify-center text-xs text-green-800">F</div>
+                        <span className="text-sm font-medium">Fertile Window (High Fertility)</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-6 h-6 bg-pink-200 border-2 border-pink-300 rounded font-bold flex items-center justify-center text-xs text-pink-800 shadow-sm">O</div>
+                        <span className="text-sm font-medium">Ovulation Day (Peak Fertility)</span>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Quick Setup */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Period Setup</CardTitle>
+              {/* Period Setup */}
+              <Card className="border-green-200">
+                <CardHeader className="bg-green-50">
+                  <CardTitle className="text-green-800">Period Setup & Tracking</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 p-6">
                   <div>
                     <Label htmlFor="lastPeriod">Last Period Start Date</Label>
                     <Input
                       type="date"
                       value={lastPeriodDate ? format(lastPeriodDate, 'yyyy-MM-dd') : ''}
                       onChange={(e) => setLastPeriodDate(new Date(e.target.value))}
-                      className="mt-1"
+                      className="mt-1 border-green-200 focus:border-green-500"
                     />
                   </div>
                   
@@ -270,7 +332,7 @@ const BloomPeriodTracker = () => {
                       onChange={(e) => setCycleLength(Number(e.target.value))}
                       min="21"
                       max="35"
-                      className="mt-1"
+                      className="mt-1 border-green-200 focus:border-green-500"
                     />
                   </div>
                   
@@ -282,24 +344,95 @@ const BloomPeriodTracker = () => {
                       onChange={(e) => setPeriodLength(Number(e.target.value))}
                       min="3"
                       max="8"
-                      className="mt-1"
+                      className="mt-1 border-green-200 focus:border-green-500"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="currentDay">Current Day of Period (if on period)</Label>
+                    <Label htmlFor="currentDay" className="text-green-700">Current Day of Period (if on period)</Label>
                     <Input
                       type="number"
                       value={currentDay}
                       onChange={(e) => setCurrentDay(Number(e.target.value))}
                       min="1"
                       max="8"
-                      className="mt-1"
+                      className="mt-1 border-green-200 focus:border-green-500"
                     />
                   </div>
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="notifications">
+            <Card className="border-green-200">
+              <CardHeader className="bg-green-50">
+                <CardTitle className="flex items-center text-green-800">
+                  <Bell className="w-5 h-5 mr-2" />
+                  Notification Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-green-800">Period Reminders</h4>
+                      <p className="text-sm text-green-600">Get notified 3 days before your period</p>
+                    </div>
+                    <Switch
+                      checked={notifications.periodReminder}
+                      onCheckedChange={(checked) => 
+                        setNotifications(prev => ({ ...prev, periodReminder: checked }))
+                      }
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-green-800">Ovulation Alerts</h4>
+                      <p className="text-sm text-green-600">Be notified about your ovulation day</p>
+                    </div>
+                    <Switch
+                      checked={notifications.ovulationAlert}
+                      onCheckedChange={(checked) => 
+                        setNotifications(prev => ({ ...prev, ovulationAlert: checked }))
+                      }
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-green-800">Fertile Window</h4>
+                      <p className="text-sm text-green-600">Get alerted when your fertile window begins</p>
+                    </div>
+                    <Switch
+                      checked={notifications.fertileWindow}
+                      onCheckedChange={(checked) => 
+                        setNotifications(prev => ({ ...prev, fertileWindow: checked }))
+                      }
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-green-800">Symptom Reminders</h4>
+                      <p className="text-sm text-green-600">Daily reminders to log symptoms</p>
+                      <Badge className="mt-1 bg-yellow-100 text-yellow-800">
+                        <Lock className="w-3 h-3 mr-1" />
+                        Premium
+                      </Badge>
+                    </div>
+                    <Switch
+                      checked={notifications.symptomReminder}
+                      onCheckedChange={(checked) => 
+                        setNotifications(prev => ({ ...prev, symptomReminder: checked }))
+                      }
+                      disabled
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="symptoms">

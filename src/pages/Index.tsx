@@ -1,9 +1,21 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Home, ShoppingCart, Utensils, Fuel, Shirt, Sparkles, Users, RefreshCw, Pill, MessageSquare, Heart, FileText, Mail, Phone, Facebook, Twitter, Instagram } from "lucide-react";
+import { Home, ShoppingCart, Utensils, Fuel, Shirt, Sparkles, Users, RefreshCw, Pill, MessageSquare, Heart, FileText, Mail, Phone, Facebook, Twitter, Instagram, Menu, Search, User } from "lucide-react";
 import ComingSoonCanvas from "@/components/ComingSoonCanvas";
+import { useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Index = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const services = [
     {
       title: "Groceries",
@@ -116,28 +128,74 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-green-50 to-yellow-100">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-yellow-50 to-green-100">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-green-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <a href="/" className="text-2xl font-bold text-gray-800">
-              Tmax Campus Connect
-            </a>
-            <Button onClick={() => window.location.href = "/login"} variant="outline">
-              Login
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu className="w-6 h-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-80">
+                  <SheetHeader>
+                    <SheetTitle className="text-green-700">Tmax Services</SheetTitle>
+                    <SheetDescription>
+                      All your campus needs in one place
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="mt-6 space-y-4">
+                    {services.map((service) => (
+                      <a
+                        key={service.title}
+                        href={service.link}
+                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-50 transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <service.icon className="w-5 h-5 text-green-600" />
+                        <span className="font-medium">{service.title}</span>
+                      </a>
+                    ))}
+                  </div>
+                </SheetContent>
+              </Sheet>
+              
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-green-600 to-yellow-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">T</span>
+                </div>
+                <a href="/" className="text-2xl font-bold text-green-800">
+                  Tmax
+                </a>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="icon">
+                <Search className="w-5 h-5" />
+              </Button>
+              <Button onClick={() => window.location.href = "/cart"} variant="ghost" size="icon">
+                <ShoppingCart className="w-5 h-5" />
+              </Button>
+              <Button onClick={() => window.location.href = "/login"} variant="outline">
+                <User className="w-4 h-4 mr-2" />
+                Login
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-yellow-200 to-green-200 py-20">
+      <div className="bg-gradient-to-r from-green-200 to-yellow-200 py-20">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
-            Welcome to Tmax Campus Connect
+          <h1 className="text-4xl font-extrabold text-green-900 mb-4">
+            Welcome to Tmax
           </h1>
-          <p className="text-lg text-gray-700 mb-8">
+          <p className="text-lg text-green-800 mb-8">
             Your one-stop platform for all campus needs.
           </p>
           <Button onClick={() => window.location.href = "/signup"} className="bg-green-600 hover:bg-green-700 text-white">
@@ -149,29 +207,29 @@ const Index = () => {
       {/* Advertisement Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-6">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-4">Featured Advertisement</h3>
+          <h3 className="text-2xl font-semibold text-green-800 mb-4">Featured Advertisement</h3>
           <ComingSoonCanvas />
         </div>
       </div>
 
       {/* Services Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-3xl font-semibold text-gray-800 mb-8 text-center">
+        <h2 className="text-3xl font-semibold text-green-800 mb-8 text-center">
           Explore Our Services
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <Card key={service.title} className="hover:shadow-lg transition-shadow">
+            <Card key={service.title} className="hover:shadow-lg transition-shadow border-green-200">
               <a href={service.comingSoon ? "#" : service.link}>
                 <div className={`bg-gradient-to-br ${service.bgColor} rounded-t-md p-4`}>
                   <service.icon className={`w-8 h-8 text-white bg-gradient-to-r ${service.color} rounded-full p-1`} />
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  <h3 className="text-xl font-semibold text-green-800 mb-2">
                     {service.title}
-                    {service.comingSoon && <span className="text-sm text-gray-500 ml-2">(Coming Soon)</span>}
+                    {service.comingSoon && <span className="text-sm text-green-500 ml-2">(Coming Soon)</span>}
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-green-700">
                     {service.description}
                   </p>
                 </CardContent>
@@ -182,26 +240,26 @@ const Index = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white/90 backdrop-blur-sm border-t border-gray-200 py-12">
+      <footer className="bg-white/90 backdrop-blur-sm border-t border-green-200 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="col-span-1 md:col-span-2">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Tmax Campus Connect</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-2xl font-bold text-green-800 mb-4">Tmax</h3>
+              <p className="text-green-700 mb-4">
                 Your one-stop platform for all campus needs. We connect students with essential services to make university life easier and more convenient.
               </p>
             </div>
 
             {/* Contact Info */}
             <div>
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">Contact Us</h4>
+              <h4 className="text-lg font-semibold text-green-800 mb-4">Contact Us</h4>
               <div className="space-y-2">
-                <div className="flex items-center text-gray-600">
+                <div className="flex items-center text-green-700">
                   <Mail className="w-4 h-4 mr-2" />
                   <span>tmax@gmail.com</span>
                 </div>
-                <div className="flex items-center text-gray-600">
+                <div className="flex items-center text-green-700">
                   <Phone className="w-4 h-4 mr-2" />
                   <span>+254741297209</span>
                 </div>
@@ -210,29 +268,29 @@ const Index = () => {
 
             {/* Social Media & Links */}
             <div>
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">Follow Us</h4>
+              <h4 className="text-lg font-semibold text-green-800 mb-4">Follow Us</h4>
               <div className="flex space-x-4 mb-4">
-                <a href="#" className="text-gray-600 hover:text-blue-600">
+                <a href="#" className="text-green-700 hover:text-green-900">
                   <Facebook className="w-5 h-5" />
                 </a>
-                <a href="#" className="text-gray-600 hover:text-blue-400">
+                <a href="#" className="text-green-700 hover:text-green-900">
                   <Twitter className="w-5 h-5" />
                 </a>
-                <a href="#" className="text-gray-600 hover:text-pink-600">
+                <a href="#" className="text-green-700 hover:text-green-900">
                   <Instagram className="w-5 h-5" />
                 </a>
               </div>
               <div className="space-y-2">
-                <a href="#" className="block text-gray-600 hover:text-gray-800">About Us</a>
-                <a href="#" className="block text-gray-600 hover:text-gray-800">Privacy Policy</a>
-                <a href="#" className="block text-gray-600 hover:text-gray-800">Terms of Service</a>
+                <a href="#" className="block text-green-700 hover:text-green-900">About Us</a>
+                <a href="#" className="block text-green-700 hover:text-green-900">Privacy Policy</a>
+                <a href="#" className="block text-green-700 hover:text-green-900">Terms of Service</a>
               </div>
             </div>
           </div>
           
-          <div className="border-t border-gray-200 mt-8 pt-8 text-center">
-            <p className="text-gray-600">
-              &copy; 2024 Tmax Campus Connect. All rights reserved.
+          <div className="border-t border-green-200 mt-8 pt-8 text-center">
+            <p className="text-green-700">
+              &copy; 2024 Tmax. All rights reserved.
             </p>
           </div>
         </div>
