@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Home, ShoppingCart, Utensils, Fuel, Shirt, Sparkles, Users, RefreshCw, Pill, MessageSquare, Heart, FileText, Mail, Phone, Facebook, Twitter, Instagram, Menu, Search, User } from "lucide-react";
 import ComingSoonCanvas from "@/components/ComingSoonCanvas";
 import { useState } from "react";
@@ -15,6 +16,9 @@ import {
 
 const Index = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   const services = [
     {
@@ -127,6 +131,21 @@ const Index = () => {
     }
   ];
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim()) {
+      const results = services.filter(service => 
+        service.title.toLowerCase().includes(query.toLowerCase()) ||
+        service.description.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(results);
+      setShowSearchResults(true);
+    } else {
+      setSearchResults([]);
+      setShowSearchResults(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-yellow-50 to-green-100">
       {/* Header */}
@@ -159,6 +178,23 @@ const Index = () => {
                         <span className="font-medium">{service.title}</span>
                       </a>
                     ))}
+                    <hr className="border-green-200" />
+                    <a
+                      href="/about"
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-50 transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <FileText className="w-5 h-5 text-green-600" />
+                      <span className="font-medium">About</span>
+                    </a>
+                    <a
+                      href="/contact"
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-green-50 transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Phone className="w-5 h-5 text-green-600" />
+                      <span className="font-medium">Contact</span>
+                    </a>
                   </div>
                 </SheetContent>
               </Sheet>
@@ -174,9 +210,43 @@ const Index = () => {
             </div>
             
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon">
-                <Search className="w-5 h-5" />
-              </Button>
+              <div className="relative">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    type="text"
+                    placeholder="Search services..."
+                    value={searchQuery}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    className="pl-10 w-64"
+                  />
+                </div>
+                {showSearchResults && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-64 overflow-y-auto">
+                    {searchResults.length > 0 ? (
+                      searchResults.map((service) => (
+                        <a
+                          key={service.title}
+                          href={service.link}
+                          className="flex items-center space-x-3 p-3 hover:bg-green-50 transition-colors border-b border-gray-100 last:border-b-0"
+                          onClick={() => {
+                            setShowSearchResults(false);
+                            setSearchQuery("");
+                          }}
+                        >
+                          <service.icon className="w-4 h-4 text-green-600" />
+                          <div>
+                            <div className="font-medium text-sm">{service.title}</div>
+                            <div className="text-xs text-gray-500">{service.description}</div>
+                          </div>
+                        </a>
+                      ))
+                    ) : (
+                      <div className="p-3 text-gray-500 text-sm">No services found</div>
+                    )}
+                  </div>
+                )}
+              </div>
               <Button onClick={() => window.location.href = "/cart"} variant="ghost" size="icon">
                 <ShoppingCart className="w-5 h-5" />
               </Button>
@@ -208,7 +278,17 @@ const Index = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-6">
           <h3 className="text-2xl font-semibold text-green-800 mb-4">Featured Advertisement</h3>
-          <ComingSoonCanvas />
+          <div className="bg-gradient-to-r from-green-100 to-yellow-100 rounded-lg p-8 border border-green-200">
+            <img
+              src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80"
+              alt="Campus Services Advertisement"
+              className="w-full max-w-2xl mx-auto rounded-lg shadow-lg"
+            />
+            <div className="mt-4">
+              <h4 className="text-xl font-bold text-green-800">Transform Your Campus Experience</h4>
+              <p className="text-green-700 mt-2">Discover convenience at your fingertips with Tmax services</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -281,7 +361,8 @@ const Index = () => {
                 </a>
               </div>
               <div className="space-y-2">
-                <a href="#" className="block text-green-700 hover:text-green-900">About Us</a>
+                <a href="/about" className="block text-green-700 hover:text-green-900">About Us</a>
+                <a href="/contact" className="block text-green-700 hover:text-green-900">Contact</a>
                 <a href="#" className="block text-green-700 hover:text-green-900">Privacy Policy</a>
                 <a href="#" className="block text-green-700 hover:text-green-900">Terms of Service</a>
               </div>

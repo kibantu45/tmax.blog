@@ -7,6 +7,8 @@ import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
+import About from '@/pages/About';
+import Contact from '@/pages/Contact';
 import Groceries from '@/pages/Groceries';
 import FoodDelivery from '@/pages/FoodDelivery';
 import GasDelivery from '@/pages/GasDelivery';
@@ -43,6 +45,8 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/groceries" element={<Groceries />} />
             <Route path="/food-delivery" element={<FoodDelivery />} />
             <Route path="/gas-delivery" element={<GasDelivery />} />

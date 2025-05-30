@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,17 +39,89 @@ const Chemist = () => {
   ]);
 
   const medications = [
-    { id: "med1", name: "Paracetamol 500mg", price: 50, description: "Pain and fever relief", category: "pain-relief", prescription: false, stock: 100 },
-    { id: "med2", name: "Ibuprofen 400mg", price: 80, description: "Anti-inflammatory", category: "pain-relief", prescription: false, stock: 50 },
-    { id: "med3", name: "Amoxicillin 250mg", price: 200, description: "Antibiotic", category: "prescription", prescription: true, stock: 30 },
-    { id: "med4", name: "Vitamin C Tablets", price: 120, description: "Immune system support", category: "vitamins", prescription: false, stock: 75 }
+    { 
+      id: "med1", 
+      name: "Paracetamol 500mg", 
+      price: 50, 
+      description: "Pain and fever relief", 
+      category: "pain-relief", 
+      prescription: false, 
+      stock: 100,
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med2", 
+      name: "Ibuprofen 400mg", 
+      price: 80, 
+      description: "Anti-inflammatory", 
+      category: "pain-relief", 
+      prescription: false, 
+      stock: 50,
+      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med3", 
+      name: "Amoxicillin 250mg", 
+      price: 200, 
+      description: "Antibiotic", 
+      category: "prescription", 
+      prescription: true, 
+      stock: 30,
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med4", 
+      name: "Vitamin C Tablets", 
+      price: 120, 
+      description: "Immune system support", 
+      category: "vitamins", 
+      prescription: false, 
+      stock: 75,
+      image: "https://images.unsplash.com/photo-1550572017-edd951aa8743?auto=format&fit=crop&w=400&q=80"
+    }
   ];
 
   const healthProducts = [
-    { id: "health1", name: "Digital Thermometer", price: 800, description: "Accurate temperature measurement", category: "devices", prescription: false, stock: 20 },
-    { id: "health2", name: "Blood Pressure Monitor", price: 2500, description: "Home BP monitoring", category: "devices", prescription: false, stock: 10 },
-    { id: "health3", name: "First Aid Kit", price: 1200, description: "Complete emergency kit", category: "emergency", prescription: false, stock: 15 },
-    { id: "health4", name: "Hand Sanitizer 500ml", price: 300, description: "99.9% germ protection", category: "hygiene", prescription: false, stock: 200 }
+    { 
+      id: "health1", 
+      name: "Digital Thermometer", 
+      price: 800, 
+      description: "Accurate temperature measurement", 
+      category: "devices", 
+      prescription: false, 
+      stock: 20,
+      image: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "health2", 
+      name: "Blood Pressure Monitor", 
+      price: 2500, 
+      description: "Home BP monitoring", 
+      category: "devices", 
+      prescription: false, 
+      stock: 10,
+      image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "health3", 
+      name: "First Aid Kit", 
+      price: 1200, 
+      description: "Complete emergency kit", 
+      category: "emergency", 
+      prescription: false, 
+      stock: 15,
+      image: "https://images.unsplash.com/photo-1603398938277-9c29e5dc1b3e?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "health4", 
+      name: "Hand Sanitizer 500ml", 
+      price: 300, 
+      description: "99.9% germ protection", 
+      category: "hygiene", 
+      prescription: false, 
+      stock: 200,
+      image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?auto=format&fit=crop&w=400&q=80"
+    }
   ];
 
   const services = [
@@ -68,7 +139,7 @@ const Chemist = () => {
         id: item.id,
         name: item.name,
         price: item.price,
-        image: "/placeholder.svg",
+        image: item.image || "/placeholder.svg",
         category: "pharmacy"
       });
     }
@@ -115,13 +186,13 @@ const Chemist = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pastelYellow via-pastelYellow-light to-pastelYellow-dark">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-yellow-50 to-green-100">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-tmaxGreen-200">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-green-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-tmaxGreen-700">Campus Pharmacy</h1>
+              <h1 className="text-3xl font-bold text-green-700">Campus Pharmacy</h1>
               <p className="text-gray-600 mt-2">Your health and wellness partner</p>
             </div>
             <div className="flex items-center space-x-4">
@@ -154,7 +225,7 @@ const Chemist = () => {
         {/* Admin Add New Tab */}
         {isAdminMode && (
           <div className="mb-6">
-            <Card className="border-2 border-dashed border-tmaxGreen-300">
+            <Card className="border-2 border-dashed border-green-300">
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Plus className="w-5 h-5 mr-2" />
@@ -195,7 +266,7 @@ const Chemist = () => {
               <div key={tab.id} className="relative group">
                 <TabsTrigger 
                   value={tab.id} 
-                  className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white w-full"
+                  className="data-[state=active]:bg-green-500 data-[state=active]:text-white w-full"
                 >
                   {tab.name}
                 </TabsTrigger>
@@ -227,6 +298,13 @@ const Chemist = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMedications.map((med) => (
                 <Card key={med.id} className="hover:shadow-lg transition-shadow bg-white/90">
+                  <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
+                    <img 
+                      src={med.image} 
+                      alt={med.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
@@ -238,11 +316,11 @@ const Chemist = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center mb-4">
-                      <span className="text-2xl font-bold text-tmaxGreen-600">KSh {med.price}</span>
+                      <span className="text-2xl font-bold text-green-600">KSh {med.price}</span>
                       <Badge variant="outline">{med.stock} in stock</Badge>
                     </div>
                     <Button 
-                      className="w-full bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
+                      className="w-full bg-green-600 hover:bg-green-700"
                       onClick={() => handleAddToCart(med)}
                       disabled={med.stock === 0}
                     >
@@ -259,17 +337,24 @@ const Chemist = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredHealthProducts.map((product) => (
                 <Card key={product.id} className="hover:shadow-lg transition-shadow bg-white/90">
+                  <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                   <CardHeader>
                     <CardTitle className="text-lg">{product.name}</CardTitle>
                     <CardDescription>{product.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center mb-4">
-                      <span className="text-2xl font-bold text-tmaxGreen-600">KSh {product.price}</span>
+                      <span className="text-2xl font-bold text-green-600">KSh {product.price}</span>
                       <Badge variant="outline">{product.stock} in stock</Badge>
                     </div>
                     <Button 
-                      className="w-full bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
+                      className="w-full bg-green-600 hover:bg-green-700"
                       onClick={() => handleAddToCart(product)}
                       disabled={product.stock === 0}
                     >
@@ -288,8 +373,8 @@ const Chemist = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow bg-white/90">
                   <CardHeader>
                     <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-tmaxGreen-100 rounded-lg flex items-center justify-center">
-                        <service.icon className="w-6 h-6 text-tmaxGreen-600" />
+                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <service.icon className="w-6 h-6 text-green-600" />
                       </div>
                       <div>
                         <CardTitle className="text-lg">{service.name}</CardTitle>
@@ -299,11 +384,11 @@ const Chemist = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-tmaxGreen-600">
+                      <span className="text-xl font-bold text-green-600">
                         {service.price === "Free" ? "Free" : `KSh ${service.price}`}
                       </span>
                       <Button 
-                        className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
+                        className="bg-green-600 hover:bg-green-700"
                         onClick={() => window.open(`https://wa.me/254702752033?text=Hi, I would like to book ${service.name}`, '_blank')}
                       >
                         Book Now
