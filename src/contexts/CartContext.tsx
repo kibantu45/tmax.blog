@@ -14,11 +14,14 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[];
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  addToCart: (item: Omit<CartItem, 'quantity'>) => void; // Alias for addItem
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  itemCount: number; // Computed property
+  total: number; // Computed property
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -106,15 +109,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return items.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
+  // Computed values
+  const itemCount = getTotalItems();
+  const total = getTotalPrice();
+
   return (
     <CartContext.Provider value={{
       items,
       addItem,
+      addToCart: addItem, // Alias for addItem
       removeItem,
       updateQuantity,
       clearCart,
       getTotalItems,
-      getTotalPrice
+      getTotalPrice,
+      itemCount,
+      total
     }}>
       {children}
     </CartContext.Provider>
