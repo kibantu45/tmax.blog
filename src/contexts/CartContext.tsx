@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -9,6 +8,7 @@ export interface CartItem {
   category: string;
   image?: string;
   quantity: number;
+  provider?: string; // Added provider property
 }
 
 interface CartContextType {
