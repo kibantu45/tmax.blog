@@ -9,6 +9,8 @@ import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
+import Terms from '@/pages/Terms';
+import Privacy from '@/pages/Privacy';
 import Groceries from '@/pages/Groceries';
 import FoodDelivery from '@/pages/FoodDelivery';
 import GasDelivery from '@/pages/GasDelivery';
@@ -47,6 +49,8 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="/groceries" element={<Groceries />} />
             <Route path="/food-delivery" element={<FoodDelivery />} />
             <Route path="/gas-delivery" element={<GasDelivery />} />
