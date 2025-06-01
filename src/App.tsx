@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/contexts/CartContext';
 import Index from '@/pages/Index';
-import NotFound from '@/pages/NotFound';
+import CatchAll from '@/pages/CatchAll';
 import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
 import About from '@/pages/About';
@@ -74,7 +74,8 @@ function App() {
             <Route path="/education/managing-pms" element={<ManagingPMS />} />
             <Route path="/education/exercise-during-cycle" element={<ExerciseDuringCycle />} />
             
-            <Route path="*" element={<NotFound />} />
+            {/* Catch all route - must be last */}
+            <Route path="*" element={<CatchAll />} />
           </Routes>
           <Toaster />
         </Router>

@@ -20,6 +20,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const Index = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -173,6 +174,10 @@ const Index = () => {
       setSearchResults([]);
       setShowSearchResults(false);
     }
+  };
+
+  const handleSocialMediaClick = () => {
+    window.open("https://canecartergallery.hustlesasa.shop/?product=47871", '_blank');
   };
 
   return (
@@ -335,6 +340,11 @@ const Index = () => {
               align: "start",
               loop: true,
             }}
+            plugins={[
+              Autoplay({
+                delay: 3000,
+              }),
+            ]}
             className="w-full max-w-4xl mx-auto"
           >
             <CarouselContent>
@@ -365,21 +375,21 @@ const Index = () => {
         <h2 className="text-3xl sm:text-4xl font-semibold text-slate-800 mb-8 sm:mb-12 text-center">
           Explore Our Services
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
           {services.map((service) => (
             <Card key={service.title} className="hover:shadow-xl transition-all duration-300 border-slate-200 hover:border-slate-300 group bg-white/80 backdrop-blur-sm">
               <a href={service.comingSoon ? "#" : service.link}>
-                <div className={`bg-gradient-to-br ${service.bgColor} rounded-t-lg p-4 sm:p-6 group-hover:scale-105 transition-transform duration-200`}>
-                  <div className={`w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r ${service.color} rounded-xl flex items-center justify-center shadow-lg`}>
-                    <service.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                <div className={`bg-gradient-to-br ${service.bgColor} rounded-t-lg p-3 sm:p-6 group-hover:scale-105 transition-transform duration-200`}>
+                  <div className={`w-8 h-8 sm:w-14 sm:h-14 bg-gradient-to-r ${service.color} rounded-xl flex items-center justify-center shadow-lg`}>
+                    <service.icon className="w-4 h-4 sm:w-7 sm:h-7 text-white" />
                   </div>
                 </div>
-                <CardContent className="p-4 sm:p-6">
-                  <h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-2">
+                <CardContent className="p-3 sm:p-6">
+                  <h3 className="text-sm sm:text-xl font-semibold text-slate-800 mb-1 sm:mb-2">
                     {service.title}
-                    {service.comingSoon && <span className="text-sm text-slate-500 ml-2">(Coming Soon)</span>}
+                    {service.comingSoon && <span className="text-xs text-slate-500 ml-1 sm:ml-2">(Coming Soon)</span>}
                   </h3>
-                  <p className="text-slate-600 text-sm sm:text-base">
+                  <p className="text-slate-600 text-xs sm:text-base hidden sm:block">
                     {service.description}
                   </p>
                 </CardContent>
@@ -420,15 +430,15 @@ const Index = () => {
             <div>
               <h4 className="text-lg font-semibold text-slate-800 mb-4">Follow Us</h4>
               <div className="flex space-x-4 mb-4">
-                <a href="#" className="text-slate-600 hover:text-slate-900 transition-colors">
+                <button onClick={handleSocialMediaClick} className="text-slate-600 hover:text-slate-900 transition-colors">
                   <Facebook className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-slate-600 hover:text-slate-900 transition-colors">
+                </button>
+                <button onClick={handleSocialMediaClick} className="text-slate-600 hover:text-slate-900 transition-colors">
                   <Twitter className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-slate-600 hover:text-slate-900 transition-colors">
+                </button>
+                <button onClick={handleSocialMediaClick} className="text-slate-600 hover:text-slate-900 transition-colors">
                   <Instagram className="w-5 h-5" />
-                </a>
+                </button>
               </div>
               <div className="space-y-2">
                 <a href="/about" className="block text-slate-600 hover:text-slate-900 transition-colors">About Us</a>
