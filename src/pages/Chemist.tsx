@@ -77,7 +77,7 @@ const Chemist = () => {
       category: "vitamins", 
       prescription: false, 
       stock: 75,
-      image: "https://images.unsplash.com/photo-1550572017-edd951aa8743?auto=format&fit=crop&w=400&q=80"
+      image: "/love-able uploads/vitamin-c.jpg"
     },
       { 
       id: "med5", 
