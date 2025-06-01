@@ -87,7 +87,7 @@ const Chemist = () => {
       category: "vitamins", 
       prescription: false, 
       stock: 75,
-      image: "https://www.nicepng.com/maxp/u2e6a9i1o0i1o0r5/"
+      image: "https://www.nicepng.com/maxp/u2e6a9i1o0i1o0r5/?auto=format&fit=crop&w=400&q=80"
     },
   ];
 
