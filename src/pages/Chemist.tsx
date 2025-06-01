@@ -81,13 +81,13 @@ const Chemist = () => {
     },
       { 
       id: "med5", 
-      name: "Kiss condoms", 
+      name: "Postinor 2", 
       price: 60, 
-      description: "Protection muhimu", 
+      description: false, 
       category: "vitamins", 
       prescription: false, 
       stock: 75,
-      image: "https://www.goodlife.co.ke/product/trust-condoms-24s/#product-gallery?auto=format&fit=crop&w=400&q=80"
+      image: "https://www.assetpharmacy.com/wp-content/uploads/2017/09/Postinor-2-Tablets-2-Tablets-2.jpg?auto=format&fit=crop&w=400&q=80"
     },
   ];
 
