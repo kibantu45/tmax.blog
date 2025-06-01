@@ -17,7 +17,7 @@ const GasDelivery = () => {
       freeDelivery: true,
       whatsapp: "+254702752033",
       products: [
-        { id: "gas1", name: "6kg Gas Cylinder Refill", price: 1200, image: "🔥", description: "Standard 6kg gas cylinder refill" },
+        { id: "gas1", name: "6kg Gas Cylinder Refill", price: 1250, image: "🔥", description: "Standard 6kg gas cylinder refill" },
         { id: "gas2", name: "13kg Gas Cylinder Refill", price: 2400, image: "🔥", description: "Large 13kg gas cylinder refill" },
         { id: "gas3", name: "New 6kg Cylinder + Gas", price: 3500, image: "🔥", description: "New 6kg cylinder with gas included" }
       ]
