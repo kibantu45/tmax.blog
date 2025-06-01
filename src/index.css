@@ -6,81 +6,81 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 142 84% 4.9%;
+    --foreground: 215 28% 17%;
 
     --card: 0 0% 100%;
-    --card-foreground: 142 84% 4.9%;
+    --card-foreground: 215 28% 17%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 142 84% 4.9%;
+    --popover-foreground: 215 28% 17%;
 
-    --primary: 142 76% 36%;
-    --primary-foreground: 355.7 100% 97.3%;
+    --primary: 220 91% 56%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 142 76% 96%;
-    --accent-foreground: 142 76% 36%;
+    --accent: 220 91% 96%;
+    --accent-foreground: 220 91% 56%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 142 76% 91.4%;
-    --input: 142 76% 91.4%;
-    --ring: 142 76% 36%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 220 91% 56%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 142 76% 98%;
-    --sidebar-foreground: 142 30% 26.1%;
-    --sidebar-primary: 142 76% 36%;
+    --sidebar-background: 220 91% 98%;
+    --sidebar-foreground: 215 30% 26%;
+    --sidebar-primary: 220 91% 56%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 142 30% 95.9%;
-    --sidebar-accent-foreground: 142 76% 36%;
-    --sidebar-border: 142 30% 91%;
-    --sidebar-ring: 142 76% 36%;
+    --sidebar-accent: 220 30% 96%;
+    --sidebar-accent-foreground: 220 91% 56%;
+    --sidebar-border: 220 30% 91%;
+    --sidebar-ring: 220 91% 56%;
   }
 
   .dark {
-    --background: 142 84% 4.9%;
-    --foreground: 142 40% 98%;
+    --background: 215 28% 9%;
+    --foreground: 210 40% 98%;
 
-    --card: 142 84% 4.9%;
-    --card-foreground: 142 40% 98%;
+    --card: 215 28% 9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 142 84% 4.9%;
-    --popover-foreground: 142 40% 98%;
+    --popover: 215 28% 9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 142 40% 98%;
-    --primary-foreground: 142 76% 36%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 220 91% 56%;
 
-    --secondary: 142 32.6% 17.5%;
-    --secondary-foreground: 142 40% 98%;
+    --secondary: 215 33% 18%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 142 32.6% 17.5%;
-    --muted-foreground: 142 20.2% 65.1%;
+    --muted: 215 33% 18%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 142 32.6% 17.5%;
-    --accent-foreground: 142 40% 98%;
+    --accent: 215 33% 18%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 142 40% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 142 32.6% 17.5%;
-    --input: 142 32.6% 17.5%;
-    --ring: 142 26.8% 83.9%;
-    --sidebar-background: 142 5.9% 10%;
-    --sidebar-foreground: 142 4.8% 95.9%;
-    --sidebar-primary: 142 76% 48%;
+    --border: 215 33% 18%;
+    --input: 215 33% 18%;
+    --ring: 215 27% 84%;
+    --sidebar-background: 215 6% 10%;
+    --sidebar-foreground: 215 5% 96%;
+    --sidebar-primary: 220 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 142 3.7% 15.9%;
-    --sidebar-accent-foreground: 142 4.8% 95.9%;
-    --sidebar-border: 142 3.7% 15.9%;
-    --sidebar-ring: 142 76% 36%;
+    --sidebar-accent: 215 4% 16%;
+    --sidebar-accent-foreground: 215 5% 96%;
+    --sidebar-border: 215 4% 16%;
+    --sidebar-ring: 220 91% 56%;
   }
 }
 
@@ -90,25 +90,25 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-green-50 via-yellow-50 to-green-100 text-foreground min-h-screen;
+    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-foreground min-h-screen;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   
   /* Custom scrollbar styling */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   
   ::-webkit-scrollbar-track {
-    @apply bg-green-50;
+    @apply bg-slate-100;
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-green-300 rounded-full;
+    @apply bg-slate-300 rounded-full;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-green-400;
+    @apply bg-slate-400;
   }
   
   /* Enhanced button animations */
@@ -118,7 +118,7 @@
   
   /* Gradient text effects */
   .gradient-text {
-    @apply bg-gradient-to-r from-green-700 to-green-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent;
   }
   
   /* Card hover effects */
@@ -128,21 +128,98 @@
   
   /* Glass morphism effects */
   .glass {
-    @apply backdrop-blur-md bg-white/80 border border-white/20;
+    @apply backdrop-blur-lg bg-white/80 border border-slate-200/60;
+  }
+
+  /* Mobile-first responsive utilities */
+  .mobile-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .mobile-text {
+    @apply text-sm sm:text-base;
+  }
+
+  .mobile-heading {
+    @apply text-xl sm:text-2xl lg:text-3xl;
   }
 }
 
-/* Custom animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+/* Custom animations for modern UX */
+@keyframes slideIn {
+  0% { 
+    transform: translateX(-100%); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: translateX(0); 
+    opacity: 1; 
+  }
 }
 
-.float-animation {
-  animation: float 3s ease-in-out infinite;
+@keyframes slideUp {
+  0% { 
+    transform: translateY(20px); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
 }
 
-/* Notification styles */
+@keyframes fadeInScale {
+  0% { 
+    transform: scale(0.95); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.fade-in-scale {
+  animation: fadeInScale 0.3s ease-out;
+}
+
+/* Carousel custom styles for better mobile experience */
+.carousel-container {
+  @apply relative w-full;
+}
+
+.carousel-content {
+  @apply flex transition-transform duration-300 ease-in-out;
+}
+
+.carousel-item {
+  @apply flex-shrink-0 w-full;
+}
+
+/* Touch-friendly tap targets for mobile */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+}
+
+/* Improved focus states for accessibility */
+.focus-visible:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Loading states */
+.loading-shimmer {
+  @apply bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 bg-[length:200%_100%] animate-pulse;
+}
+
+/* Notification improvements */
 .notification-enter {
   @apply transform translate-x-full opacity-0;
 }
@@ -157,4 +234,31 @@
 
 .notification-exit-active {
   @apply transform translate-x-full opacity-0 transition-all duration-300;
+}
+
+/* Better mobile typography */
+@media (max-width: 640px) {
+  h1 {
+    @apply text-2xl sm:text-3xl;
+  }
+  
+  h2 {
+    @apply text-xl sm:text-2xl;
+  }
+  
+  h3 {
+    @apply text-lg sm:text-xl;
+  }
+  
+  .mobile-optimize {
+    @apply text-sm leading-relaxed;
+  }
+}
+
+/* Safe area for mobile devices with notches */
+@supports (padding: env(safe-area-inset-left)) {
+  .safe-area-padding {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
 }
