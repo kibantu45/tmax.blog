@@ -78,7 +78,17 @@ const Chemist = () => {
       prescription: false, 
       stock: 75,
       image: "https://images.unsplash.com/photo-1550572017-edd951aa8743?auto=format&fit=crop&w=400&q=80"
-    }
+    },
+      { 
+      id: "med5", 
+      name: "Kiss condoms", 
+      price: 60, 
+      description: "Protection muhimu", 
+      category: "vitamins", 
+      prescription: false, 
+      stock: 75,
+      image: "https://www.nicepng.com/maxp/u2e6a9i1o0i1o0r5/"
+    },
   ];
 
   const healthProducts = [
