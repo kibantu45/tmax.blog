@@ -9,7 +9,141 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      period_tracking: {
+        Row: {
+          created_at: string
+          cycle_length: number | null
+          due_date: string | null
+          flow_intensity: string | null
+          id: string
+          is_pregnancy_mode: boolean | null
+          mood: string | null
+          notes: string | null
+          period_end_date: string | null
+          period_start_date: string
+          pregnancy_week: number | null
+          symptoms: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cycle_length?: number | null
+          due_date?: string | null
+          flow_intensity?: string | null
+          id?: string
+          is_pregnancy_mode?: boolean | null
+          mood?: string | null
+          notes?: string | null
+          period_end_date?: string | null
+          period_start_date: string
+          pregnancy_week?: number | null
+          symptoms?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          cycle_length?: number | null
+          due_date?: string | null
+          flow_intensity?: string | null
+          id?: string
+          is_pregnancy_mode?: boolean | null
+          mood?: string | null
+          notes?: string | null
+          period_end_date?: string | null
+          period_start_date?: string
+          pregnancy_week?: number | null
+          symptoms?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pregnancy_tracking: {
+        Row: {
+          appointments: Json | null
+          baby_name: string | null
+          created_at: string
+          current_week: number
+          due_date: string
+          id: string
+          notes: string | null
+          pregnancy_start_date: string
+          symptoms: Json | null
+          updated_at: string
+          user_id: string
+          weight_tracking: Json | null
+        }
+        Insert: {
+          appointments?: Json | null
+          baby_name?: string | null
+          created_at?: string
+          current_week: number
+          due_date: string
+          id?: string
+          notes?: string | null
+          pregnancy_start_date: string
+          symptoms?: Json | null
+          updated_at?: string
+          user_id: string
+          weight_tracking?: Json | null
+        }
+        Update: {
+          appointments?: Json | null
+          baby_name?: string | null
+          created_at?: string
+          current_week?: number
+          due_date?: string
+          id?: string
+          notes?: string | null
+          pregnancy_start_date?: string
+          symptoms?: Json | null
+          updated_at?: string
+          user_id?: string
+          weight_tracking?: Json | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          course: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          university: string | null
+          updated_at: string
+          year_of_study: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          course?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          university?: string | null
+          updated_at?: string
+          year_of_study?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          course?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          university?: string | null
+          updated_at?: string
+          year_of_study?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

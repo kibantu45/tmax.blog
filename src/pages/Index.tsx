@@ -1,461 +1,367 @@
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Home, ShoppingCart, Utensils, Fuel, Shirt, Sparkles, Users, RefreshCw, Pill, MessageSquare, Heart, FileText, Mail, Phone, Facebook, Twitter, Instagram, Menu, Search, User, Bell } from "lucide-react";
-import ComingSoonCanvas from "@/components/ComingSoonCanvas";
 import { useState } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Search, ShoppingBag, Utensils, Flame, Shirt, Users, Home, BookOpen, Car, ShoppingCart, Pill, GraduationCap, MessageSquare, Heart, Scissors } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import BottomNavigation from "@/components/BottomNavigation";
 
 const Index = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = useAuth();
+  const { addToCart } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [showSearchResults, setShowSearchResults] = useState(false);
 
-  // Advertisement data
-  const advertisements = [
-    {
-      id: 1,
-      image: "/lovable-uploads/20233c98-5f17-4311-a23a-2c2cbdb7bb68.png",
-      title: "CCC Magazine - 2nd Edition",
-      description: "Discover the latest campus trends and stories"
-    },
-    {
-      id: 2,
-      image: "/placeholder.svg",
-      title: "Campus Events Weekly",
-      description: "Don't miss out on upcoming campus activities"
-    },
-    {
-      id: 3,
-      image: "/placeholder.svg",
-      title: "Student Discounts Available",
-      description: "Save more on your favorite campus services"
-    }
-  ];
-
-  const services = [
+  const essentialServices = [
     {
       title: "Groceries",
-      description: "Fresh groceries delivered to your doorstep",
-      icon: ShoppingCart,
-      color: "from-emerald-500 to-teal-600",
-      bgColor: "from-emerald-50 to-teal-50",
-      link: "/groceries",
-      comingSoon: false
+      description: "Fresh produce & essentials",
+      icon: ShoppingBag,
+      color: "bg-green-100",
+      textColor: "text-green-700",
+      link: "/groceries"
     },
     {
       title: "Food Delivery",
-      description: "Delicious meals from campus restaurants",
+      description: "Meals from local restaurants",
       icon: Utensils,
-      color: "from-orange-500 to-amber-600",
-      bgColor: "from-orange-50 to-amber-50",
-      link: "/food-delivery",
-      comingSoon: false
+      color: "bg-orange-100",
+      textColor: "text-orange-700",
+      link: "/food-delivery"
     },
     {
       title: "Gas Delivery",
-      description: "Quick gas cylinder refills and installation",
-      icon: Fuel,
-      color: "from-blue-500 to-cyan-600",
-      bgColor: "from-blue-50 to-cyan-50",
-      link: "/gas-delivery",
-      comingSoon: false
+      description: "Cooking gas to your door",
+      icon: Flame,
+      color: "bg-red-100",
+      textColor: "text-red-700",
+      link: "/gas-delivery"
     },
     {
       title: "Laundry Services",
-      description: "Professional laundry and dry cleaning",
+      description: "Wash, dry & fold services",
       icon: Shirt,
-      color: "from-purple-500 to-violet-600",
-      bgColor: "from-purple-50 to-violet-50",
-      link: "/laundry-services",
-      comingSoon: false
-    },
-    {
-      title: "Errand Services",
-      description: "Post office and HELB office services",
-      icon: FileText,
-      color: "from-teal-500 to-emerald-600",
-      bgColor: "from-teal-50 to-emerald-50",
-      link: "/errand-services",
-      comingSoon: false
-    },
-    {
-      title: "Salon & Beauty",
-      description: "Hair, nails, and beauty treatments",
-      icon: Sparkles,
-      color: "from-pink-500 to-rose-600",
-      bgColor: "from-pink-50 to-rose-50",
-      link: "/salon-beauty",
-      comingSoon: false
-    },
-    {
-      title: "Roommate Finder",
-      description: "Find compatible roommates near campus",
-      icon: Users,
-      color: "from-indigo-500 to-blue-600",
-      bgColor: "from-indigo-50 to-blue-50",
-      link: "/roommate-finder",
-      comingSoon: false
-    },
-    {
-      title: "Rental Booking",
-      description: "Find and book student accommodation",
-      icon: Home,
-      color: "from-green-500 to-emerald-600",
-      bgColor: "from-green-50 to-emerald-50",
-      link: "/rental-booking",
-      comingSoon: false
-    },
-    {
-      title: "Second Hand",
-      description: "Buy and sell used items with students",
-      icon: RefreshCw,
-      color: "from-yellow-500 to-orange-600",
-      bgColor: "from-yellow-50 to-orange-50",
-      link: "/second-hand",
-      comingSoon: false
-    },
-    {
-      title: "Pharmacy",
-      description: "Medicine and health products delivery",
-      icon: Pill,
-      color: "from-red-500 to-pink-600",
-      bgColor: "from-red-50 to-pink-50",
-      link: "/chemist",
-      comingSoon: false
-    },
-    {
-      title: "Campus Gossip",
-      description: "Latest campus news, events and discussions",
-      icon: MessageSquare,
-      color: "from-violet-500 to-purple-600",
-      bgColor: "from-violet-50 to-purple-50",
-      link: "/tum-gossip",
-      comingSoon: false
-    },
-    {
-      title: "Bloom Period Tracker",
-      description: "Track your menstrual cycle and health",
-      icon: Heart,
-      color: "from-rose-500 to-pink-600",
-      bgColor: "from-rose-50 to-pink-50",
-      link: "/bloom-period-tracker",
-      comingSoon: false
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
+      link: "/laundry-services"
     }
   ];
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    if (query.trim()) {
-      const results = services.filter(service => 
-        service.title.toLowerCase().includes(query.toLowerCase()) ||
-        service.description.toLowerCase().includes(query.toLowerCase())
-      );
-      setSearchResults(results);
-      setShowSearchResults(true);
-    } else {
-      setSearchResults([]);
-      setShowSearchResults(false);
+  const accommodationServices = [
+    {
+      title: "Roommate Finder",
+      description: "Find compatible roommates",
+      icon: Users,
+      color: "bg-purple-100",
+      textColor: "text-purple-700",
+      link: "/roommate-finder"
+    },
+    {
+      title: "Rental Booking",
+      description: "Student-friendly accommodations",
+      icon: Home,
+      color: "bg-yellow-100",
+      textColor: "text-yellow-700",
+      link: "/rental-booking"
+    },
+    {
+      title: "Second Hand",
+      description: "Buy & sell used items",
+      icon: ShoppingCart,
+      color: "bg-emerald-100",
+      textColor: "text-emerald-700",
+      link: "/second-hand"
     }
-  };
+  ];
 
-  const handleSocialMediaClick = () => {
-    window.open("https://canecartergallery.hustlesasa.shop/?product=47871", '_blank');
-  };
+  const campusServices = [
+    {
+      title: "Chemist",
+      description: "Medications & health products",
+      icon: Pill,
+      color: "bg-pink-100",
+      textColor: "text-pink-700",
+      link: "/chemist"
+    },
+    {
+      title: "My University",
+      description: "Campus resources & info",
+      icon: GraduationCap,
+      color: "bg-indigo-100",
+      textColor: "text-indigo-700",
+      link: "/my-university"
+    },
+    {
+      title: "TUM Gossip",
+      description: "Campus news & discussions",
+      icon: MessageSquare,
+      color: "bg-amber-100",
+      textColor: "text-amber-700",
+      link: "/tum-gossip"
+    },
+    {
+      title: "Bloom Period Tracker",
+      description: "Track your menstrual cycle",
+      icon: Heart,
+      color: "bg-rose-100",
+      textColor: "text-rose-700",
+      link: "/bloom-period-tracker"
+    },
+    {
+      title: "Errand Services",
+      description: "Get help with daily tasks",
+      icon: ShoppingBag,
+      color: "bg-cyan-100",
+      textColor: "text-cyan-700",
+      link: "/errand-services"
+    },
+    {
+      title: "Salon & Beauty",
+      description: "Hair, nails & beauty services",
+      icon: Scissors,
+      color: "bg-fuchsia-100",
+      textColor: "text-fuchsia-700",
+      link: "/salon-beauty"
+    }
+  ];
+
+  const filteredServices = [...essentialServices, ...accommodationServices, ...campusServices].filter(
+    service => service.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+               service.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-pastelYellow-light via-white to-tmaxGreen-50 pb-20">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-lg border-b border-slate-200/60 shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="hover:bg-slate-100 lg:hidden">
-                    <Menu className="w-6 h-6 text-slate-700" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-80 bg-gradient-to-b from-white to-slate-50">
-                  <SheetHeader>
-                    <SheetTitle className="text-slate-800 text-xl font-bold">Tmax Services</SheetTitle>
-                    <SheetDescription className="text-slate-600">
-                      All your campus needs in one place
-                    </SheetDescription>
-                  </SheetHeader>
-                  <div className="mt-6 space-y-2">
-                    {services.map((service) => (
-                      <a
-                        key={service.title}
-                        href={service.link}
-                        className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/80 transition-all duration-200 hover:shadow-sm group"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <div className={`p-2 rounded-lg bg-gradient-to-r ${service.color}`}>
-                          <service.icon className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="font-medium text-slate-700 group-hover:text-slate-900">{service.title}</span>
-                      </a>
-                    ))}
-                    <hr className="border-slate-200 my-4" />
-                    <a
-                      href="/about"
-                      className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/80 transition-all duration-200"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <FileText className="w-5 h-5 text-slate-600" />
-                      <span className="font-medium text-slate-700">About</span>
-                    </a>
-                    <a
-                      href="/contact"
-                      className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/80 transition-all duration-200"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Phone className="w-5 h-5 text-slate-600" />
-                      <span className="font-medium text-slate-700">Contact</span>
-                    </a>
-                    <a
-                      href="/terms"
-                      className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/80 transition-all duration-200"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <FileText className="w-5 h-5 text-slate-600" />
-                      <span className="font-medium text-slate-700">Terms of Use</span>
-                    </a>
-                    <a
-                      href="/privacy"
-                      className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/80 transition-all duration-200"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <FileText className="w-5 h-5 text-slate-600" />
-                      <span className="font-medium text-slate-700">Privacy Policy</span>
-                    </a>
-                  </div>
-                </SheetContent>
-              </Sheet>
-              
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
-                  <span className="text-white font-bold text-lg">T</span>
-                </div>
-                <a href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-pastelYellow-light/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-pastelYellow to-tmaxGreen-500 flex items-center justify-center">
+                <span className="text-white font-bold text-xl">T</span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-tmaxGreen-600 to-pastelYellow bg-clip-text text-transparent">
                   Tmax
-                </a>
+                </h1>
+                <p className="text-sm text-gray-600">Campus Life Simplified</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-3">
-              <div className="relative hidden md:block">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 w-4 h-4" />
-                  <Input
-                    type="text"
-                    placeholder="Search services..."
-                    value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    className="pl-10 w-64 border-slate-200 focus:border-blue-400 focus:ring-blue-400 bg-white/80 backdrop-blur-sm"
-                  />
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-600">Hi, {user.email?.split('@')[0]}</span>
+                  <Button size="sm" onClick={() => window.location.href = '/profile'}>
+                    Profile
+                  </Button>
                 </div>
-                {showSearchResults && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white/95 backdrop-blur-lg border border-slate-200 rounded-xl shadow-xl z-50 max-h-64 overflow-y-auto">
-                    {searchResults.length > 0 ? (
-                      searchResults.map((service) => (
-                        <a
-                          key={service.title}
-                          href={service.link}
-                          className="flex items-center space-x-3 p-3 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-b-0 first:rounded-t-xl last:rounded-b-xl"
-                          onClick={() => {
-                            setShowSearchResults(false);
-                            setSearchQuery("");
-                          }}
-                        >
-                          <div className={`p-1.5 rounded-lg bg-gradient-to-r ${service.color}`}>
-                            <service.icon className="w-3 h-3 text-white" />
-                          </div>
-                          <div>
-                            <div className="font-medium text-sm text-slate-800">{service.title}</div>
-                            <div className="text-xs text-slate-600">{service.description}</div>
-                          </div>
-                        </a>
-                      ))
-                    ) : (
-                      <div className="p-3 text-slate-600 text-sm">No services found</div>
-                    )}
-                  </div>
-                )}
-              </div>
-              <Button variant="ghost" size="icon" className="hover:bg-slate-100 hidden sm:flex">
-                <Bell className="w-5 h-5 text-slate-700" />
-              </Button>
-              <Button onClick={() => window.location.href = "/cart"} variant="ghost" size="icon" className="hover:bg-slate-100">
-                <ShoppingCart className="w-5 h-5 text-slate-700" />
-              </Button>
-              <Button onClick={() => window.location.href = "/login"} variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 hidden sm:flex">
-                <User className="w-4 h-4 mr-2" />
-                Login
-              </Button>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Button variant="outline" size="sm" onClick={() => window.location.href = '/login'}>
+                    Login
+                  </Button>
+                  <Button size="sm" onClick={() => window.location.href = '/signup'}>
+                    Sign Up
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 py-16 sm:py-20">
-        <div className="max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-4 drop-shadow-sm">
-            Welcome to Tmax
-          </h1>
-          <p className="text-lg sm:text-xl text-blue-100 mb-8 drop-shadow-sm max-w-2xl mx-auto">
-            Your one-stop platform for all campus needs. Fast, reliable, and convenient.
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            Everything You Need, <span className="text-tmaxGreen-600">All in One Place</span>
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            From groceries to laundry, roommates to study resources - we've got your campus life covered.
           </p>
-          <Button onClick={() => window.location.href = "/signup"} className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-200">
-            Get Started
-          </Button>
         </div>
-      </div>
 
-      {/* Advertisement Carousel Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="text-center mb-6 sm:mb-8">
-          <h3 className="text-2xl sm:text-3xl font-semibold text-slate-800 mb-4">Featured Advertisements</h3>
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            plugins={[
-              Autoplay({
-                delay: 3000,
-              }),
-            ]}
-            className="w-full max-w-4xl mx-auto"
-          >
-            <CarouselContent>
-              {advertisements.map((ad) => (
-                <CarouselItem key={ad.id}>
-                  <div className="bg-gradient-to-r from-white to-slate-50 rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-lg">
-                    <img
-                      src={ad.image}
-                      alt={ad.title}
-                      className="w-full max-w-2xl mx-auto rounded-xl shadow-lg"
-                    />
-                    <div className="mt-4 sm:mt-6">
-                      <h4 className="text-xl sm:text-2xl font-bold text-slate-800">{ad.title}</h4>
-                      <p className="text-slate-600 mt-2">{ad.description}</p>
+        {/* Search Bar */}
+        <div className="max-w-md mx-auto mb-12">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search for services..."
+              className="pl-10 bg-white/80"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Services Tabs */}
+        {searchQuery ? (
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-700">Search Results</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredServices.map((service, index) => (
+                <Card 
+                  key={index} 
+                  className="hover:shadow-lg transition-shadow cursor-pointer bg-white/80"
+                  onClick={() => window.location.href = service.link}
+                >
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-12 h-12 rounded-lg ${service.color} flex items-center justify-center`}>
+                        <service.icon className={`w-6 h-6 ${service.textColor}`} />
+                      </div>
+                      <div>
+                        <CardTitle>{service.title}</CardTitle>
+                        <CardDescription>{service.description}</CardDescription>
+                      </div>
                     </div>
-                  </div>
-                </CarouselItem>
+                  </CardHeader>
+                </Card>
               ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex" />
-            <CarouselNext className="hidden sm:flex" />
-          </Carousel>
-        </div>
-      </div>
+            </div>
+          </div>
+        ) : (
+          <Tabs defaultValue="essentials" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-3 bg-white/80">
+              <TabsTrigger value="essentials" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
+                Essentials
+              </TabsTrigger>
+              <TabsTrigger value="accommodation" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
+                Accommodation
+              </TabsTrigger>
+              <TabsTrigger value="campus" className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white">
+                Campus Life
+              </TabsTrigger>
+            </TabsList>
 
-      {/* Services Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h2 className="text-3xl sm:text-4xl font-semibold text-slate-800 mb-8 sm:mb-12 text-center">
-          Explore Our Services
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
-          {services.map((service) => (
-            <Card key={service.title} className="hover:shadow-xl transition-all duration-300 border-slate-200 hover:border-slate-300 group bg-white/80 backdrop-blur-sm">
-              <a href={service.comingSoon ? "#" : service.link}>
-                <div className={`bg-gradient-to-br ${service.bgColor} rounded-t-lg p-3 sm:p-6 group-hover:scale-105 transition-transform duration-200`}>
-                  <div className={`w-8 h-8 sm:w-14 sm:h-14 bg-gradient-to-r ${service.color} rounded-xl flex items-center justify-center shadow-lg`}>
-                    <service.icon className="w-4 h-4 sm:w-7 sm:h-7 text-white" />
+            <TabsContent value="essentials" className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {essentialServices.map((service, index) => (
+                  <Card 
+                    key={index} 
+                    className="hover:shadow-lg transition-shadow cursor-pointer bg-white/80"
+                    onClick={() => window.location.href = service.link}
+                  >
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-12 h-12 rounded-lg ${service.color} flex items-center justify-center`}>
+                          <service.icon className={`w-6 h-6 ${service.textColor}`} />
+                        </div>
+                        <div>
+                          <CardTitle>{service.title}</CardTitle>
+                          <CardDescription>{service.description}</CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="accommodation" className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {accommodationServices.map((service, index) => (
+                  <Card 
+                    key={index} 
+                    className="hover:shadow-lg transition-shadow cursor-pointer bg-white/80"
+                    onClick={() => window.location.href = service.link}
+                  >
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-12 h-12 rounded-lg ${service.color} flex items-center justify-center`}>
+                          <service.icon className={`w-6 h-6 ${service.textColor}`} />
+                        </div>
+                        <div>
+                          <CardTitle>{service.title}</CardTitle>
+                          <CardDescription>{service.description}</CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="campus" className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {campusServices.map((service, index) => (
+                  <Card 
+                    key={index} 
+                    className="hover:shadow-lg transition-shadow cursor-pointer bg-white/80"
+                    onClick={() => window.location.href = service.link}
+                  >
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-12 h-12 rounded-lg ${service.color} flex items-center justify-center`}>
+                          <service.icon className={`w-6 h-6 ${service.textColor}`} />
+                        </div>
+                        <div>
+                          <CardTitle>{service.title}</CardTitle>
+                          <CardDescription>{service.description}</CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        )}
+
+        {/* Featured Section */}
+        <div className="mt-16">
+          <div className="text-center mb-8">
+            <Badge variant="outline" className="mb-2">New</Badge>
+            <h2 className="text-2xl font-bold text-gray-800">Featured Services</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="bg-gradient-to-r from-pink-50 to-rose-100 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => window.location.href = "/bloom-period-tracker"}>
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <Badge className="bg-pink-500 mb-2">Women's Health</Badge>
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">Bloom Period Tracker</h3>
+                    <p className="text-gray-600 mb-4">Track your cycle, monitor symptoms, and get personalized insights.</p>
+                    <Button className="bg-pink-600 hover:bg-pink-700">
+                      <Heart className="w-4 h-4 mr-2" />
+                      Try Now
+                    </Button>
+                  </div>
+                  <div className="hidden md:block">
+                    <Heart className="w-24 h-24 text-pink-300" />
                   </div>
                 </div>
-                <CardContent className="p-3 sm:p-6">
-                  <h3 className="text-sm sm:text-xl font-semibold text-slate-800 mb-1 sm:mb-2">
-                    {service.title}
-                    {service.comingSoon && <span className="text-xs text-slate-500 ml-1 sm:ml-2">(Coming Soon)</span>}
-                  </h3>
-                  <p className="text-slate-600 text-xs sm:text-base hidden sm:block">
-                    {service.description}
-                  </p>
-                </CardContent>
-              </a>
+              </CardContent>
             </Card>
-          ))}
+
+            <Card className="bg-gradient-to-r from-blue-50 to-indigo-100 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => window.location.href = "/my-university"}>
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <Badge className="bg-indigo-500 mb-2">Campus Resources</Badge>
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">My University Hub</h3>
+                    <p className="text-gray-600 mb-4">Access academic resources, campus events, and student services.</p>
+                    <Button className="bg-indigo-600 hover:bg-indigo-700">
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Explore
+                    </Button>
+                  </div>
+                  <div className="hidden md:block">
+                    <GraduationCap className="w-24 h-24 text-indigo-300" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white/90 backdrop-blur-lg border-t border-slate-200 py-12 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Company Info */}
-            <div className="col-span-1 md:col-span-2">
-              <h3 className="text-2xl font-bold text-slate-800 mb-4">Tmax</h3>
-              <p className="text-slate-600 mb-4">
-                Your one-stop platform for all campus needs. We connect students with essential services to make university life easier and more convenient.
-              </p>
-            </div>
-
-            {/* Contact Info */}
-            <div>
-              <h4 className="text-lg font-semibold text-slate-800 mb-4">Contact Us</h4>
-              <div className="space-y-2">
-                <div className="flex items-center text-slate-600">
-                  <Mail className="w-4 h-4 mr-2" />
-                  <span>tmax@gmail.com</span>
-                </div>
-                <div className="flex items-center text-slate-600">
-                  <Phone className="w-4 h-4 mr-2" />
-                  <span>+254741297209</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Social Media & Links */}
-            <div>
-              <h4 className="text-lg font-semibold text-slate-800 mb-4">Follow Us</h4>
-              <div className="flex space-x-4 mb-4">
-                <button onClick={handleSocialMediaClick} className="text-slate-600 hover:text-slate-900 transition-colors">
-                  <Facebook className="w-5 h-5" />
-                </button>
-                <button onClick={handleSocialMediaClick} className="text-slate-600 hover:text-slate-900 transition-colors">
-                  <Twitter className="w-5 h-5" />
-                </button>
-                <button onClick={handleSocialMediaClick} className="text-slate-600 hover:text-slate-900 transition-colors">
-                  <Instagram className="w-5 h-5" />
-                </button>
-              </div>
-              <div className="space-y-2">
-                <a href="/about" className="block text-slate-600 hover:text-slate-900 transition-colors">About Us</a>
-                <a href="/contact" className="block text-slate-600 hover:text-slate-900 transition-colors">Contact</a>
-                <a href="/privacy" className="block text-slate-600 hover:text-slate-900 transition-colors">Privacy Policy</a>
-                <a href="/terms" className="block text-slate-600 hover:text-slate-900 transition-colors">Terms of Service</a>
-              </div>
-            </div>
-          </div>
-          
-          <div className="border-t border-slate-200 mt-8 pt-8 text-center">
-            <p className="text-slate-600">
-              &copy; 2024 Tmax. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <BottomNavigation />
     </div>
   );
 };

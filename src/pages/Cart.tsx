@@ -1,153 +1,133 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Minus, Plus, Trash2, ShoppingBag, Phone } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { ShoppingCart, Minus, Plus, Trash2, CreditCard } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import BottomNavigation from "@/components/BottomNavigation";
 
 const Cart = () => {
-  const { items, removeItem, updateQuantity, clearCart, total, itemCount } = useCart();
+  const { items, updateQuantity, removeFromCart, getTotalPrice } = useCart();
 
   const handleCheckout = () => {
-    if (items.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
-
-    const orderDetails = items.map(item => 
-      `${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`
-    ).join('\n');
+    const message = `Hi! I'd like to place an order:\n\n${items
+      .map(item => `${item.name} x${item.quantity} - KSh ${item.price * item.quantity}`)
+      .join('\n')}\n\nTotal: KSh ${getTotalPrice()}\n\nPlease let me know the delivery details.`;
     
-    const totalAmount = total.toFixed(2);
-    const message = `Hi! I'd like to place an order:\n\n${orderDetails}\n\nTotal: $${totalAmount}\n\nPlease confirm my order details.`;
-    
-    const whatsappUrl = `https://wa.me/+254702752033?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    window.open(`https://wa.me/254702752033?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pastelYellow-light via-white to-tmaxGreen-50">
-        {/* Header */}
-        <header className="bg-white/90 backdrop-blur-sm border-b border-tmaxGreen-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-pastelYellow to-tmaxGreen-500 flex items-center justify-center">
-                  <ShoppingBag className="text-white w-6 h-6" />
-                </div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-tmaxGreen-600 to-pastelYellow bg-clip-text text-transparent">
-                  Shopping Cart
-                </h1>
-              </div>
-              <Button 
-                className="bg-gradient-to-r from-tmaxGreen-500 to-pastelYellow hover:from-tmaxGreen-600 hover:to-pastelYellow-dark"
-                onClick={() => window.location.href = "/"}
-              >
-                Continue Shopping
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
+        <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              <h1 className="text-3xl font-bold text-gray-800 flex items-center">
+                <ShoppingCart className="w-8 h-8 mr-3" />
+                Shopping Cart
+              </h1>
+              <Button onClick={() => window.history.back()} variant="outline">
+                Back to Home
               </Button>
             </div>
           </div>
         </header>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <ShoppingBag className="w-24 h-24 mx-auto text-gray-400 mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
-            <p className="text-gray-600 mb-8">Add some items to your cart to get started!</p>
-            <Button 
-              size="lg"
-              className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
-              onClick={() => window.location.href = "/food-delivery"}
-            >
-              Browse Food Items
-            </Button>
-          </div>
+        <div className="max-w-4xl mx-auto px-4 py-16">
+          <Card className="text-center bg-white/90">
+            <CardContent className="pt-16 pb-16">
+              <ShoppingCart className="w-24 h-24 text-gray-300 mx-auto mb-6" />
+              <h2 className="text-2xl font-semibold text-gray-600 mb-4">Your cart is empty</h2>
+              <p className="text-gray-500 mb-8">Start shopping to add items to your cart</p>
+              <Button onClick={() => window.location.href = "/"} className="bg-tmaxGreen-600 hover:bg-tmaxGreen-700">
+                Continue Shopping
+              </Button>
+            </CardContent>
+          </Card>
         </div>
+        <BottomNavigation />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pastelYellow-light via-white to-tmaxGreen-50">
-      {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-tmaxGreen-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-pastelYellow to-tmaxGreen-500 flex items-center justify-center">
-                <ShoppingBag className="text-white w-6 h-6" />
-              </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-tmaxGreen-600 to-pastelYellow bg-clip-text text-transparent">
-                Shopping Cart ({itemCount} items)
-              </h1>
-            </div>
-            <Button 
-              className="bg-gradient-to-r from-tmaxGreen-500 to-pastelYellow hover:from-tmaxGreen-600 hover:to-pastelYellow-dark"
-              onClick={() => window.location.href = "/"}
-            >
-              Continue Shopping
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-800 flex items-center">
+              <ShoppingCart className="w-8 h-8 mr-3" />
+              Shopping Cart ({items.length})
+            </h1>
+            <Button onClick={() => window.history.back()} variant="outline">
+              Back to Home
             </Button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            <Card>
+            <Card className="bg-white/90">
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  Cart Items
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={clearCart}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Clear Cart
-                  </Button>
-                </CardTitle>
+                <CardTitle>Cart Items</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center space-x-4 p-4 border rounded-lg">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                      <Badge variant="outline" className="text-xs">
-                        {item.category}
-                      </Badge>
-                      <p className="text-lg font-bold text-tmaxGreen-600">${item.price}</p>
+                    <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                      <img 
+                        src={item.image || "/placeholder.svg"} 
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                    <div className="flex items-center space-x-2">
+                    
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-800 truncate">{item.name}</h3>
+                      <p className="text-sm text-gray-600 capitalize">{item.category}</p>
+                      <p className="font-bold text-tmaxGreen-600">KSh {item.price}</p>
+                    </div>
+
+                    <div className="flex items-center space-x-2 flex-shrink-0">
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        disabled={item.quantity <= 1}
+                        className="w-8 h-8 p-0"
+                        onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
                       >
                         <Minus className="w-4 h-4" />
                       </Button>
-                      <span className="w-8 text-center font-semibold">{item.quantity}</span>
+                      
+                      <Input
+                        type="number"
+                        min="1"
+                        value={item.quantity}
+                        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 1)}
+                        className="w-16 text-center"
+                      />
+                      
                       <Button
                         variant="outline"
                         size="sm"
+                        className="w-8 h-8 p-0"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       >
                         <Plus className="w-4 h-4" />
                       </Button>
+                    </div>
+
+                    <div className="text-right flex-shrink-0">
+                      <p className="font-bold">KSh {item.price * item.quantity}</p>
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
-                        onClick={() => removeItem(item.id)}
-                        className="text-red-600 hover:text-red-700 ml-4"
+                        className="text-red-600 hover:text-red-700 p-1"
+                        onClick={() => removeFromCart(item.id)}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -159,51 +139,45 @@ const Cart = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="space-y-4">
-            <Card>
+          <div className="lg:col-span-1">
+            <Card className="bg-white/90 sticky top-4">
               <CardHeader>
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  {items.map((item) => (
-                    <div key={item.id} className="flex justify-between text-sm">
-                      <span>{item.name} x{item.quantity}</span>
-                      <span>${(item.price * item.quantity).toFixed(2)}</span>
-                    </div>
-                  ))}
+                  <div className="flex justify-between">
+                    <span>Subtotal</span>
+                    <span>KSh {getTotalPrice()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Delivery Fee</span>
+                    <span>KSh 100</span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between font-bold text-lg">
+                    <span>Total</span>
+                    <span>KSh {getTotalPrice() + 100}</span>
+                  </div>
                 </div>
-                <hr />
-                <div className="flex justify-between font-semibold text-lg">
-                  <span>Total</span>
-                  <span className="text-tmaxGreen-600">${total.toFixed(2)}</span>
-                </div>
+
                 <Button 
-                  className="w-full bg-tmaxGreen-600 hover:bg-tmaxGreen-700 text-white"
+                  className="w-full bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
                   onClick={handleCheckout}
                 >
-                  <Phone className="w-4 h-4 mr-2" />
-                  Order via WhatsApp
+                  <CreditCard className="w-4 h-4 mr-2" />
+                  Proceed to Checkout
                 </Button>
-                <p className="text-xs text-gray-600 text-center">
-                  You'll be redirected to WhatsApp to confirm your order
-                </p>
-              </CardContent>
-            </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Delivery Info</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600">
-                  Free delivery on campus for orders over $25. Standard delivery time: 30-45 minutes.
-                </p>
+                <div className="text-xs text-gray-500 text-center">
+                  You'll be redirected to WhatsApp to complete your order
+                </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </div>
+      <BottomNavigation />
     </div>
   );
 };

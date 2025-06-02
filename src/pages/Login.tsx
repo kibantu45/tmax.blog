@@ -5,24 +5,40 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { signIn } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect to dashboard or home
-      window.location.href = "/";
-    }, 1500);
+    const { error } = await signIn(email, password);
+    
+    if (error) {
+      toast({
+        title: "Login Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Welcome back!",
+        description: "You have been successfully logged in.",
+      });
+      navigate("/");
+    }
+    
+    setIsLoading(false);
   };
 
   return (
@@ -93,9 +109,6 @@ const Login = () => {
             </Button>
 
             <div className="text-center space-y-2">
-              <Button variant="link" className="text-sm text-gray-600">
-                Forgot your password?
-              </Button>
               <p className="text-sm text-gray-600">
                 Don't have an account?{" "}
                 <Link to="/signup" className="text-tmaxGreen-600 hover:underline font-medium">
