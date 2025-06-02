@@ -79,15 +79,15 @@ const Chemist = () => {
       stock: 75,
       image: "/lovable-uploads/vitamin-c.jpg"
     },
-      { 
+    { 
       id: "med5", 
       name: "Postinor 2", 
       price: 60, 
-      description: false, 
-      category: "vitamins", 
+      description: "Emergency contraceptive", 
+      category: "contraceptive", 
       prescription: false, 
       stock: 75,
-      image: "https://www.assetpharmacy.com/wp-content/uploads/2017/09/Postinor-2-Tablets-2-Tablets-2.jpg?auto=format&fit=crop&w=400&q=80"
+      image: "https://www.assetpharmacy.com/wp-content/uploads/2017/09/Postinor-2-Tablets-2-Tablets-2.jpg"
     },
   ];
 
@@ -142,6 +142,7 @@ const Chemist = () => {
   ];
 
   const handleAddToCart = (item: any) => {
+    console.log('Adding to cart:', item);
     if (item.prescription) {
       window.open(`https://wa.me/254702752033?text=Hi, I need to order ${item.name} (prescription required). Please help me with the process.`, '_blank');
     } else {
@@ -335,7 +336,7 @@ const Chemist = () => {
                       disabled={med.stock === 0}
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
-                      {med.prescription ? 'Request Prescription' : 'Add to Cart'}
+                      {med.prescription ? 'Order Now (Prescription)' : 'Add to Cart'}
                     </Button>
                   </CardContent>
                 </Card>
