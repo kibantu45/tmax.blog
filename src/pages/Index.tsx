@@ -21,24 +21,24 @@ const Index = () => {
       title: "Groceries",
       description: "Fresh produce & essentials",
       icon: ShoppingBag,
-      color: "bg-green-100",
-      textColor: "text-green-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/groceries"
     },
     {
       title: "Food Delivery",
       description: "Meals from local restaurants",
       icon: Utensils,
-      color: "bg-orange-100",
-      textColor: "text-orange-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/food-delivery"
     },
     {
       title: "Gas Delivery",
       description: "Cooking gas to your door",
       icon: Flame,
-      color: "bg-red-100",
-      textColor: "text-red-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/gas-delivery"
     },
     {
@@ -53,75 +53,101 @@ const Index = () => {
       title: "Roommate Finder",
       description: "Find compatible roommates",
       icon: Users,
-      color: "bg-purple-100",
-      textColor: "text-purple-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/roommate-finder"
     },
     {
       title: "Rental Booking",
       description: "Student-friendly accommodations",
       icon: Home,
-      color: "bg-yellow-100",
-      textColor: "text-yellow-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/rental-booking"
     },
     {
       title: "Second Hand",
       description: "Buy & sell used items",
       icon: ShoppingCart,
-      color: "bg-emerald-100",
-      textColor: "text-emerald-700",
+      color: "bg-green-100",
+      textColor: "text-green-700",
       link: "/second-hand"
     },
     {
       title: "Chemist",
       description: "Medications & health products",
       icon: Pill,
-      color: "bg-pink-100",
-      textColor: "text-pink-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/chemist"
     },
     {
       title: "My University",
       description: "Campus resources & info",
       icon: GraduationCap,
-      color: "bg-indigo-100",
-      textColor: "text-indigo-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/my-university"
     },
     {
       title: "TUM Gossip",
       description: "Campus news & discussions",
       icon: MessageSquare,
-      color: "bg-amber-100",
-      textColor: "text-amber-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/tum-gossip"
     },
     {
       title: "Bloom Period Tracker",
       description: "Track your menstrual cycle",
       icon: Heart,
-      color: "bg-rose-100",
-      textColor: "text-rose-700",
-      link: "/bloom-period-tracker"
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
+      link: user ? "/bloom-period-tracker" : "/login"
     },
     {
       title: "Errand Services",
       description: "Get help with daily tasks",
       icon: ShoppingBag,
-      color: "bg-cyan-100",
-      textColor: "text-cyan-700",
+      color: "bg-green-100",
+      textColor: "text-green-700",
       link: "/errand-services"
     },
     {
       title: "Salon & Beauty",
       description: "Hair, nails & beauty services",
       icon: Scissors,
-      color: "bg-fuchsia-100",
-      textColor: "text-fuchsia-700",
+      color: "bg-blue-100",
+      textColor: "text-blue-700",
       link: "/salon-beauty"
+    },
+    {
+      title: "Boda Boda Services",
+      description: "Quick motorcycle transport",
+      icon: Car,
+      color: "bg-green-100",
+      textColor: "text-green-700",
+      link: "#"
+    },
+    {
+      title: "Tuk Tuk Services",
+      description: "Affordable three-wheel transport",
+      icon: Car,
+      color: "bg-green-100",
+      textColor: "text-green-700",
+      link: "#"
     }
   ];
+
+  const handleServiceClick = (service: any) => {
+    if (service.title === "Boda Boda Services" || service.title === "Tuk Tuk Services") {
+      window.open('tel:+254702752033');
+    } else if (service.title === "Bloom Period Tracker" && !user) {
+      window.location.href = "/login";
+    } else {
+      window.location.href = service.link;
+    }
+  };
 
   const filteredServices = searchQuery 
     ? allServices.filter(service => 
@@ -131,31 +157,31 @@ const Index = () => {
     : allServices;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pastelYellow-light via-white to-tmaxGreen-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
       {/* Navigation Menu */}
       <nav className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-pastelYellow to-tmaxGreen-500 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-green-500 flex items-center justify-center">
                 <span className="text-white font-bold text-lg">T</span>
               </div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-tmaxGreen-600 to-pastelYellow bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                 Tmax
               </h1>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#services" className="text-gray-700 hover:text-tmaxGreen-600 transition-colors">Services</a>
-              <a href="/about" className="text-gray-700 hover:text-tmaxGreen-600 transition-colors">About Us</a>
-              <a href="/contact" className="text-gray-700 hover:text-tmaxGreen-600 transition-colors">Contact</a>
+              <a href="#services" className="text-gray-700 hover:text-blue-600 transition-colors">Services</a>
+              <a href="/about" className="text-gray-700 hover:text-blue-600 transition-colors">About Us</a>
+              <a href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
               
               {user ? (
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-600">Hi, {user.email?.split('@')[0]}</span>
-                  <Button size="sm" onClick={() => window.location.href = '/profile'}>
+                  <Button size="sm" onClick={() => window.location.href = '/profile'} className="bg-blue-600 hover:bg-blue-700">
                     Profile
                   </Button>
                 </div>
@@ -164,7 +190,7 @@ const Index = () => {
                   <Button variant="outline" size="sm" onClick={() => window.location.href = '/login'}>
                     Login
                   </Button>
-                  <Button size="sm" onClick={() => window.location.href = '/signup'}>
+                  <Button size="sm" onClick={() => window.location.href = '/signup'} className="bg-blue-600 hover:bg-blue-700">
                     Sign Up
                   </Button>
                 </div>
@@ -187,13 +213,13 @@ const Index = () => {
           {isMenuOpen && (
             <div className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
-                <a href="#services" className="block px-3 py-2 text-gray-700 hover:text-tmaxGreen-600">Services</a>
-                <a href="/about" className="block px-3 py-2 text-gray-700 hover:text-tmaxGreen-600">About Us</a>
-                <a href="/contact" className="block px-3 py-2 text-gray-700 hover:text-tmaxGreen-600">Contact</a>
+                <a href="#services" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Services</a>
+                <a href="/about" className="block px-3 py-2 text-gray-700 hover:text-blue-600">About Us</a>
+                <a href="/contact" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Contact</a>
                 {user ? (
                   <div className="px-3 py-2">
                     <span className="text-sm text-gray-600 block mb-2">Hi, {user.email?.split('@')[0]}</span>
-                    <Button size="sm" onClick={() => window.location.href = '/profile'}>
+                    <Button size="sm" onClick={() => window.location.href = '/profile'} className="bg-blue-600 hover:bg-blue-700">
                       Profile
                     </Button>
                   </div>
@@ -202,7 +228,7 @@ const Index = () => {
                     <Button variant="outline" size="sm" onClick={() => window.location.href = '/login'} className="w-full">
                       Login
                     </Button>
-                    <Button size="sm" onClick={() => window.location.href = '/signup'} className="w-full">
+                    <Button size="sm" onClick={() => window.location.href = '/signup'} className="w-full bg-blue-600 hover:bg-blue-700">
                       Sign Up
                     </Button>
                   </div>
@@ -217,7 +243,7 @@ const Index = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Everything You Need, <span className="text-tmaxGreen-600">All in One Place</span>
+            Everything You Need, <span className="text-blue-600">All in One Place</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             From groceries to laundry, roommates to study resources - we've got your campus life covered.
@@ -241,7 +267,7 @@ const Index = () => {
         {/* Advertisement Carousel */}
         <ServiceCarousel />
 
-        {/* Services Grid - Free Layout */}
+        {/* Services Grid */}
         <div id="services" className="mt-16">
           <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Our Services</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -249,7 +275,7 @@ const Index = () => {
               <Card 
                 key={index} 
                 className="hover:shadow-lg transition-shadow cursor-pointer bg-white/80 hover:scale-105 duration-200"
-                onClick={() => window.location.href = service.link}
+                onClick={() => handleServiceClick(service)}
               >
                 <CardHeader className="pb-2 text-center">
                   <div className={`w-12 h-12 rounded-lg ${service.color} flex items-center justify-center mx-auto mb-3`}>
@@ -257,6 +283,13 @@ const Index = () => {
                   </div>
                   <CardTitle className="text-sm md:text-base">{service.title}</CardTitle>
                   <CardDescription className="text-xs md:text-sm">{service.description}</CardDescription>
+                  {(service.title === "Boda Boda Services" || service.title === "Tuk Tuk Services") && (
+                    <div className="text-xs text-gray-500 mt-2">
+                      <p>Call: +254 702 752 033</p>
+                      <p>Available 24/7</p>
+                      <p>Campus & City rides</p>
+                    </div>
+                  )}
                 </CardHeader>
               </Card>
             ))}
@@ -271,39 +304,39 @@ const Index = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-gradient-to-r from-pink-50 to-rose-100 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => window.location.href = "/bloom-period-tracker"}>
+            <Card className="bg-gradient-to-r from-blue-50 to-blue-100 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => user ? window.location.href = "/bloom-period-tracker" : window.location.href = "/login"}>
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <Badge className="bg-pink-500 mb-2">Women's Health</Badge>
+                    <Badge className="bg-blue-500 mb-2">Women's Health</Badge>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Bloom Period Tracker</h3>
                     <p className="text-gray-600 mb-4">Track your cycle, monitor symptoms, and get personalized insights.</p>
-                    <Button className="bg-pink-600 hover:bg-pink-700">
+                    <Button className="bg-blue-600 hover:bg-blue-700">
                       <Heart className="w-4 h-4 mr-2" />
-                      Try Now
+                      {user ? "Try Now" : "Login to Access"}
                     </Button>
                   </div>
                   <div className="hidden md:block">
-                    <Heart className="w-24 h-24 text-pink-300" />
+                    <Heart className="w-24 h-24 text-blue-300" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-r from-blue-50 to-indigo-100 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => window.location.href = "/my-university"}>
+            <Card className="bg-gradient-to-r from-blue-50 to-green-50 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => window.location.href = "/my-university"}>
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <Badge className="bg-indigo-500 mb-2">Campus Resources</Badge>
+                    <Badge className="bg-blue-500 mb-2">Campus Resources</Badge>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">My University Hub</h3>
                     <p className="text-gray-600 mb-4">Access academic resources, campus events, and student services.</p>
-                    <Button className="bg-indigo-600 hover:bg-indigo-700">
+                    <Button className="bg-blue-600 hover:bg-blue-700">
                       <BookOpen className="w-4 h-4 mr-2" />
                       Explore
                     </Button>
                   </div>
                   <div className="hidden md:block">
-                    <GraduationCap className="w-24 h-24 text-indigo-300" />
+                    <GraduationCap className="w-24 h-24 text-blue-300" />
                   </div>
                 </div>
               </CardContent>
@@ -319,7 +352,7 @@ const Index = () => {
             {/* Company Info */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-pastelYellow to-tmaxGreen-500 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-green-500 flex items-center justify-center">
                   <span className="text-white font-bold text-lg">T</span>
                 </div>
                 <h3 className="text-xl font-bold">Tmax</h3>
@@ -356,28 +389,28 @@ const Index = () => {
               <h4 className="text-lg font-semibold">Contact Info</h4>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-tmaxGreen-400" />
+                  <Mail className="w-5 h-5 text-blue-400" />
                   <span className="text-gray-300">support@tmax.co.ke</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-tmaxGreen-400" />
+                  <Phone className="w-5 h-5 text-blue-400" />
                   <span className="text-gray-300">+254 702 752 033</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-tmaxGreen-400" />
+                  <MapPin className="w-5 h-5 text-blue-400" />
                   <span className="text-gray-300">Nairobi, Kenya</span>
                 </div>
               </div>
               
               {/* Social Media */}
               <div className="flex space-x-4 pt-4">
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                <a href="https://www.facebook.com/hustlesasa" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
                   <Facebook className="w-6 h-6" />
                 </a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                <a href="https://www.twitter.com/hustlesasa" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
                   <Twitter className="w-6 h-6" />
                 </a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                <a href="https://www.instagram.com/hustlesasa" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
                   <Instagram className="w-6 h-6" />
                 </a>
               </div>

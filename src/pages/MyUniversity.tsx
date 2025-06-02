@@ -21,6 +21,8 @@ import {
 import BottomNavigation from "@/components/BottomNavigation";
 
 const MyUniversity = () => {
+  const whatsappLink = "https://wa.me/254702752033?text=Hi, I need assistance with university services";
+
   const universityTabs = [
     { id: "academics", name: "Academics", icon: BookOpen },
     { id: "campus-life", name: "Campus Life", icon: Users },
@@ -41,10 +43,10 @@ const MyUniversity = () => {
   const campusLifeServices = [
     { name: "Student Organizations", description: "Join clubs and societies", icon: Users, color: "bg-blue-100" },
     { name: "Sports & Recreation", description: "Gym, sports, and fitness activities", icon: Trophy, color: "bg-green-100" },
-    { name: "Student Housing", description: "Dormitory and housing information", icon: MapPin, color: "bg-purple-100" },
-    { name: "Campus Forums", description: "Connect with fellow students", icon: MessageSquare, color: "bg-yellow-100" },
-    { name: "Mental Health Support", description: "Counseling and wellness services", icon: Heart, color: "bg-pink-100" },
-    { name: "Career Services", description: "Job placement and career guidance", icon: GraduationCap, color: "bg-indigo-100" },
+    { name: "Student Housing", description: "Dormitory and housing information", icon: MapPin, color: "bg-blue-100" },
+    { name: "Campus Forums", description: "Connect with fellow students", icon: MessageSquare, color: "bg-blue-100" },
+    { name: "Mental Health Support", description: "Counseling and wellness services", icon: Heart, color: "bg-blue-100" },
+    { name: "Career Services", description: "Job placement and career guidance", icon: GraduationCap, color: "bg-blue-100" },
   ];
 
   const facilities = [
@@ -73,7 +75,7 @@ const MyUniversity = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
       {/* Header */}
       <header className="bg-white/90 backdrop-blur-sm border-b border-blue-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -126,7 +128,10 @@ const MyUniversity = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    <Button 
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                      onClick={() => window.open(whatsappLink, '_blank')}
+                    >
                       Access Service
                     </Button>
                   </CardContent>
@@ -142,7 +147,7 @@ const MyUniversity = () => {
                   <CardHeader>
                     <div className="flex items-center space-x-3">
                       <div className={`w-12 h-12 ${service.color || 'bg-gray-100'} rounded-lg flex items-center justify-center`}>
-                        <service.icon className="w-6 h-6 text-gray-700" />
+                        <service.icon className="w-6 h-6 text-blue-700" />
                       </div>
                       <div>
                         <CardTitle className="text-lg">{service.name}</CardTitle>
@@ -151,7 +156,10 @@ const MyUniversity = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                    <Button 
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                      onClick={() => window.open(whatsappLink, '_blank')}
+                    >
                       Learn More
                     </Button>
                   </CardContent>
@@ -184,6 +192,7 @@ const MyUniversity = () => {
                     <Button 
                       className="w-full bg-green-600 hover:bg-green-700"
                       disabled={!facility.available}
+                      onClick={() => window.open(whatsappLink, '_blank')}
                     >
                       {facility.available ? "View Details" : "Coming Soon"}
                     </Button>
@@ -211,10 +220,17 @@ const MyUniversity = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex gap-2">
-                      <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700">
+                      <Button 
+                        className="flex-1 bg-blue-600 hover:bg-blue-700"
+                        onClick={() => window.open(whatsappLink, '_blank')}
+                      >
                         Register
                       </Button>
-                      <Button variant="outline" className="flex-1">
+                      <Button 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => window.open(whatsappLink, '_blank')}
+                      >
                         Learn More
                       </Button>
                     </div>
@@ -238,7 +254,10 @@ const MyUniversity = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-gray-600 hover:bg-gray-700">
+                    <Button 
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                      onClick={() => window.open(whatsappLink, '_blank')}
+                    >
                       Access Resource
                     </Button>
                   </CardContent>

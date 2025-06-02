@@ -16,58 +16,69 @@ const ServiceCarousel = () => {
   const advertisements = [
     {
       id: 1,
+      title: "CCC Magazine",
+      description: "The latest edition of CCC Magazine - 2nd Edition",
+      image: "/lovable-uploads/7349f6be-f149-42a3-b2f7-77924eabd7a9.png",
+      price: "Available Now",
+      rating: 4.9,
+      badge: "New Edition",
+      link: "https://wa.me/254702752033?text=Hi, I'm interested in the CCC Magazine 2nd Edition",
+      bgColor: "bg-gradient-to-r from-blue-600 to-blue-800"
+    },
+    {
+      id: 2,
       title: "Cane Carter Gallery",
       description: "Premium art pieces and custom frames for your space",
       image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=800&q=80",
       price: "From KSh 2,500",
       rating: 4.9,
       badge: "Featured",
-      link: "/cane-carter-gallery",
+      link: "https://wa.me/254702752033?text=Hi, I'm interested in Cane Carter Gallery services",
       bgColor: "bg-gradient-to-r from-blue-600 to-blue-800"
     },
     {
-      id: 2,
+      id: 3,
       title: "Express Delivery",
       description: "Get your orders delivered within 30 minutes",
       image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80",
       price: "Free delivery",
       rating: 4.8,
       badge: "Fast",
-      link: "/express-delivery",
+      link: "https://wa.me/254702752033?text=Hi, I need express delivery service",
       bgColor: "bg-gradient-to-r from-green-600 to-emerald-700"
     },
     {
-      id: 3,
+      id: 4,
       title: "Student Discounts",
       description: "Save up to 50% on all campus essentials",
       image: "https://images.unsplash.com/photo-1607013251379-e6eecfffe234?auto=format&fit=crop&w=800&q=80",
       price: "Up to 50% off",
       rating: 4.7,
       badge: "Hot Deal",
-      link: "/student-discounts",
-      bgColor: "bg-gradient-to-r from-orange-600 to-red-600"
+      link: "https://wa.me/254702752033?text=Hi, I want to know about student discounts",
+      bgColor: "bg-gradient-to-r from-blue-600 to-indigo-700"
     },
     {
-      id: 4,
+      id: 5,
       title: "Campus Fresh Market",
       description: "Fresh organic produce delivered to your doorstep",
       image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80",
       price: "From KSh 200",
       rating: 4.9,
       badge: "Organic",
-      link: "/groceries",
+      link: "https://wa.me/254702752033?text=Hi, I'm interested in fresh organic produce",
       bgColor: "bg-gradient-to-r from-green-500 to-teal-600"
     },
     {
-      id: 5,
+      id: 6,
       title: "Study Buddy Services",
       description: "Find study partners and academic support",
       image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
       price: "Free to join",
       rating: 4.6,
       badge: "New",
-      link: "/study-buddy",
-      bgColor: "bg-gradient-to-r from-purple-600 to-indigo-700"
+      link: "https://wa.me/254702752033?text=Hi, I want to join Study Buddy Services",
+      bgColor: "bg-gradient-to-r from-blue-600 to-indigo-700"
     }
   ];
 
@@ -111,7 +122,7 @@ const ServiceCarousel = () => {
                         size="sm" 
                         variant="secondary"
                         className="bg-white/20 text-white border-white/30 hover:bg-white/30"
-                        onClick={() => window.location.href = ad.link}
+                        onClick={() => window.open(ad.link, '_blank')}
                       >
                         <ShoppingCart className="w-4 h-4 mr-2" />
                         View

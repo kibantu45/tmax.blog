@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -143,17 +144,18 @@ const Chemist = () => {
 
   const handleAddToCart = (item: any) => {
     console.log('Adding to cart:', item);
-    if (item.prescription) {
-      window.open(`https://wa.me/254702752033?text=Hi, I need to order ${item.name} (prescription required). Please help me with the process.`, '_blank');
-    } else {
-      addToCart({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        image: item.image || "/placeholder.svg",
-        category: "pharmacy"
-      });
-    }
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image || "/placeholder.svg",
+      category: "pharmacy"
+    });
+  };
+
+  const handleOrderNow = (item: any) => {
+    const message = `Hi, I want to order ${item.name} - ${item.description}. Price: KSh ${item.price}`;
+    window.open(`https://wa.me/254702752033?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleEditTab = (tab: any) => {
@@ -197,13 +199,13 @@ const Chemist = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-yellow-50 to-green-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-green-200">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-blue-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-green-700">Campus Pharmacy</h1>
+              <h1 className="text-3xl font-bold text-blue-700">Campus Pharmacy</h1>
               <p className="text-gray-600 mt-2">Your health and wellness partner</p>
             </div>
             <div className="flex items-center space-x-4">
@@ -236,7 +238,7 @@ const Chemist = () => {
         {/* Admin Add New Tab */}
         {isAdminMode && (
           <div className="mb-6">
-            <Card className="border-2 border-dashed border-green-300">
+            <Card className="border-2 border-dashed border-blue-300">
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Plus className="w-5 h-5 mr-2" />
@@ -262,7 +264,7 @@ const Chemist = () => {
                     onChange={(e) => setNewTabForm(prev => ({ ...prev, id: e.target.value }))}
                   />
                 </div>
-                <Button onClick={handleAddNewTab} className="md:col-span-2">
+                <Button onClick={handleAddNewTab} className="md:col-span-2 bg-blue-600 hover:bg-blue-700">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Category Tab
                 </Button>
@@ -277,7 +279,7 @@ const Chemist = () => {
               <div key={tab.id} className="relative group">
                 <TabsTrigger 
                   value={tab.id} 
-                  className="data-[state=active]:bg-green-500 data-[state=active]:text-white w-full"
+                  className="data-[state=active]:bg-blue-500 data-[state=active]:text-white w-full"
                 >
                   {tab.name}
                 </TabsTrigger>
@@ -327,17 +329,26 @@ const Chemist = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center mb-4">
-                      <span className="text-2xl font-bold text-green-600">KSh {med.price}</span>
+                      <span className="text-2xl font-bold text-blue-600">KSh {med.price}</span>
                       <Badge variant="outline">{med.stock} in stock</Badge>
                     </div>
-                    <Button 
-                      className="w-full bg-green-600 hover:bg-green-700"
-                      onClick={() => handleAddToCart(med)}
-                      disabled={med.stock === 0}
-                    >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      {med.prescription ? 'Order Now (Prescription)' : 'Add to Cart'}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button 
+                        className="flex-1 bg-blue-600 hover:bg-blue-700"
+                        onClick={() => handleAddToCart(med)}
+                        disabled={med.stock === 0}
+                      >
+                        <ShoppingCart className="w-4 h-4 mr-2" />
+                        Add to Cart
+                      </Button>
+                      <Button 
+                        className="flex-1 bg-green-600 hover:bg-green-700"
+                        onClick={() => handleOrderNow(med)}
+                        disabled={med.stock === 0}
+                      >
+                        Order Now
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -361,11 +372,11 @@ const Chemist = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center mb-4">
-                      <span className="text-2xl font-bold text-green-600">KSh {product.price}</span>
+                      <span className="text-2xl font-bold text-blue-600">KSh {product.price}</span>
                       <Badge variant="outline">{product.stock} in stock</Badge>
                     </div>
                     <Button 
-                      className="w-full bg-green-600 hover:bg-green-700"
+                      className="w-full bg-blue-600 hover:bg-blue-700"
                       onClick={() => handleAddToCart(product)}
                       disabled={product.stock === 0}
                     >
@@ -384,8 +395,8 @@ const Chemist = () => {
                 <Card key={index} className="hover:shadow-lg transition-shadow bg-white/90">
                   <CardHeader>
                     <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <service.icon className="w-6 h-6 text-green-600" />
+                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <service.icon className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
                         <CardTitle className="text-lg">{service.name}</CardTitle>
@@ -395,11 +406,11 @@ const Chemist = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-green-600">
+                      <span className="text-xl font-bold text-blue-600">
                         {service.price === "Free" ? "Free" : `KSh ${service.price}`}
                       </span>
                       <Button 
-                        className="bg-green-600 hover:bg-green-700"
+                        className="bg-blue-600 hover:bg-blue-700"
                         onClick={() => window.open(`https://wa.me/254702752033?text=Hi, I would like to book ${service.name}`, '_blank')}
                       >
                         Book Now
@@ -475,7 +486,7 @@ const Chemist = () => {
                   placeholder="Tab ID"
                 />
               </div>
-              <Button onClick={handleSaveTab} className="w-full">
+              <Button onClick={handleSaveTab} className="w-full bg-blue-600 hover:bg-blue-700">
                 Save Changes
               </Button>
             </div>
