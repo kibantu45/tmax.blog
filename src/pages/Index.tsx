@@ -4,11 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, ShoppingBag, Utensils, Flame, Shirt, Users, Home, BookOpen, Car, ShoppingCart, Pill, GraduationCap, MessageSquare, Heart, Scissors, Menu, X, Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNavigation from "@/components/BottomNavigation";
 import ServiceCarousel from "@/components/ServiceCarousel";
+import EducationTab from "@/components/EducationTab";
+import TransportServices from "@/components/TransportServices";
+import BingwaSokoni from "@/components/BingwaSokoni";
 
 const Index = () => {
   const { user } = useAuth();
@@ -122,27 +126,17 @@ const Index = () => {
       link: "/salon-beauty"
     },
     {
-      title: "Boda Boda Services",
-      description: "Quick motorcycle transport",
+      title: "Transport Services",
+      description: "Boda Boda & Tuk Tuk rides",
       icon: Car,
       color: "bg-green-100",
       textColor: "text-green-700",
-      link: "#"
-    },
-    {
-      title: "Tuk Tuk Services",
-      description: "Affordable three-wheel transport",
-      icon: Car,
-      color: "bg-green-100",
-      textColor: "text-green-700",
-      link: "#"
+      link: "/transport-services"
     }
   ];
 
   const handleServiceClick = (service: any) => {
-    if (service.title === "Boda Boda Services" || service.title === "Tuk Tuk Services") {
-      window.open('tel:+254702752033');
-    } else if (service.title === "Bloom Period Tracker" && !user) {
+    if (service.title === "Bloom Period Tracker" && !user) {
       window.location.href = "/login";
     } else {
       window.location.href = service.link;
@@ -267,33 +261,59 @@ const Index = () => {
         {/* Advertisement Carousel */}
         <ServiceCarousel />
 
-        {/* Services Grid */}
-        <div id="services" className="mt-16">
-          <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Our Services</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {filteredServices.map((service, index) => (
-              <Card 
-                key={index} 
-                className="hover:shadow-lg transition-shadow cursor-pointer bg-white/80 hover:scale-105 duration-200"
-                onClick={() => handleServiceClick(service)}
-              >
-                <CardHeader className="pb-2 text-center">
-                  <div className={`w-12 h-12 rounded-lg ${service.color} flex items-center justify-center mx-auto mb-3`}>
-                    <service.icon className={`w-6 h-6 ${service.textColor}`} />
-                  </div>
-                  <CardTitle className="text-sm md:text-base">{service.title}</CardTitle>
-                  <CardDescription className="text-xs md:text-sm">{service.description}</CardDescription>
-                  {(service.title === "Boda Boda Services" || service.title === "Tuk Tuk Services") && (
-                    <div className="text-xs text-gray-500 mt-2">
-                      <p>Call: +254 702 752 033</p>
-                      <p>Available 24/7</p>
-                      <p>Campus & City rides</p>
-                    </div>
-                  )}
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
+        {/* Main Content Tabs */}
+        <div className="mt-16">
+          <Tabs defaultValue="services" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4 bg-white/80">
+              <TabsTrigger value="services" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                Services
+              </TabsTrigger>
+              <TabsTrigger value="education" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                Education
+              </TabsTrigger>
+              <TabsTrigger value="transport" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                Transport
+              </TabsTrigger>
+              <TabsTrigger value="bundles" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                Bundles
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="services" className="space-y-6">
+              <div id="services">
+                <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Our Services</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                  {filteredServices.map((service, index) => (
+                    <Card 
+                      key={index} 
+                      className="hover:shadow-lg transition-shadow cursor-pointer bg-white/80 hover:scale-105 duration-200"
+                      onClick={() => handleServiceClick(service)}
+                    >
+                      <CardHeader className="pb-2 text-center">
+                        <div className={`w-12 h-12 rounded-lg ${service.color} flex items-center justify-center mx-auto mb-3`}>
+                          <service.icon className={`w-6 h-6 ${service.textColor}`} />
+                        </div>
+                        <CardTitle className="text-sm md:text-base">{service.title}</CardTitle>
+                        <CardDescription className="text-xs md:text-sm">{service.description}</CardDescription>
+                      </CardHeader>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="education" className="space-y-6">
+              <EducationTab />
+            </TabsContent>
+
+            <TabsContent value="transport" className="space-y-6">
+              <TransportServices />
+            </TabsContent>
+
+            <TabsContent value="bundles" className="space-y-6">
+              <BingwaSokoni />
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* Featured Section */}

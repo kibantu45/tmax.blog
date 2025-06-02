@@ -2,359 +2,278 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search, ShoppingCart, Apple, Milk, Sandwich, Coffee, Edit, Plus, Trash2, Phone } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ShoppingCart, Search, Plus, Minus } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import BottomNavigation from "@/components/BottomNavigation";
 
 const Groceries = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const { addToCart } = useCart();
-  const [isAdminMode, setIsAdminMode] = useState(false);
-  const [editingTab, setEditingTab] = useState<any>(null);
-  const [newTabForm, setNewTabForm] = useState({
-    id: "",
-    name: "",
-    icon: "Apple",
-    products: []
-  });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
 
-  // Check if admin mode is enabled (you can add proper admin authentication here)
-  const checkAdminMode = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('admin') === 'true';
-  };
-
-  // Initialize admin mode check
-  useState(() => {
-    setIsAdminMode(checkAdminMode());
-  });
-
-  const [groceryTabs, setGroceryTabs] = useState([
-    { 
-      id: "fruits", 
-      name: "Fruits & Vegetables", 
-      icon: Apple,
-      products: [
-        { id: "fruit1", name: "Fresh Bananas", price: 150, description: "Sweet and ripe bananas per kg", stock: 50, unit: "kg" },
-        { id: "fruit2", name: "Red Apples", price: 300, description: "Crispy red apples per kg", stock: 30, unit: "kg" },
-        { id: "fruit3", name: "Orange Oranges", price: 200, description: "Juicy oranges per kg", stock: 40, unit: "kg" },
-        { id: "fruit4", name: "Avocados", price: 400, description: "Fresh avocados per kg", stock: 25, unit: "kg" }
-      ]
+  const groceryItems = [
+    {
+      id: "onions",
+      name: "Red Onions",
+      price: 80,
+      unit: "per kg",
+      category: "vegetables",
+      image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh red onions, perfect for cooking"
     },
-    { 
-      id: "dairy", 
-      name: "Dairy Products", 
-      icon: Milk,
-      products: [
-        { id: "dairy1", name: "Fresh Milk", price: 120, description: "1 liter fresh milk", stock: 100, unit: "1L" },
-        { id: "dairy2", name: "Greek Yogurt", price: 250, description: "500g creamy yogurt", stock: 50, unit: "500g" },
-        { id: "dairy3", name: "Cheese Slices", price: 300, description: "200g processed cheese", stock: 40, unit: "200g" },
-        { id: "dairy4", name: "Butter", price: 400, description: "500g unsalted butter", stock: 30, unit: "500g" }
-      ]
+    {
+      id: "garlic",
+      name: "Fresh Garlic",
+      price: 200,
+      unit: "per 250g",
+      category: "vegetables",
+      image: "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh garlic bulbs for flavoring"
     },
-    { 
-      id: "pantry", 
-      name: "Pantry Essentials", 
-      icon: Sandwich,
-      products: [
-        { id: "pantry1", name: "White Bread", price: 80, description: "Fresh white bread loaf", stock: 60, unit: "loaf" },
-        { id: "pantry2", name: "Rice", price: 180, description: "1kg quality rice", stock: 100, unit: "1kg" },
-        { id: "pantry3", name: "Cooking Oil", price: 350, description: "2L vegetable oil", stock: 45, unit: "2L" },
-        { id: "pantry4", name: "Sugar", price: 200, description: "2kg white sugar", stock: 80, unit: "2kg" }
-      ]
+    {
+      id: "oranges",
+      name: "Sweet Oranges",
+      price: 150,
+      unit: "per kg",
+      category: "fruits",
+      image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=400&q=80",
+      description: "Juicy sweet oranges, vitamin C rich"
     },
-    { 
-      id: "beverages", 
-      name: "Beverages", 
-      icon: Coffee,
-      products: [
-        { id: "bev1", name: "Instant Coffee", price: 500, description: "200g premium coffee", stock: 35, unit: "200g" },
-        { id: "bev2", name: "Black Tea", price: 250, description: "100 tea bags", stock: 40, unit: "100 bags" },
-        { id: "bev3", name: "Mineral Water", price: 50, description: "500ml bottled water", stock: 200, unit: "500ml" },
-        { id: "bev4", name: "Fresh Juice", price: 150, description: "1L mixed fruit juice", stock: 25, unit: "1L" }
-      ]
+    {
+      id: "mangoes",
+      name: "Ripe Mangoes",
+      price: 120,
+      unit: "per piece",
+      category: "fruits",
+      image: "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=400&q=80",
+      description: "Sweet ripe mangoes, locally sourced"
+    },
+    {
+      id: "bananas",
+      name: "Fresh Bananas",
+      price: 100,
+      unit: "per bunch",
+      category: "fruits",
+      image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh bananas, perfect for snacking"
+    },
+    {
+      id: "carrots",
+      name: "Fresh Carrots",
+      price: 90,
+      unit: "per kg",
+      category: "vegetables",
+      image: "https://images.unsplash.com/photo-1445282768818-728615cc910a?auto=format&fit=crop&w=400&q=80",
+      description: "Crunchy fresh carrots, vitamin A rich"
+    },
+    {
+      id: "cabbage",
+      name: "Green Cabbage",
+      price: 60,
+      unit: "per head",
+      category: "vegetables",
+      image: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh green cabbage for salads and cooking"
+    },
+    {
+      id: "milk",
+      name: "Fresh Milk",
+      price: 60,
+      unit: "per 500ml",
+      category: "dairy",
+      image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh cow milk, pasteurized"
+    },
+    {
+      id: "ginger",
+      name: "Fresh Ginger",
+      price: 250,
+      unit: "per 250g",
+      category: "spices",
+      image: "https://images.unsplash.com/photo-1599909533908-5e9afeee7201?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh ginger root for cooking and tea"
+    },
+    {
+      id: "pilipilihoho",
+      name: "Pilipili Hoho (Bell Peppers)",
+      price: 30,
+      unit: "per piece",
+      category: "vegetables",
+      image: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh bell peppers, colorful and crunchy"
+    },
+    {
+      id: "dhania",
+      name: "Dhania (Coriander)",
+      price: 20,
+      unit: "per bunch",
+      category: "herbs",
+      image: "https://images.unsplash.com/photo-1622143623765-46ff90a8139e?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh coriander leaves for garnishing"
+    },
+    {
+      id: "tomatoes",
+      name: "Fresh Tomatoes",
+      price: 120,
+      unit: "per kg",
+      category: "vegetables",
+      image: "https://images.unsplash.com/photo-1546470427-e40b4ba3762b?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh red tomatoes, perfect for cooking"
+    },
+    {
+      id: "eggs",
+      name: "Fresh Eggs",
+      price: 350,
+      unit: "per tray (30 pieces)",
+      category: "dairy",
+      image: "https://images.unsplash.com/photo-1569288063643-5d29ad64df09?auto=format&fit=crop&w=400&q=80",
+      description: "Fresh farm eggs, high protein"
     }
-  ]);
+  ];
+
+  const categories = ["all", "fruits", "vegetables", "dairy", "spices", "herbs"];
+
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const filteredItems = groceryItems.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const updateQuantity = (itemId: string, change: number) => {
+    setQuantities(prev => ({
+      ...prev,
+      [itemId]: Math.max(0, (prev[itemId] || 1) + change)
+    }));
+  };
 
   const handleAddToCart = (item: any) => {
-    addToCart({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      image: "/placeholder.svg",
-      category: "groceries"
-    });
-  };
-
-  const handleOrderNow = (item: any) => {
-    // Add to cart first
-    handleAddToCart(item);
-    
-    // Redirect to WhatsApp with order details
-    const message = `Hi! I'd like to order ${item.name} for KSh ${item.price}. Please confirm availability and delivery time.`;
-    const whatsappUrl = `https://wa.me/+254702752033?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const handleEditTab = (tab: any) => {
-    setEditingTab(tab);
-  };
-
-  const handleSaveTab = () => {
-    if (editingTab) {
-      setGroceryTabs(prev => prev.map(tab => 
-        tab.id === editingTab.id ? editingTab : tab
-      ));
-      setEditingTab(null);
+    const quantity = quantities[item.id] || 1;
+    for (let i = 0; i < quantity; i++) {
+      addToCart({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        category: item.category,
+        image: item.image
+      });
     }
   };
-
-  const handleDeleteTab = (tabId: string) => {
-    if (confirm("Are you sure you want to delete this tab?")) {
-      setGroceryTabs(prev => prev.filter(tab => tab.id !== tabId));
-    }
-  };
-
-  const handleAddNewTab = () => {
-    const newTab = {
-      ...newTabForm,
-      id: newTabForm.id || `tab_${Date.now()}`,
-      icon: Apple, // Default icon
-      products: []
-    };
-    setGroceryTabs(prev => [...prev, newTab]);
-    setNewTabForm({
-      id: "",
-      name: "",
-      icon: "Apple",
-      products: []
-    });
-  };
-
-  const filterItems = (items: any[]) => {
-    return items.filter(item => 
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  };
-
-  const renderItemGrid = (items: any[]) => (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filterItems(items).map((item) => (
-        <Card key={item.id} className="hover:shadow-lg transition-shadow bg-white/90">
-          <CardHeader>
-            <CardTitle className="text-lg">{item.name}</CardTitle>
-            <CardDescription>{item.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <span className="text-2xl font-bold text-tmaxGreen-600">KSh {item.price}</span>
-                <span className="text-sm text-gray-500 ml-1">/{item.unit}</span>
-              </div>
-              <Badge variant="outline">{item.stock} in stock</Badge>
-            </div>
-            <div className="flex gap-2">
-              <Button 
-                className="flex-1 bg-tmaxGreen-600 hover:bg-tmaxGreen-700"
-                onClick={() => handleAddToCart(item)}
-                disabled={item.stock === 0}
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Add to Cart
-              </Button>
-              <Button 
-                variant="outline"
-                className="flex-1"
-                onClick={() => handleOrderNow(item)}
-                disabled={item.stock === 0}
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                Order Now
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pastelYellow via-pastelYellow-light to-pastelYellow-dark">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
       {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-tmaxGreen-200">
+      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-tmaxGreen-700">Campus Groceries</h1>
-              <p className="text-gray-600 mt-2">Fresh groceries delivered to your doorstep</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              {isAdminMode && (
-                <Badge variant="outline" className="bg-red-100 text-red-800">Admin Mode</Badge>
-              )}
-              <Button 
-                variant="outline"
-                onClick={() => window.location.href = "/cart"}
-              >
-                <ShoppingCart className="w-4 h-4 mr-2" />
-                View Cart
-              </Button>
-              <Button onClick={() => window.history.back()} variant="outline">
-                Back to Home
-              </Button>
-            </div>
+            <h1 className="text-3xl font-bold text-gray-800 flex items-center">
+              <ShoppingCart className="w-8 h-8 mr-3" />
+              Groceries
+            </h1>
+            <Button onClick={() => window.history.back()} variant="outline">
+              Back to Home
+            </Button>
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search Bar */}
-        <div className="mb-8">
-          <div className="relative max-w-md mx-auto">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        {/* Search and Filter */}
+        <div className="mb-8 space-y-4">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <Input
               type="text"
               placeholder="Search groceries..."
+              className="pl-10 bg-white/80"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white/90"
             />
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <Badge
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                className={`cursor-pointer capitalize ${
+                  selectedCategory === category 
+                    ? "bg-blue-600 hover:bg-blue-700" 
+                    : "hover:bg-blue-50"
+                }`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </Badge>
+            ))}
           </div>
         </div>
 
-        {/* Admin Add New Tab */}
-        {isAdminMode && (
-          <div className="mb-6">
-            <Card className="border-2 border-dashed border-tmaxGreen-300">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Plus className="w-5 h-5 mr-2" />
-                  Add New Category Tab
-                </CardTitle>
+        {/* Items Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredItems.map((item) => (
+            <Card key={item.id} className="bg-white/90 hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="aspect-square bg-gray-100 overflow-hidden">
+                <img 
+                  src={item.image} 
+                  alt={item.name}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">{item.name}</CardTitle>
+                <CardDescription className="text-sm">{item.description}</CardDescription>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-blue-600">KSh {item.price}</span>
+                  <span className="text-sm text-gray-500">{item.unit}</span>
+                </div>
               </CardHeader>
-              <CardContent className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="tab-name">Tab Name</Label>
-                  <Input
-                    id="tab-name"
-                    placeholder="Category Name"
-                    value={newTabForm.name}
-                    onChange={(e) => setNewTabForm(prev => ({ ...prev, name: e.target.value }))}
-                  />
+              <CardContent className="pt-0">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm text-gray-600">Quantity:</span>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-8 h-8 p-0"
+                      onClick={() => updateQuantity(item.id, -1)}
+                    >
+                      <Minus className="w-4 h-4" />
+                    </Button>
+                    <span className="w-8 text-center">{quantities[item.id] || 1}</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-8 h-8 p-0"
+                      onClick={() => updateQuantity(item.id, 1)}
+                    >
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Label htmlFor="tab-id">Tab ID</Label>
-                  <Input
-                    id="tab-id"
-                    placeholder="category-id"
-                    value={newTabForm.id}
-                    onChange={(e) => setNewTabForm(prev => ({ ...prev, id: e.target.value }))}
-                  />
-                </div>
-                <Button onClick={handleAddNewTab} className="md:col-span-2">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Category Tab
+                <Button 
+                  onClick={() => handleAddToCart(item)}
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  Add to Cart
                 </Button>
               </CardContent>
             </Card>
+          ))}
+        </div>
+
+        {filteredItems.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500">No items found matching your search.</p>
           </div>
         )}
-
-        <Tabs defaultValue={groceryTabs[0]?.id} className="space-y-6">
-          <TabsList className="grid w-full bg-white/80" style={{ gridTemplateColumns: `repeat(${groceryTabs.length}, 1fr)` }}>
-            {groceryTabs.map((tab) => (
-              <div key={tab.id} className="relative group">
-                <TabsTrigger 
-                  value={tab.id} 
-                  className="data-[state=active]:bg-tmaxGreen-500 data-[state=active]:text-white w-full"
-                >
-                  <tab.icon className="w-4 h-4 mr-2" />
-                  {tab.name}
-                </TabsTrigger>
-                {isAdminMode && (
-                  <div className="absolute top-0 right-0 flex opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-md shadow-md">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-6 w-6 p-0"
-                      onClick={() => handleEditTab(tab)}
-                    >
-                      <Edit className="w-3 h-3" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      className="h-6 w-6 p-0"
-                      onClick={() => handleDeleteTab(tab.id)}
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </TabsList>
-
-          {groceryTabs.map((tab) => (
-            <TabsContent key={tab.id} value={tab.id} className="space-y-6">
-              {renderItemGrid(tab.products)}
-            </TabsContent>
-          ))}
-        </Tabs>
-
-        {/* Quick Order Section */}
-        <div className="mt-12 bg-white/90 rounded-lg p-6">
-          <h3 className="text-2xl font-bold text-tmaxGreen-700 mb-4">Quick Order via WhatsApp</h3>
-          <p className="text-gray-600 mb-4">
-            Can't find what you're looking for? Send us a message with your grocery list and we'll help you get everything you need.
-          </p>
-          <Button 
-            className="bg-green-600 hover:bg-green-700"
-            onClick={() => window.open('https://wa.me/254702752033?text=Hi, I would like to place a grocery order. Here is my list:', '_blank')}
-          >
-            <Phone className="w-4 h-4 mr-2" />
-            Order via WhatsApp
-          </Button>
-        </div>
       </div>
 
-      {/* Edit Tab Dialog */}
-      <Dialog open={!!editingTab} onOpenChange={() => setEditingTab(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Edit Category Tab</DialogTitle>
-          </DialogHeader>
-          {editingTab && (
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="edit-tab-name">Tab Name</Label>
-                <Input
-                  id="edit-tab-name"
-                  value={editingTab.name}
-                  onChange={(e) => setEditingTab(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Tab Name"
-                />
-              </div>
-              <div>
-                <Label htmlFor="edit-tab-id">Tab ID</Label>
-                <Input
-                  id="edit-tab-id"
-                  value={editingTab.id}
-                  onChange={(e) => setEditingTab(prev => ({ ...prev, id: e.target.value }))}
-                  placeholder="Tab ID"
-                />
-              </div>
-              <Button onClick={handleSaveTab} className="w-full">
-                Save Changes
-              </Button>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <BottomNavigation />
     </div>
   );
 };
