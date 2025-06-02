@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -8,20 +9,21 @@ export interface CartItem {
   category: string;
   image?: string;
   quantity: number;
-  provider?: string; // Added provider property
+  provider?: string;
 }
 
 interface CartContextType {
   items: CartItem[];
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void; // Alias for addItem
+  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
   removeItem: (id: string) => void;
+  removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
-  itemCount: number; // Computed property
-  total: number; // Computed property
+  itemCount: number;
+  total: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -109,7 +111,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return items.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
-  // Computed values
   const itemCount = getTotalItems();
   const total = getTotalPrice();
 
@@ -117,8 +118,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     <CartContext.Provider value={{
       items,
       addItem,
-      addToCart: addItem, // Alias for addItem
+      addToCart: addItem,
       removeItem,
+      removeFromCart: removeItem,
       updateQuantity,
       clearCart,
       getTotalItems,

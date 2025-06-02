@@ -42,7 +42,21 @@ export const usePeriodTracking = () => {
         variant: 'destructive',
       });
     } else {
-      setPeriodData(data || []);
+      // Transform the data to match our interface
+      const transformedData = (data || []).map(item => ({
+        id: item.id,
+        period_start_date: item.period_start_date,
+        period_end_date: item.period_end_date,
+        cycle_length: item.cycle_length,
+        flow_intensity: item.flow_intensity as 'light' | 'medium' | 'heavy',
+        symptoms: item.symptoms || [],
+        mood: item.mood,
+        notes: item.notes,
+        is_pregnancy_mode: item.is_pregnancy_mode,
+        pregnancy_week: item.pregnancy_week,
+        due_date: item.due_date,
+      }));
+      setPeriodData(transformedData);
     }
     setLoading(false);
   };

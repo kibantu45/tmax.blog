@@ -62,7 +62,19 @@ const EnhancedPregnancyTracker = () => {
     if (error) {
       console.error('Error fetching pregnancy data:', error);
     } else if (data) {
-      setPregnancyData(data);
+      // Transform the data to match our interface
+      const transformedData: PregnancyData = {
+        id: data.id,
+        pregnancy_start_date: data.pregnancy_start_date,
+        due_date: data.due_date,
+        current_week: data.current_week,
+        baby_name: data.baby_name,
+        notes: data.notes,
+        appointments: Array.isArray(data.appointments) ? data.appointments : [],
+        symptoms: Array.isArray(data.symptoms) ? data.symptoms : [],
+        weight_tracking: Array.isArray(data.weight_tracking) ? data.weight_tracking : [],
+      };
+      setPregnancyData(transformedData);
     }
   };
 
