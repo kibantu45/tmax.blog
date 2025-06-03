@@ -2,446 +2,400 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, ShoppingBag, Utensils, Flame, Shirt, Users, Home, BookOpen, Car, ShoppingCart, Pill, GraduationCap, MessageSquare, Heart, Scissors, Menu, X, Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
+import { Input } from "@/components/ui/input";
+import { 
+  ShoppingCart, 
+  Users, 
+  MessageSquare, 
+  Calendar, 
+  Utensils, 
+  Truck, 
+  Shirt, 
+  Scissors, 
+  Home, 
+  BookOpen, 
+  Fuel, 
+  Car, 
+  Pill,
+  Menu,
+  X,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  MapPin,
+  Phone,
+  Mail,
+  ChevronRight,
+  Star,
+  Heart,
+  Zap,
+  Shield
+} from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import BottomNavigation from "@/components/BottomNavigation";
+import { useCart } from "@/contexts/CartContext";
 import ServiceCarousel from "@/components/ServiceCarousel";
-import EducationTab from "@/components/EducationTab";
-import TransportServices from "@/components/TransportServices";
 import BingwaSokoni from "@/components/BingwaSokoni";
+import BottomNavigation from "@/components/BottomNavigation";
 
 const Index = () => {
   const { user } = useAuth();
-  const { addToCart } = useCart();
-  const [searchQuery, setSearchQuery] = useState("");
+  const { itemCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const allServices = [
-    {
-      title: "Groceries",
-      description: "Fresh produce & essentials",
-      icon: ShoppingBag,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/groceries"
+  const services = [
+    { 
+      title: "Groceries", 
+      description: "Fresh produce and essentials", 
+      icon: ShoppingCart, 
+      color: "bg-green-500",
+      link: "/groceries" 
     },
-    {
-      title: "Food Delivery",
-      description: "Meals from local restaurants",
-      icon: Utensils,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/food-delivery"
+    { 
+      title: "Food Delivery", 
+      description: "Delicious meals delivered", 
+      icon: Utensils, 
+      color: "bg-orange-500",
+      link: "/food-delivery" 
     },
-    {
-      title: "Gas Delivery",
-      description: "Cooking gas to your door",
-      icon: Flame,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/gas-delivery"
+    { 
+      title: "Gas Delivery", 
+      description: "Quick gas cylinder refills", 
+      icon: Fuel, 
+      color: "bg-red-500",
+      link: "/gas-delivery" 
     },
-    {
-      title: "Laundry Services",
-      description: "Wash, dry & fold services",
-      icon: Shirt,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/laundry-services"
+    { 
+      title: "Laundry Services", 
+      description: "Professional cleaning", 
+      icon: Shirt, 
+      color: "bg-blue-500",
+      link: "/laundry-services" 
     },
-    {
-      title: "Roommate Finder",
-      description: "Find compatible roommates",
-      icon: Users,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/roommate-finder"
+    { 
+      title: "Salon & Beauty", 
+      description: "Beauty and grooming", 
+      icon: Scissors, 
+      color: "bg-pink-500",
+      link: "/salon-beauty" 
     },
-    {
-      title: "Rental Booking",
-      description: "Student-friendly accommodations",
-      icon: Home,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/rental-booking"
+    { 
+      title: "Roommate Finder", 
+      description: "Find compatible roommates", 
+      icon: Users, 
+      color: "bg-purple-500",
+      link: "/roommate-finder" 
     },
-    {
-      title: "Second Hand",
-      description: "Buy & sell used items",
-      icon: ShoppingCart,
-      color: "bg-green-100",
-      textColor: "text-green-700",
-      link: "/second-hand"
+    { 
+      title: "Rental Booking", 
+      description: "Affordable accommodation", 
+      icon: Home, 
+      color: "bg-indigo-500",
+      link: "/rental-booking" 
     },
-    {
-      title: "Chemist",
-      description: "Medications & health products",
-      icon: Pill,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/chemist"
+    { 
+      title: "Second Hand", 
+      description: "Buy & sell used items", 
+      icon: Heart, 
+      color: "bg-yellow-500",
+      link: "/second-hand" 
     },
-    {
-      title: "My University",
-      description: "Campus resources & info",
-      icon: GraduationCap,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/my-university"
+    { 
+      title: "Chemist", 
+      description: "Medicines and health products", 
+      icon: Pill, 
+      color: "bg-teal-500",
+      link: "/chemist" 
     },
-    {
-      title: "TUM Gossip",
-      description: "Campus news & discussions",
-      icon: MessageSquare,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/tum-gossip"
+    { 
+      title: "My University", 
+      description: "University services", 
+      icon: BookOpen, 
+      color: "bg-cyan-500",
+      link: "/my-university" 
     },
-    {
-      title: "Bloom Period Tracker",
-      description: "Track your menstrual cycle",
-      icon: Heart,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: user ? "/bloom-period-tracker" : "/login"
+    { 
+      title: "TUM Gossip", 
+      description: "Campus news and discussions", 
+      icon: MessageSquare, 
+      color: "bg-rose-500",
+      link: "/tum-gossip" 
     },
-    {
-      title: "Errand Services",
-      description: "Get help with daily tasks",
-      icon: ShoppingBag,
-      color: "bg-green-100",
-      textColor: "text-green-700",
-      link: "/errand-services"
+    { 
+      title: "Transport Services", 
+      description: "Boda Boda & Tuk Tuk rides", 
+      icon: Car, 
+      color: "bg-amber-500",
+      link: "/transport-services" 
     },
-    {
-      title: "Salon & Beauty",
-      description: "Hair, nails & beauty services",
-      icon: Scissors,
-      color: "bg-blue-100",
-      textColor: "text-blue-700",
-      link: "/salon-beauty"
-    },
-    {
-      title: "Transport Services",
-      description: "Boda Boda & Tuk Tuk rides",
-      icon: Car,
-      color: "bg-green-100",
-      textColor: "text-green-700",
-      link: "/transport-services"
+    { 
+      title: "Errand Services", 
+      description: "Personal assistance", 
+      icon: Zap, 
+      color: "bg-violet-500",
+      link: "/errand-services" 
     }
   ];
 
-  const handleServiceClick = (service: any) => {
-    if (service.title === "Bloom Period Tracker" && !user) {
-      window.location.href = "/login";
-    } else {
-      window.location.href = service.link;
+  const featuredServices = [
+    {
+      title: "Bloom Period Tracker",
+      description: "Track your menstrual cycle and health",
+      icon: Calendar,
+      color: "bg-pink-500",
+      link: "/bloom-period-tracker"
     }
-  };
+  ];
 
-  const filteredServices = searchQuery 
-    ? allServices.filter(service => 
-        service.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        service.description.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : allServices;
+  const filteredServices = services.filter(service =>
+    service.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
-      {/* Navigation Menu */}
-      <nav className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+      {/* Header */}
+      <header className="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-green-500 flex items-center justify-center">
-                <span className="text-white font-bold text-lg">T</span>
-              </div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                Tmax
-              </h1>
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-blue-600">TMAX</h1>
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            <nav className="hidden md:flex space-x-8">
               <a href="#services" className="text-gray-700 hover:text-blue-600 transition-colors">Services</a>
               <a href="/about" className="text-gray-700 hover:text-blue-600 transition-colors">About Us</a>
               <a href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
-              
+            </nav>
+
+            {/* Right side */}
+            <div className="flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Hi, {user.email?.split('@')[0]}</span>
-                  <Button size="sm" onClick={() => window.location.href = '/profile'} className="bg-blue-600 hover:bg-blue-700">
+                  <span className="text-sm text-gray-600">Hello, {user.email}</span>
+                  <Button variant="outline" size="sm" onClick={() => window.location.href = '/profile'}>
                     Profile
                   </Button>
                 </div>
               ) : (
-                <div className="flex items-center space-x-2">
+                <div className="hidden sm:flex space-x-2">
                   <Button variant="outline" size="sm" onClick={() => window.location.href = '/login'}>
                     Login
                   </Button>
-                  <Button size="sm" onClick={() => window.location.href = '/signup'} className="bg-blue-600 hover:bg-blue-700">
+                  <Button size="sm" onClick={() => window.location.href = '/signup'}>
                     Sign Up
                   </Button>
                 </div>
               )}
-            </div>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
+              {/* Mobile menu button */}
               <Button
                 variant="ghost"
                 size="sm"
+                className="md:hidden"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </Button>
             </div>
           </div>
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
-                <a href="#services" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Services</a>
-                <a href="/about" className="block px-3 py-2 text-gray-700 hover:text-blue-600">About Us</a>
-                <a href="/contact" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Contact</a>
-                {user ? (
-                  <div className="px-3 py-2">
-                    <span className="text-sm text-gray-600 block mb-2">Hi, {user.email?.split('@')[0]}</span>
-                    <Button size="sm" onClick={() => window.location.href = '/profile'} className="bg-blue-600 hover:bg-blue-700">
-                      Profile
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="px-3 py-2 space-y-2">
-                    <Button variant="outline" size="sm" onClick={() => window.location.href = '/login'} className="w-full">
+            <div className="md:hidden border-t border-gray-200 py-4">
+              <nav className="flex flex-col space-y-2">
+                <a href="#services" className="text-gray-700 hover:text-blue-600 transition-colors px-4 py-2">Services</a>
+                <a href="/about" className="text-gray-700 hover:text-blue-600 transition-colors px-4 py-2">About Us</a>
+                <a href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors px-4 py-2">Contact</a>
+                {!user && (
+                  <div className="flex space-x-2 px-4 pt-2">
+                    <Button variant="outline" size="sm" onClick={() => window.location.href = '/login'}>
                       Login
                     </Button>
-                    <Button size="sm" onClick={() => window.location.href = '/signup'} className="w-full bg-blue-600 hover:bg-blue-700">
+                    <Button size="sm" onClick={() => window.location.href = '/signup'}>
                       Sign Up
                     </Button>
                   </div>
                 )}
-              </div>
+              </nav>
             </div>
           )}
         </div>
-      </nav>
+      </header>
 
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Everything You Need, <span className="text-blue-600">All in One Place</span>
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            From groceries to laundry, roommates to study resources - we've got your campus life covered.
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            Your Campus
+            <span className="text-blue-600"> Lifestyle</span>
+            <br />
+            <span className="text-green-600">Simplified</span>
+          </h1>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Everything you need for university life - from groceries to services, all in one place.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+              <ShoppingCart className="w-5 h-5 mr-2" />
+              Start Shopping
+            </Button>
+            <Button size="lg" variant="outline">
+              Explore Services
+            </Button>
+          </div>
         </div>
+      </section>
 
-        {/* Search Bar */}
-        <div className="max-w-md mx-auto mb-12">
+      {/* Advertisement Carousel */}
+      <section className="py-8">
+        <ServiceCarousel />
+      </section>
+
+      {/* Featured Services */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">Featured Services</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredServices.map((service, index) => (
+              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer bg-white/90" onClick={() => window.location.href = service.link}>
+                <CardHeader>
+                  <div className={`w-12 h-12 ${service.color} rounded-lg flex items-center justify-center mb-4`}>
+                    <service.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <CardTitle className="text-xl">{service.title}</CardTitle>
+                  <CardDescription>{service.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    Access Service
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Search Bar */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8" id="services">
+        <div className="max-w-2xl mx-auto">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <Input
               type="text"
               placeholder="Search for services..."
-              className="pl-10 bg-white/80"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-12 text-lg bg-white/90"
             />
+            <ShoppingCart className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           </div>
         </div>
+      </section>
 
-        {/* Advertisement Carousel */}
-        <ServiceCarousel />
-
-        {/* Main Content Tabs */}
-        <div className="mt-16">
-          <Tabs defaultValue="services" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4 bg-white/80">
-              <TabsTrigger value="services" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-                Services
-              </TabsTrigger>
-              <TabsTrigger value="education" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-                Education
-              </TabsTrigger>
-              <TabsTrigger value="transport" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-                Transport
-              </TabsTrigger>
-              <TabsTrigger value="bundles" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-                Bundles
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="services" className="space-y-6">
-              <div id="services">
-                <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Our Services</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                  {filteredServices.map((service, index) => (
-                    <Card 
-                      key={index} 
-                      className="hover:shadow-lg transition-shadow cursor-pointer bg-white/80 hover:scale-105 duration-200"
-                      onClick={() => handleServiceClick(service)}
-                    >
-                      <CardHeader className="pb-2 text-center">
-                        <div className={`w-12 h-12 rounded-lg ${service.color} flex items-center justify-center mx-auto mb-3`}>
-                          <service.icon className={`w-6 h-6 ${service.textColor}`} />
-                        </div>
-                        <CardTitle className="text-sm md:text-base">{service.title}</CardTitle>
-                        <CardDescription className="text-xs md:text-sm">{service.description}</CardDescription>
-                      </CardHeader>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="education" className="space-y-6">
-              <EducationTab />
-            </TabsContent>
-
-            <TabsContent value="transport" className="space-y-6">
-              <TransportServices />
-            </TabsContent>
-
-            <TabsContent value="bundles" className="space-y-6">
-              <BingwaSokoni />
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        {/* Featured Section */}
-        <div className="mt-16">
-          <div className="text-center mb-8">
-            <Badge variant="outline" className="mb-2">New</Badge>
-            <h2 className="text-2xl font-bold text-gray-800">Featured Services</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-gradient-to-r from-blue-50 to-blue-100 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => user ? window.location.href = "/bloom-period-tracker" : window.location.href = "/login"}>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <Badge className="bg-blue-500 mb-2">Women's Health</Badge>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">Bloom Period Tracker</h3>
-                    <p className="text-gray-600 mb-4">Track your cycle, monitor symptoms, and get personalized insights.</p>
-                    <Button className="bg-blue-600 hover:bg-blue-700">
-                      <Heart className="w-4 h-4 mr-2" />
-                      {user ? "Try Now" : "Login to Access"}
-                    </Button>
+      {/* Services Grid */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Our Services</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredServices.map((service, index) => (
+              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer bg-white/90" onClick={() => window.location.href = service.link}>
+                <CardHeader className="text-center">
+                  <div className={`w-16 h-16 ${service.color} rounded-xl flex items-center justify-center mx-auto mb-4`}>
+                    <service.icon className="w-8 h-8 text-white" />
                   </div>
-                  <div className="hidden md:block">
-                    <Heart className="w-24 h-24 text-blue-300" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-r from-blue-50 to-green-50 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => window.location.href = "/my-university"}>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <Badge className="bg-blue-500 mb-2">Campus Resources</Badge>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">My University Hub</h3>
-                    <p className="text-gray-600 mb-4">Access academic resources, campus events, and student services.</p>
-                    <Button className="bg-blue-600 hover:bg-blue-700">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Explore
-                    </Button>
-                  </div>
-                  <div className="hidden md:block">
-                    <GraduationCap className="w-24 h-24 text-blue-300" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  <CardTitle className="text-lg">{service.title}</CardTitle>
+                  <CardDescription className="text-sm">{service.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Bingwa Sokoni Section */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
+        <BingwaSokoni />
+      </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Company Info */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-green-500 flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">T</span>
-                </div>
-                <h3 className="text-xl font-bold">Tmax</h3>
-              </div>
-              <p className="text-gray-300">
-                Your one-stop platform for all campus life needs. Making student life easier, one service at a time.
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-xl font-bold mb-4 text-blue-400">TMAX</h3>
+              <p className="text-gray-400 mb-4">
+                Your one-stop solution for all campus lifestyle needs.
               </p>
+              <div className="flex space-x-4">
+                <a href="https://facebook.com/tmaxkenya" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a href="https://twitter.com/tmaxkenya" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <Twitter className="w-5 h-5" />
+                </a>
+                <a href="https://instagram.com/tmaxkenya" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href="https://youtube.com/tmaxkenya" className="text-gray-400 hover:text-blue-400 transition-colors">
+                  <Youtube className="w-5 h-5" />
+                </a>
+                <a href="https://wa.me/254702752033?text=Hi%20Hustle%20Sasa!" className="text-gray-400 hover:text-green-400 transition-colors">
+                  <MessageSquare className="w-5 h-5" />
+                </a>
+              </div>
             </div>
 
-            {/* Quick Links */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">Quick Links</h4>
+            <div>
+              <h4 className="font-semibold mb-4 text-blue-400">Quick Links</h4>
               <ul className="space-y-2">
-                <li><a href="/about" className="text-gray-300 hover:text-white transition-colors">About Us</a></li>
-                <li><a href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</a></li>
-                <li><a href="/terms" className="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="/privacy" className="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                <li><a href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                <li><a href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
               </ul>
             </div>
 
-            {/* Services */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">Popular Services</h4>
-              <ul className="space-y-2">
-                <li><a href="/groceries" className="text-gray-300 hover:text-white transition-colors">Groceries</a></li>
-                <li><a href="/food-delivery" className="text-gray-300 hover:text-white transition-colors">Food Delivery</a></li>
-                <li><a href="/laundry-services" className="text-gray-300 hover:text-white transition-colors">Laundry Services</a></li>
-                <li><a href="/chemist" className="text-gray-300 hover:text-white transition-colors">Pharmacy</a></li>
-              </ul>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">Contact Info</h4>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-blue-400" />
-                  <span className="text-gray-300">support@tmax.co.ke</span>
+            <div>
+              <h4 className="font-semibold mb-4 text-blue-400">Contact Info</h4>
+              <div className="space-y-2 text-gray-400">
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 mr-2" />
+                  <span>TUM Campus, Nairobi</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-blue-400" />
-                  <span className="text-gray-300">+254 702 752 033</span>
+                <div className="flex items-center">
+                  <Phone className="w-4 h-4 mr-2" />
+                  <span>+254 702 752 033</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-blue-400" />
-                  <span className="text-gray-300">Nairobi, Kenya</span>
+                <div className="flex items-center">
+                  <Mail className="w-4 h-4 mr-2" />
+                  <span>info@tmax.co.ke</span>
                 </div>
               </div>
-              
-              {/* Social Media */}
-              <div className="flex space-x-4 pt-4">
-                <a href="https://www.facebook.com/hustlesasa" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
-                  <Facebook className="w-6 h-6" />
-                </a>
-                <a href="https://www.twitter.com/hustlesasa" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
-                  <Twitter className="w-6 h-6" />
-                </a>
-                <a href="https://www.instagram.com/hustlesasa" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
-                  <Instagram className="w-6 h-6" />
-                </a>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4 text-blue-400">Newsletter</h4>
+              <p className="text-gray-400 mb-4">Stay updated with our latest offers and services.</p>
+              <div className="flex">
+                <Input
+                  type="email"
+                  placeholder="Your email"
+                  className="rounded-r-none bg-gray-800 border-gray-700 text-white"
+                />
+                <Button className="rounded-l-none bg-blue-600 hover:bg-blue-700">
+                  Subscribe
+                </Button>
               </div>
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p className="text-gray-300">
-              © 2024 Tmax. All rights reserved. Empowering campus life across Kenya.
-            </p>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 TMAX. All rights reserved.</p>
           </div>
         </div>
       </footer>

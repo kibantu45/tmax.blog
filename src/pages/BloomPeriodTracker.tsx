@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,10 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Heart, Baby, TrendingUp, Bell, CalendarDays } from "lucide-react";
+import { Calendar, Heart, Baby, TrendingUp, Bell, CalendarDays, BookOpen } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePeriodTracking } from "@/hooks/usePeriodTracking";
 import EnhancedPregnancyTracker from "@/components/EnhancedPregnancyTracker";
+import EducationTab from "@/components/EducationTab";
 import BottomNavigation from "@/components/BottomNavigation";
 
 const BloomPeriodTracker = () => {
@@ -49,6 +49,28 @@ const BloomPeriodTracker = () => {
     return "Track more cycles for predictions";
   };
 
+  // Get fertile window
+  const getFertileWindow = () => {
+    if (periodData.length > 0) {
+      const lastPeriod = new Date(periodData[0].period_start_date);
+      const ovulationDay = new Date(lastPeriod);
+      ovulationDay.setDate(lastPeriod.getDate() + 14);
+      
+      const fertileStart = new Date(ovulationDay);
+      fertileStart.setDate(ovulationDay.getDate() - 5);
+      
+      const fertileEnd = new Date(ovulationDay);
+      fertileEnd.setDate(ovulationDay.getDate() + 1);
+      
+      return {
+        start: fertileStart.toLocaleDateString(),
+        end: fertileEnd.toLocaleDateString(),
+        ovulation: ovulationDay.toLocaleDateString()
+      };
+    }
+    return { start: "N/A", end: "N/A", ovulation: "N/A" };
+  };
+
   // Get current cycle phase
   const getCurrentPhase = () => {
     if (periodData.length > 0) {
@@ -83,6 +105,7 @@ const BloomPeriodTracker = () => {
   }
 
   const currentPhase = getCurrentPhase();
+  const fertileWindow = getFertileWindow();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 pb-20">
@@ -144,7 +167,7 @@ const BloomPeriodTracker = () => {
             </div>
 
             <Tabs defaultValue="track" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4 bg-white/80">
+              <TabsList className="grid w-full grid-cols-5 bg-white/80">
                 <TabsTrigger value="track" className="data-[state=active]:bg-pink-500 data-[state=active]:text-white">
                   <Calendar className="w-4 h-4 mr-2" />
                   Track Period
@@ -160,6 +183,10 @@ const BloomPeriodTracker = () => {
                 <TabsTrigger value="insights" className="data-[state=active]:bg-pink-500 data-[state=active]:text-white">
                   <Heart className="w-4 h-4 mr-2" />
                   Insights
+                </TabsTrigger>
+                <TabsTrigger value="education" className="data-[state=active]:bg-pink-500 data-[state=active]:text-white">
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Education
                 </TabsTrigger>
               </TabsList>
 
@@ -236,13 +263,79 @@ const BloomPeriodTracker = () => {
               <TabsContent value="calendar" className="space-y-6">
                 <Card className="bg-white/90">
                   <CardHeader>
-                    <CardTitle>Cycle Calendar Visualization</CardTitle>
+                    <CardTitle>Cycle Calendar & Predictions</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-center py-8">
-                      <CalendarDays className="w-16 h-16 mx-auto mb-4 text-pink-400" />
-                      <p className="text-gray-600">Interactive calendar with cycle phases visualization coming soon!</p>
-                      <p className="text-sm text-gray-500 mt-2">Track your periods to see patterns and predictions.</p>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <h4 className="font-semibold mb-4 text-pink-700">Current Cycle Information</h4>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center p-3 bg-pink-50 rounded-lg">
+                            <span className="font-medium">Current Phase:</span>
+                            <Badge className={currentPhase.color}>{currentPhase.phase}</Badge>
+                          </div>
+                          <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                            <span className="font-medium">Next Period:</span>
+                            <span className="text-blue-700">{getNextPeriodPrediction()}</span>
+                          </div>
+                          <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span className="font-medium">Ovulation Day:</span>
+                            <span className="text-green-700">{fertileWindow.ovulation}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-4 text-pink-700">Fertile Window</h4>
+                        <div className="space-y-3">
+                          <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
+                            <h5 className="font-medium text-green-700 mb-2">Fertile Period</h5>
+                            <p className="text-sm text-gray-600 mb-2">
+                              Your fertile window is when you're most likely to conceive.
+                            </p>
+                            <div className="flex justify-between text-sm">
+                              <span>Start: <strong>{fertileWindow.start}</strong></span>
+                              <span>End: <strong>{fertileWindow.end}</strong></span>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 bg-yellow-50 rounded-lg">
+                            <div className="flex items-center">
+                              <Bell className="w-4 h-4 text-yellow-600 mr-2" />
+                              <span className="text-sm font-medium">Period Reminder</span>
+                            </div>
+                            <p className="text-xs text-gray-600 mt-1">
+                              We'll notify you 3 days before your next period
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                      <h5 className="font-medium text-blue-700 mb-2">Cycle Phases Explanation</h5>
+                      <div className="grid md:grid-cols-4 gap-3 text-sm">
+                        <div className="text-center">
+                          <div className="w-3 h-3 bg-red-500 rounded-full mx-auto mb-1"></div>
+                          <span className="font-medium">Menstrual</span>
+                          <p className="text-xs text-gray-600">Days 1-5</p>
+                        </div>
+                        <div className="text-center">
+                          <div className="w-3 h-3 bg-blue-500 rounded-full mx-auto mb-1"></div>
+                          <span className="font-medium">Follicular</span>
+                          <p className="text-xs text-gray-600">Days 6-13</p>
+                        </div>
+                        <div className="text-center">
+                          <div className="w-3 h-3 bg-green-500 rounded-full mx-auto mb-1"></div>
+                          <span className="font-medium">Ovulation</span>
+                          <p className="text-xs text-gray-600">Days 14-16</p>
+                        </div>
+                        <div className="text-center">
+                          <div className="w-3 h-3 bg-yellow-500 rounded-full mx-auto mb-1"></div>
+                          <span className="font-medium">Luteal</span>
+                          <p className="text-xs text-gray-600">Days 17-28</p>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -343,6 +436,10 @@ const BloomPeriodTracker = () => {
                     )}
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="education" className="space-y-6">
+                <EducationTab />
               </TabsContent>
             </Tabs>
           </div>

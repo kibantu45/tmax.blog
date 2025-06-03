@@ -1,11 +1,10 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Pill, Heart, Thermometer, Shield, Search, ShoppingCart, Edit, Plus, Trash2 } from "lucide-react";
+import { Pill, Heart, Thermometer, Shield, Search, ShoppingCart, Edit, Plus, Trash2, Phone } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -34,6 +33,9 @@ const Chemist = () => {
 
   const [chemistTabs, setChemistTabs] = useState([
     { id: "medications", name: "Medications", icon: "Pill" },
+    { id: "pain-relief", name: "Pain Relief", icon: "Heart" },
+    { id: "cold-flu", name: "Cold & Flu", icon: "Thermometer" },
+    { id: "digestion", name: "Digestion", icon: "Shield" },
     { id: "health-products", name: "Health Products", icon: "Heart" },
     { id: "services", name: "Services", icon: "Thermometer" },
     { id: "emergency", name: "Emergency", icon: "Shield" }
@@ -90,6 +92,205 @@ const Chemist = () => {
       stock: 75,
       image: "https://www.assetpharmacy.com/wp-content/uploads/2017/09/Postinor-2-Tablets-2-Tablets-2.jpg"
     },
+    { 
+      id: "med6", 
+      name: "Diclofenac 50mg", 
+      price: 90, 
+      description: "Anti-inflammatory pain relief", 
+      category: "pain-relief", 
+      prescription: false, 
+      stock: 60,
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med7", 
+      name: "Omeprazole 20mg", 
+      price: 150, 
+      description: "Acid reducer for stomach ulcers", 
+      category: "digestion", 
+      prescription: false, 
+      stock: 40,
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med8", 
+      name: "Cetirizine 10mg", 
+      price: 70, 
+      description: "Antihistamine for allergies", 
+      category: "cold-flu", 
+      prescription: false, 
+      stock: 80,
+      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med9", 
+      name: "Strepsils Lozenges", 
+      price: 120, 
+      description: "Sore throat relief", 
+      category: "cold-flu", 
+      prescription: false, 
+      stock: 90,
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med10", 
+      name: "Mediven Cough Syrup", 
+      price: 180, 
+      description: "Cough suppressant", 
+      category: "cold-flu", 
+      prescription: false, 
+      stock: 50,
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med11", 
+      name: "Cypro-B Syrup", 
+      price: 250, 
+      description: "Appetite stimulant", 
+      category: "vitamins", 
+      prescription: false, 
+      stock: 30,
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med12", 
+      name: "ABZ Tablets", 
+      price: 100, 
+      description: "Deworming medication", 
+      category: "medications", 
+      prescription: false, 
+      stock: 40,
+      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "med13", 
+      name: "Clozole-B Cream", 
+      price: 80, 
+      description: "Antifungal cream", 
+      category: "medications", 
+      prescription: false, 
+      stock: 55,
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
+    }
+  ];
+
+  const painReliefMeds = [
+    { 
+      id: "pain1", 
+      name: "Panadol Extra", 
+      price: 60, 
+      description: "Enhanced paracetamol for severe pain", 
+      category: "pain-relief", 
+      prescription: false, 
+      stock: 80,
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "pain2", 
+      name: "Brufen 400mg", 
+      price: 90, 
+      description: "Ibuprofen for inflammation", 
+      category: "pain-relief", 
+      prescription: false, 
+      stock: 70,
+      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "pain3", 
+      name: "Aspirin 75mg", 
+      price: 40, 
+      description: "Low dose aspirin", 
+      category: "pain-relief", 
+      prescription: false, 
+      stock: 100,
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "pain4", 
+      name: "Diclofenac Gel", 
+      price: 120, 
+      description: "Topical pain relief", 
+      category: "pain-relief", 
+      prescription: false, 
+      stock: 45,
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
+    }
+  ];
+
+  const coldFluMeds = [
+    { 
+      id: "cold1", 
+      name: "Piriton Tablets", 
+      price: 80, 
+      description: "Antihistamine for cold symptoms", 
+      category: "cold-flu", 
+      prescription: false, 
+      stock: 90,
+      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "cold2", 
+      name: "Actifed Syrup", 
+      price: 160, 
+      description: "Decongestant syrup", 
+      category: "cold-flu", 
+      prescription: false, 
+      stock: 35,
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "cold3", 
+      name: "Vicks VapoRub", 
+      price: 200, 
+      description: "Chest rub for congestion", 
+      category: "cold-flu", 
+      prescription: false, 
+      stock: 60,
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
+    }
+  ];
+
+  const digestionMeds = [
+    { 
+      id: "dig1", 
+      name: "Eno Fruit Salt", 
+      price: 100, 
+      description: "Antacid for indigestion", 
+      category: "digestion", 
+      prescription: false, 
+      stock: 75,
+      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "dig2", 
+      name: "Gestid Tablets", 
+      price: 120, 
+      description: "Antacid tablets", 
+      category: "digestion", 
+      prescription: false, 
+      stock: 50,
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "dig3", 
+      name: "Buscopan Tablets", 
+      price: 180, 
+      description: "Stomach cramp relief", 
+      category: "digestion", 
+      prescription: false, 
+      stock: 40,
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
+    },
+    { 
+      id: "dig4", 
+      name: "Feminax Tablets", 
+      price: 150, 
+      description: "Menstrual cramp relief", 
+      category: "digestion", 
+      prescription: false, 
+      stock: 65,
+      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
+    }
   ];
 
   const healthProducts = [
@@ -198,6 +399,51 @@ const Chemist = () => {
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const renderMedicationCard = (med: any) => (
+    <Card key={med.id} className="hover:shadow-lg transition-shadow bg-white/90">
+      <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
+        <img 
+          src={med.image} 
+          alt={med.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <CardHeader>
+        <div className="flex justify-between items-start">
+          <div>
+            <CardTitle className="text-lg">{med.name}</CardTitle>
+            <CardDescription>{med.description}</CardDescription>
+          </div>
+          {med.prescription && <Badge variant="destructive">Prescription Required</Badge>}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-2xl font-bold text-blue-600">KSh {med.price}</span>
+          <Badge variant="outline">{med.stock} in stock</Badge>
+        </div>
+        <div className="flex gap-2">
+          <Button 
+            className="flex-1 bg-blue-600 hover:bg-blue-700"
+            onClick={() => handleAddToCart(med)}
+            disabled={med.stock === 0}
+          >
+            <ShoppingCart className="w-4 h-4 mr-2" />
+            Add to Cart
+          </Button>
+          <Button 
+            className="flex-1 bg-green-600 hover:bg-green-700"
+            onClick={() => handleOrderNow(med)}
+            disabled={med.stock === 0}
+          >
+            <Phone className="w-4 h-4 mr-2" />
+            Order Now
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Header */}
@@ -235,123 +481,40 @@ const Chemist = () => {
           </div>
         </div>
 
-        {/* Admin Add New Tab */}
-        {isAdminMode && (
-          <div className="mb-6">
-            <Card className="border-2 border-dashed border-blue-300">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Plus className="w-5 h-5 mr-2" />
-                  Add New Category Tab
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="tab-name">Tab Name</Label>
-                  <Input
-                    id="tab-name"
-                    placeholder="Category Name"
-                    value={newTabForm.name}
-                    onChange={(e) => setNewTabForm(prev => ({ ...prev, name: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="tab-id">Tab ID</Label>
-                  <Input
-                    id="tab-id"
-                    placeholder="category-id"
-                    value={newTabForm.id}
-                    onChange={(e) => setNewTabForm(prev => ({ ...prev, id: e.target.value }))}
-                  />
-                </div>
-                <Button onClick={handleAddNewTab} className="md:col-span-2 bg-blue-600 hover:bg-blue-700">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Category Tab
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        <Tabs defaultValue={chemistTabs[0]?.id} className="space-y-6">
+        <Tabs defaultValue="medications" className="space-y-6">
           <TabsList className="grid w-full bg-white/80" style={{ gridTemplateColumns: `repeat(${chemistTabs.length}, 1fr)` }}>
             {chemistTabs.map((tab) => (
-              <div key={tab.id} className="relative group">
-                <TabsTrigger 
-                  value={tab.id} 
-                  className="data-[state=active]:bg-blue-500 data-[state=active]:text-white w-full"
-                >
-                  {tab.name}
-                </TabsTrigger>
-                {isAdminMode && (
-                  <div className="absolute top-0 right-0 flex opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-md shadow-md">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-6 w-6 p-0"
-                      onClick={() => handleEditTab(tab)}
-                    >
-                      <Edit className="w-3 h-3" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      className="h-6 w-6 p-0"
-                      onClick={() => handleDeleteTab(tab.id)}
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                )}
-              </div>
+              <TabsTrigger 
+                key={tab.id}
+                value={tab.id} 
+                className="data-[state=active]:bg-blue-500 data-[state=active]:text-white"
+              >
+                {tab.name}
+              </TabsTrigger>
             ))}
           </TabsList>
 
           <TabsContent value="medications" className="space-y-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredMedications.map((med) => (
-                <Card key={med.id} className="hover:shadow-lg transition-shadow bg-white/90">
-                  <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
-                    <img 
-                      src={med.image} 
-                      alt={med.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-lg">{med.name}</CardTitle>
-                        <CardDescription>{med.description}</CardDescription>
-                      </div>
-                      {med.prescription && <Badge variant="destructive">Prescription Required</Badge>}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-2xl font-bold text-blue-600">KSh {med.price}</span>
-                      <Badge variant="outline">{med.stock} in stock</Badge>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button 
-                        className="flex-1 bg-blue-600 hover:bg-blue-700"
-                        onClick={() => handleAddToCart(med)}
-                        disabled={med.stock === 0}
-                      >
-                        <ShoppingCart className="w-4 h-4 mr-2" />
-                        Add to Cart
-                      </Button>
-                      <Button 
-                        className="flex-1 bg-green-600 hover:bg-green-700"
-                        onClick={() => handleOrderNow(med)}
-                        disabled={med.stock === 0}
-                      >
-                        Order Now
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              {filteredMedications.map(renderMedicationCard)}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="pain-relief" className="space-y-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {painReliefMeds.map(renderMedicationCard)}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="cold-flu" className="space-y-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {coldFluMeds.map(renderMedicationCard)}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="digestion" className="space-y-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {digestionMeds.map(renderMedicationCard)}
             </div>
           </TabsContent>
 
@@ -459,40 +622,6 @@ const Chemist = () => {
           </TabsContent>
         </Tabs>
       </div>
-
-      {/* Edit Tab Dialog */}
-      <Dialog open={!!editingTab} onOpenChange={() => setEditingTab(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Edit Category Tab</DialogTitle>
-          </DialogHeader>
-          {editingTab && (
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="edit-tab-name">Tab Name</Label>
-                <Input
-                  id="edit-tab-name"
-                  value={editingTab.name}
-                  onChange={(e) => setEditingTab(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Tab Name"
-                />
-              </div>
-              <div>
-                <Label htmlFor="edit-tab-id">Tab ID</Label>
-                <Input
-                  id="edit-tab-id"
-                  value={editingTab.id}
-                  onChange={(e) => setEditingTab(prev => ({ ...prev, id: e.target.value }))}
-                  placeholder="Tab ID"
-                />
-              </div>
-              <Button onClick={handleSaveTab} className="w-full bg-blue-600 hover:bg-blue-700">
-                Save Changes
-              </Button>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
