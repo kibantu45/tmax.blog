@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -132,6 +131,13 @@ const Index = () => {
       link: "/transport-services" 
     },
     { 
+      title: "Bloom Period Tracker", 
+      description: "Track your menstrual cycle and health", 
+      icon: Calendar, 
+      color: "bg-pink-500",
+      link: "/bloom-period-tracker" 
+    },
+    { 
       title: "Errand Services", 
       description: "Personal assistance", 
       icon: Zap, 
@@ -140,19 +146,16 @@ const Index = () => {
     }
   ];
 
-  const featuredServices = [
-    {
-      title: "Bloom Period Tracker",
-      description: "Track your menstrual cycle and health",
-      icon: Calendar,
-      color: "bg-pink-500",
-      link: "/bloom-period-tracker"
-    }
-  ];
-
   const filteredServices = services.filter(service =>
     service.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const scrollToServices = () => {
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
@@ -239,11 +242,11 @@ const Index = () => {
             Everything you need for university life - from groceries to services, all in one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700" onClick={scrollToServices}>
               <ShoppingCart className="w-5 h-5 mr-2" />
               Start Shopping
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" onClick={scrollToServices}>
               Explore Services
             </Button>
           </div>
@@ -253,32 +256,6 @@ const Index = () => {
       {/* Advertisement Carousel */}
       <section className="py-8">
         <ServiceCarousel />
-      </section>
-
-      {/* Featured Services */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">Featured Services</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredServices.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer bg-white/90" onClick={() => window.location.href = service.link}>
-                <CardHeader>
-                  <div className={`w-12 h-12 ${service.color} rounded-lg flex items-center justify-center mb-4`}>
-                    <service.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
-                  <CardDescription>{service.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                    Access Service
-                    <ChevronRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* Search Bar */}
@@ -332,16 +309,16 @@ const Index = () => {
                 Your one-stop solution for all campus lifestyle needs.
               </p>
               <div className="flex space-x-4">
-                <a href="https://facebook.com/tmaxkenya" className="text-gray-400 hover:text-blue-400 transition-colors">
+                <a href="https://facebook.com/hustlesasa" className="text-gray-400 hover:text-blue-400 transition-colors">
                   <Facebook className="w-5 h-5" />
                 </a>
-                <a href="https://twitter.com/tmaxkenya" className="text-gray-400 hover:text-blue-400 transition-colors">
+                <a href="https://twitter.com/hustlesasa" className="text-gray-400 hover:text-blue-400 transition-colors">
                   <Twitter className="w-5 h-5" />
                 </a>
-                <a href="https://instagram.com/tmaxkenya" className="text-gray-400 hover:text-blue-400 transition-colors">
+                <a href="https://instagram.com/hustlesasa" className="text-gray-400 hover:text-blue-400 transition-colors">
                   <Instagram className="w-5 h-5" />
                 </a>
-                <a href="https://youtube.com/tmaxkenya" className="text-gray-400 hover:text-blue-400 transition-colors">
+                <a href="https://youtube.com/hustlesasa" className="text-gray-400 hover:text-blue-400 transition-colors">
                   <Youtube className="w-5 h-5" />
                 </a>
                 <a href="https://wa.me/254702752033?text=Hi%20Hustle%20Sasa!" className="text-gray-400 hover:text-green-400 transition-colors">

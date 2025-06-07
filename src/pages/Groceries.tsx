@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Search, Plus, Minus } from "lucide-react";
+import { ShoppingCart, Search, Plus, Minus, Phone } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import BottomNavigation from "@/components/BottomNavigation";
 
@@ -163,6 +163,13 @@ const Groceries = () => {
     }
   };
 
+  const handleOrderNow = (item: any) => {
+    const quantity = quantities[item.id] || 1;
+    const message = `Hi! I'd like to order: ${item.name} - KES ${item.price} x ${quantity} = KES ${item.price * quantity}. Please confirm availability and delivery.`;
+    const whatsappUrl = `https://wa.me/254702752033?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
       {/* Header */}
@@ -254,13 +261,23 @@ const Groceries = () => {
                     </Button>
                   </div>
                 </div>
-                <Button 
-                  onClick={() => handleAddToCart(item)}
-                  className="w-full bg-blue-600 hover:bg-blue-700"
-                >
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Add to Cart
-                </Button>
+                <div className="space-y-2">
+                  <Button 
+                    onClick={() => handleAddToCart(item)}
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    <ShoppingCart className="w-4 h-4 mr-2" />
+                    Add to Cart
+                  </Button>
+                  <Button 
+                    onClick={() => handleOrderNow(item)}
+                    variant="outline"
+                    className="w-full border-green-600 text-green-600 hover:bg-green-50"
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Order Now
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}

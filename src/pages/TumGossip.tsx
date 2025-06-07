@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Heart, Send, User, Clock } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MessageSquare, Heart, Send, User, Clock, TrendingUp } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -17,6 +18,7 @@ interface GossipPost {
   likes: number;
   comments: Comment[];
   isLiked: boolean;
+  category: 'general' | 'love';
 }
 
 interface Comment {
@@ -32,6 +34,7 @@ const TumGossip = () => {
   const [posts, setPosts] = useState<GossipPost[]>([]);
   const [newPost, setNewPost] = useState("");
   const [commentInputs, setCommentInputs] = useState<{ [key: string]: string }>({});
+  const [selectedCategory, setSelectedCategory] = useState<'general' | 'love'>('general');
 
   // Initialize with some sample posts
   useEffect(() => {
@@ -45,17 +48,19 @@ const TumGossip = () => {
           { id: "c1", content: "I was there! Can't believe it happened", timestamp: "1 hour ago", author: "Anonymous" },
           { id: "c2", content: "What exactly happened? Spill the tea! ☕", timestamp: "45 min ago", author: "Anonymous" }
         ],
-        isLiked: false
+        isLiked: false,
+        category: 'general'
       },
       {
         id: "2",
-        content: "The new cafeteria menu is actually fire 🔥 Finally some good food!",
+        content: "Looking for someone special to share campus life with 💕 DM if interested",
         timestamp: "5 hours ago",
         likes: 45,
         comments: [
-          { id: "c3", content: "The chicken is so good now!", timestamp: "4 hours ago", author: "Anonymous" }
+          { id: "c3", content: "Good luck finding someone!", timestamp: "4 hours ago", author: "Anonymous" }
         ],
-        isLiked: false
+        isLiked: false,
+        category: 'love'
       },
       {
         id: "3",
@@ -63,7 +68,19 @@ const TumGossip = () => {
         timestamp: "1 day ago",
         likes: 12,
         comments: [],
-        isLiked: false
+        isLiked: false,
+        category: 'general'
+      },
+      {
+        id: "4",
+        content: "Saw my crush at the cafeteria today but couldn't work up the courage to say hi 😅",
+        timestamp: "3 hours ago",
+        likes: 18,
+        comments: [
+          { id: "c4", content: "You got this! Just say hello next time", timestamp: "2 hours ago", author: "Anonymous" }
+        ],
+        isLiked: false,
+        category: 'love'
       }
     ];
     setPosts(samplePosts);
@@ -85,7 +102,8 @@ const TumGossip = () => {
       timestamp: "Just now",
       likes: 0,
       comments: [],
-      isLiked: false
+      isLiked: false,
+      category: selectedCategory
     };
 
     setPosts([post, ...posts]);
@@ -97,6 +115,15 @@ const TumGossip = () => {
   };
 
   const handleLike = (postId: string) => {
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please login to like posts",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setPosts(posts.map(post => 
       post.id === postId 
         ? { 
@@ -109,6 +136,15 @@ const TumGossip = () => {
   };
 
   const handleComment = (postId: string) => {
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please login to comment",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const commentContent = commentInputs[postId];
     if (!commentContent?.trim()) return;
 
@@ -131,6 +167,85 @@ const TumGossip = () => {
       description: "Your comment has been posted anonymously",
     });
   };
+
+  const filteredPosts = (category: 'general' | 'love') => 
+    posts.filter(post => post.category === category);
+
+  const PostsList = ({ posts }: { posts: GossipPost[] }) => (
+    <div className="space-y-6">
+      {posts.map((post) => (
+        <Card key={post.id} className="bg-white/90 hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <User className="w-5 h-5 text-gray-400" />
+                <span className="text-sm text-gray-500">Anonymous</span>
+              </div>
+              <div className="flex items-center space-x-2 text-sm text-gray-500">
+                <Clock className="w-4 h-4" />
+                <span>{post.timestamp}</span>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-800 mb-4">{post.content}</p>
+            
+            {/* Like and Comment Actions */}
+            <div className="flex items-center space-x-4 mb-4 pb-4 border-b">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleLike(post.id)}
+                className={`${post.isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
+              >
+                <Heart className={`w-4 h-4 mr-1 ${post.isLiked ? 'fill-current' : ''}`} />
+                {post.likes}
+              </Button>
+              <Button variant="ghost" size="sm" className="text-gray-500">
+                <MessageSquare className="w-4 h-4 mr-1" />
+                {post.comments.length}
+              </Button>
+            </div>
+
+            {/* Comments Section */}
+            {post.comments.length > 0 && (
+              <div className="space-y-3 mb-4">
+                {post.comments.map((comment) => (
+                  <div key={comment.id} className="bg-gray-50 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium text-gray-600">{comment.author}</span>
+                      <span className="text-xs text-gray-500">{comment.timestamp}</span>
+                    </div>
+                    <p className="text-sm text-gray-800">{comment.content}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add Comment */}
+            <div className="flex space-x-2">
+              <Input
+                placeholder="Add a comment..."
+                value={commentInputs[post.id] || ""}
+                onChange={(e) => setCommentInputs({
+                  ...commentInputs,
+                  [post.id]: e.target.value
+                })}
+                className="flex-1"
+              />
+              <Button 
+                size="sm"
+                onClick={() => handleComment(post.id)}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
@@ -166,8 +281,26 @@ const TumGossip = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
+              <div className="flex space-x-2 mb-4">
+                <Button
+                  variant={selectedCategory === 'general' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedCategory('general')}
+                  className={selectedCategory === 'general' ? 'bg-blue-600' : ''}
+                >
+                  General
+                </Button>
+                <Button
+                  variant={selectedCategory === 'love' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedCategory('love')}
+                  className={selectedCategory === 'love' ? 'bg-pink-600' : ''}
+                >
+                  Campus Love
+                </Button>
+              </div>
               <Textarea
-                placeholder="What's the tea? Share something happening on campus..."
+                placeholder={selectedCategory === 'love' ? "Share something about campus love... 💕" : "What's the tea? Share something happening on campus..."}
                 value={newPost}
                 onChange={(e) => setNewPost(e.target.value)}
                 className="min-h-[100px]"
@@ -186,80 +319,27 @@ const TumGossip = () => {
           </CardContent>
         </Card>
 
-        {/* Posts Feed */}
-        <div className="space-y-6">
-          {posts.map((post) => (
-            <Card key={post.id} className="bg-white/90 hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <User className="w-5 h-5 text-gray-400" />
-                    <span className="text-sm text-gray-500">Anonymous</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-sm text-gray-500">
-                    <Clock className="w-4 h-4" />
-                    <span>{post.timestamp}</span>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-800 mb-4">{post.content}</p>
-                
-                {/* Like and Comment Actions */}
-                <div className="flex items-center space-x-4 mb-4 pb-4 border-b">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleLike(post.id)}
-                    className={`${post.isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
-                  >
-                    <Heart className={`w-4 h-4 mr-1 ${post.isLiked ? 'fill-current' : ''}`} />
-                    {post.likes}
-                  </Button>
-                  <Button variant="ghost" size="sm" className="text-gray-500">
-                    <MessageSquare className="w-4 h-4 mr-1" />
-                    {post.comments.length}
-                  </Button>
-                </div>
+        {/* Posts Feed with Tabs */}
+        <Tabs defaultValue="general" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="general" className="flex items-center space-x-2">
+              <MessageSquare className="w-4 h-4" />
+              <span>All Anonymous Messages</span>
+            </TabsTrigger>
+            <TabsTrigger value="love" className="flex items-center space-x-2">
+              <Heart className="w-4 h-4" />
+              <span>Campus Love</span>
+            </TabsTrigger>
+          </TabsList>
 
-                {/* Comments Section */}
-                {post.comments.length > 0 && (
-                  <div className="space-y-3 mb-4">
-                    {post.comments.map((comment) => (
-                      <div key={comment.id} className="bg-gray-50 rounded-lg p-3">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-gray-600">{comment.author}</span>
-                          <span className="text-xs text-gray-500">{comment.timestamp}</span>
-                        </div>
-                        <p className="text-sm text-gray-800">{comment.content}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+          <TabsContent value="general">
+            <PostsList posts={filteredPosts('general')} />
+          </TabsContent>
 
-                {/* Add Comment */}
-                <div className="flex space-x-2">
-                  <Input
-                    placeholder="Add a comment..."
-                    value={commentInputs[post.id] || ""}
-                    onChange={(e) => setCommentInputs({
-                      ...commentInputs,
-                      [post.id]: e.target.value
-                    })}
-                    className="flex-1"
-                  />
-                  <Button 
-                    size="sm"
-                    onClick={() => handleComment(post.id)}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+          <TabsContent value="love">
+            <PostsList posts={filteredPosts('love')} />
+          </TabsContent>
+        </Tabs>
 
         {/* Guidelines */}
         <Card className="mt-8 bg-blue-50 border-blue-200">
