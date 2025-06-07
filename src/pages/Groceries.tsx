@@ -38,7 +38,7 @@ const Groceries = () => {
       price: 150,
       unit: "per kg",
       category: "fruits",
-      image: "https://www.freepik.com/free-photo/closeup-shot-oranges-top-each-other-white-surface-great-background_11542062.htm#fromView=search&page=1&position=3&uuid=d03f5f16-1d4b-4561-a25b-61b337875e57&query=oranges",
+      image: "/lovable-uploads/closeup-shot-oranges-top-each-other-white-surface-great-background.jpg",
       description: "Juicy sweet oranges, vitamin C rich"
     },
     {
