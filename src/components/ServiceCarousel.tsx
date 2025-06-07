@@ -38,13 +38,13 @@ const ServiceCarousel = () => {
     },
     {
       id: 3,
-      title: "Express Delivery",
-      description: "Get your orders delivered within 30 minutes",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80",
-      price: "Free delivery",
+      title: "Blades Emporium001",
+      description: "Get your orders delivered ",
+      image: "https://www.instagram.com/p/DJTZfHls5Q6/?igsh=cm9mZDB0cm1xeTRp",
+      price: "now open",
       rating: 4.8,
       badge: "Fast",
-      link: "https://wa.me/254702752033?text=Hi, I need express delivery service",
+      link: "https://www.instagram.com/blades_emporium001?igsh=MTg5dmVma3J0aHA1MQ==",
       bgColor: "bg-gradient-to-r from-green-600 to-emerald-700"
     },
     {
