@@ -15,7 +15,7 @@ const BingwaSokoni = () => {
       items: ["24hrs deals", "sms deals", "weekly mins deals", "weekly data deals", "monthly data deals"],
       rating: 4.8,
       reviews: 45,
-      image: "/loveable-uploads/bingwa.png"
+      image: "/lovable-uploads/bingwa.jpg"
     }
   ];
 
