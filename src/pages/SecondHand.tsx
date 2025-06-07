@@ -91,17 +91,17 @@ const SecondHand = () => {
   const electronics = [
     {
       id: 1,
-      title: "MacBook Air M1 2020",
-      price: 850,
-      originalPrice: 1200,
-      description: "Excellent condition, barely used. Includes charger and box.",
-      seller: "Alex Chen",
-      sellerPhone: "+254701234567",
-      location: "Campus West",
-      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop",
+      title: "Iphone 12pro",
+      price: 27999,
+      originalPrice: 30000,
+      description: "256gb storage, battery changed,wifi not working can be fixed, face id-yes.",
+      seller: "massive",
+      sellerPhone: "+254793754495",
+      location: "Mombasa",
+      image: "/lovable-uploads/254793754495.jpg.jpeg",
       condition: "Like New",
       likes: 24,
-      timePosted: "2 hours ago"
+      timePosted: "7th June"
     },
     {
       id: 2,
