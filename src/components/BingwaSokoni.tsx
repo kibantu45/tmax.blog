@@ -8,7 +8,7 @@ const BingwaSokoni = () => {
   const bundles = [
     {
       id: 1,
-      name: "Student Cheapest Bunddles",
+      name: "Student Cheapest Bundles",
       description: "Purchase bundles even with okoa jahazi",
       price: "select your package",
       originalPrice: false,
