@@ -25,19 +25,8 @@ const ServiceCarousel = () => {
       link: "https://wa.me/254702752033?text=Hi, I'm interested in the CCC Magazine 2nd Edition",
       bgColor: "bg-gradient-to-r from-blue-600 to-blue-800"
     },
-    {
+   {
       id: 2,
-      title: "Cane Carter Gallery",
-      description: "Premium art pieces and custom frames for your space",
-      image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=800&q=80",
-      price: "From KSh 2,500",
-      rating: 4.9,
-      badge: "Featured",
-      link: "https://wa.me/254702752033?text=Hi, I'm interested in Cane Carter Gallery services",
-      bgColor: "bg-gradient-to-r from-blue-600 to-blue-800"
-    },
-    {
-      id: 3,
       title: "Blades Emporium001",
       description: "Available now ",
       image: "/lovable-uploads/emporium.jpg",
@@ -46,41 +35,8 @@ const ServiceCarousel = () => {
       badge: "Fast",
       link: "https://www.instagram.com/blades_emporium001?igsh=MTg5dmVma3J0aHA1MQ==",
       bgColor: "bg-gradient-to-r from-green-600 to-emerald-700"
-    },
-    {
-      id: 4,
-      title: "Student Discounts",
-      description: "Save up to 50% on all campus essentials",
-      image: "https://images.unsplash.com/photo-1607013251379-e6eecfffe234?auto=format&fit=crop&w=800&q=80",
-      price: "Up to 50% off",
-      rating: 4.7,
-      badge: "Hot Deal",
-      link: "https://wa.me/254702752033?text=Hi, I want to know about student discounts",
-      bgColor: "bg-gradient-to-r from-blue-600 to-indigo-700"
-    },
-    {
-      id: 5,
-      title: "Campus Fresh Market",
-      description: "Fresh organic produce delivered to your doorstep",
-      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80",
-      price: "From KSh 200",
-      rating: 4.9,
-      badge: "Organic",
-      link: "https://wa.me/254702752033?text=Hi, I'm interested in fresh organic produce",
-      bgColor: "bg-gradient-to-r from-green-500 to-teal-600"
-    },
-    {
-      id: 6,
-      title: "Study Buddy Services",
-      description: "Find study partners and academic support",
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
-      price: "Free to join",
-      rating: 4.6,
-      badge: "New",
-      link: "https://wa.me/254702752033?text=Hi, I want to join Study Buddy Services",
-      bgColor: "bg-gradient-to-r from-blue-600 to-indigo-700"
     }
-  ];
+];
 
   return (
     <div className="mb-12">
