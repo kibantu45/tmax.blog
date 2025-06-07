@@ -41,13 +41,13 @@ const SecondHand = () => {
   };
 
   const handleWhatsAppContact = (item: any) => {
-    const message = `Hi! I'm interested in your ${item.title} listed for $${item.price}. Could you please provide more details?`;
+    const message = `Hi! I'm interested in your ${item.title} listed for KSh ${item.price}. Could you please provide more details?`;
     const whatsappUrl = `https://wa.me/+254702752033?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   const handleSellerContact = (item: any) => {
-    const message = `Hi! I'm interested in your ${item.title} listed for $${item.price}. Could you please provide more details?`;
+    const message = `Hi! I'm interested in your ${item.title} listed for KSh ${item.price}. Could you please provide more details?`;
     const phone = item.sellerPhone || "+254702752033";
     const whatsappUrl = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -106,8 +106,8 @@ const SecondHand = () => {
     {
       id: 2,
       title: "iPhone 13 Pro",
-      price: 650,
-      originalPrice: 999,
+      price: 65000,
+      originalPrice: 99900,
       description: "Minor scratches on back, screen protector applied since day 1.",
       seller: "Sarah Kim",
       sellerPhone: "+254701234568",
@@ -154,8 +154,8 @@ const SecondHand = () => {
             {item.title}
           </h3>
           <div className="text-right">
-            <div className="text-xl font-bold text-green-600">${item.price}</div>
-            <div className="text-sm text-gray-500 line-through">${item.originalPrice}</div>
+            <div className="text-xl font-bold text-green-600">KSh {item.price.toLocaleString()}</div>
+            <div className="text-sm text-gray-500 line-through">KSh {item.originalPrice.toLocaleString()}</div>
           </div>
         </div>
         <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
@@ -374,12 +374,12 @@ const SecondHand = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Price (USD) *</label>
+                  <label className="block text-sm font-medium mb-2">Price (KSh) *</label>
                   <Input
                     type="number"
                     value={sellFormData.price}
                     onChange={(e) => setSellFormData(prev => ({ ...prev, price: e.target.value }))}
-                    placeholder="e.g., 500"
+                    placeholder="e.g., 50000"
                   />
                 </div>
                 <div>
