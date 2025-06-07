@@ -12,19 +12,22 @@ const RentalBooking = () => {
   const accommodations = [
     {
       id: 1,
-      title: "Cozy Bedsitter Near Campus",
-      price: 350,
-      location: "Campus West",
+      title: "Bedsitter Near Campus",
+      price: 10000,
+      location: "leisure",
       type: "bedsitter",
-      bedrooms: 1,
-      bathrooms: 1,
-      amenities: ["WiFi", "Parking", "Laundry"],
-      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
+      bedrooms: false,
+      bathrooms: false,
+      amenities: ["elecricity", "water", "security"],
+      image: "/lovable-uploads/l1.jpeg",
       available: true,
-      sellerPhone: "+254701234567",
+      sellerPhone: "+254768539933",
       photos: [
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop"
+        "/lovable-uploads/l1.jpeg",
+        "/lovable-uploads/l2.jpeg",
+        "/lovable-uploads/l3.jpeg",
+        "/lovable-uploads/l4.jpeg",
+        "/lovable-uploads/l5.jpeg"
       ]
     },
     {
