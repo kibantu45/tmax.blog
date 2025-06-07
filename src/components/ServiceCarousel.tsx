@@ -40,7 +40,7 @@ const ServiceCarousel = () => {
       id: 3,
       title: "Blades Emporium001",
       description: "Available now ",
-      image: "/loveable-uploads/emporium.jpg",
+      image: "/lovable-uploads/emporium.jpg",
       price: "New stock alert",
       rating: 4.8,
       badge: "Fast",
