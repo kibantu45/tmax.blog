@@ -39,9 +39,9 @@ const ServiceCarousel = () => {
     {
       id: 3,
       title: "Blades Emporium001",
-      description: "Get your orders delivered ",
-      image: "https://www.instagram.com/p/DJTZfHls5Q6/?igsh=cm9mZDB0cm1xeTRp",
-      price: "now open",
+      description: "Available now ",
+      image: "/loveable-uploads/emporium.jpeg",
+      price: "New stock alert",
       rating: 4.8,
       badge: "Fast",
       link: "https://www.instagram.com/blades_emporium001?igsh=MTg5dmVma3J0aHA1MQ==",
