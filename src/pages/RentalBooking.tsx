@@ -21,7 +21,7 @@ const RentalBooking = () => {
       amenities: ["elecricity", "water", "security"],
       image: "/lovable-uploads/l1.jpeg",
       available: true,
-      sellerPhone: "+254769633006",
+      sellerPhone: "+254702752033",
       photos: [
         "/lovable-uploads/l1.jpeg",
         "/lovable-uploads/l2.jpeg",
@@ -32,18 +32,21 @@ const RentalBooking = () => {
     },
     {
       id: 2,
-      title: "Modern Hostel Room",
-      price: 200,
-      location: "Campus East",
+      title: "Private Hostel Available",
+      price: 4000,
+      location: "Near Tum and Kenya Coast",
       type: "hostel",
-      bedrooms: 1,
-      bathrooms: 1,
-      amenities: ["WiFi", "Shared Kitchen", "Security"],
-      image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
+      bedrooms: false,
+      bathrooms: false,
+      amenities: ["close to the road", "24/7 water supply","Wifi available" "token electricity", "clean environment","tight security"],
+      image: "https://ibb.co/HpxZGQbB",
       available: true,
-      sellerPhone: "+254701234568",
+      sellerPhone: "+254702752033",
       photos: [
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop"
+        "https://ibb.co/HpxZGQbB",
+        "https://ibb.co/jPYzN2yd",
+        "https://ibb.co/YFK6vgJB",
+        "https://ibb.co/twmkVDHW"
       ]
     },
     {
