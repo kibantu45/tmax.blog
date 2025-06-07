@@ -21,7 +21,7 @@ const RentalBooking = () => {
       amenities: ["elecricity", "water", "security"],
       image: "/lovable-uploads/l1.jpeg",
       available: true,
-      sellerPhone: "+254768539933",
+      sellerPhone: "+254769633006",
       photos: [
         "/lovable-uploads/l1.jpeg",
         "/lovable-uploads/l2.jpeg",
