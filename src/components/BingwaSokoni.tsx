@@ -16,61 +16,6 @@ const BingwaSokoni = () => {
       rating: 4.8,
       reviews: 45,
       image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 2,
-      name: "Grocery Essentials Bundle",
-      description: "Weekly grocery essentials delivered",
-      price: "KSh 1,800",
-      originalPrice: "KSh 2,100",
-      items: ["Rice 2kg", "Cooking oil", "Sugar", "Tea leaves", "Bread"],
-      rating: 4.9,
-      reviews: 67,
-      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 3,
-      name: "Study Essentials Pack",
-      description: "Everything you need for academic success",
-      price: "KSh 1,200",
-      originalPrice: "KSh 1,500",
-      items: ["Notebooks", "Pens", "Calculator", "Highlighters", "Folder"],
-      rating: 4.7,
-      reviews: 32,
-      image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 4,
-      name: "Laundry & Hygiene Bundle",
-      description: "Complete hygiene and laundry essentials",
-      price: "KSh 950",
-      originalPrice: "KSh 1,200",
-      items: ["Detergent", "Soap", "Toothpaste", "Shampoo", "Toilet paper"],
-      rating: 4.6,
-      reviews: 28,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 5,
-      name: "Tech Student Bundle",
-      description: "Digital accessories for modern students",
-      price: "KSh 3,500",
-      originalPrice: "KSh 4,200",
-      items: ["Power bank", "USB cables", "Phone stand", "Earphones", "Screen cleaner"],
-      rating: 4.9,
-      reviews: 55,
-      image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      id: 6,
-      name: "Comfort Living Pack",
-      description: "Items to make your room more comfortable",
-      price: "KSh 2,800",
-      originalPrice: "KSh 3,400",
-      items: ["Cushions", "Curtains", "Air freshener", "Storage boxes", "Desk organizer"],
-      rating: 4.5,
-      reviews: 21,
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80"
     }
   ];
 
