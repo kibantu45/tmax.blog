@@ -31,9 +31,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth event:', event, 'Session:', session);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+        
+        // Handle email verification redirect
+        if (event === 'SIGNED_IN' && session?.user?.email_confirmed_at) {
+          // Check if this is from email verification
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get('type') === 'confirmation' || window.location.pathname === '/') {
+            // Clear any URL parameters and redirect to login
+            window.history.replaceState({}, document.title, window.location.pathname);
+            // Small delay to ensure state is updated
+            setTimeout(() => {
+              window.location.href = '/login';
+            }, 100);
+          }
+        }
       }
     );
 
@@ -48,7 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/login`;
     
     const { error } = await supabase.auth.signUp({
       email,

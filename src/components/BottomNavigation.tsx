@@ -9,7 +9,7 @@ const BottomNavigation = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
-  const { items } = useCart();
+  const { itemCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,7 +30,7 @@ const BottomNavigation = () => {
 
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
-    { icon: ShoppingCart, label: 'Cart', path: '/cart', badge: items.length },
+    { icon: ShoppingCart, label: 'Cart', path: '/cart', badge: itemCount },
     { icon: User, label: 'Profile', path: '/profile' },
   ];
 
