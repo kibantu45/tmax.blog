@@ -8,14 +8,14 @@ const BingwaSokoni = () => {
   const bundles = [
     {
       id: 1,
-      name: "Student Starter Pack",
-      description: "Essential items for new students",
-      price: "KSh 2,500",
-      originalPrice: "KSh 3,200",
-      items: ["Bedding set", "Study lamp", "Water bottle", "Snacks pack"],
+      name: "Student Cheapest Bunddles",
+      description: "Purchase bundles even with okoa jahazi",
+      price: "select your package",
+      originalPrice: false,
+      items: ["24hrs deals", "sms deals", "weekly mins deals", "weekly data deals", "monthly data deals"],
       rating: 4.8,
       reviews: 45,
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80"
+      image: "/loveable-uploads/bingwa.png"
     }
   ];
 
