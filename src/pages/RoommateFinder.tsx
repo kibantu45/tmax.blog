@@ -13,39 +13,39 @@ const RoommateFinder = () => {
   const availableRoommates = [
     {
       id: "rm1",
-      name: "Sarah K.",
-      age: 20,
-      course: "Engineering",
-      year: "2nd Year",
-      budget: "15000-20000",
-      location: "Near Main Campus",
-      preferences: ["Non-smoker", "Clean", "Quiet study time"],
-      contact: "+254701234567",
-      description: "Looking for a responsible roommate to share a 2-bedroom apartment."
+      name: "Boogie.",
+      age: false,
+      course: false ,
+      year: "any year",
+      budget: "2bedroom 18000",
+      location: "Hongera",
+      preferences: ["male roommate"],
+      contact: "+254792823310",
+      description: " urgently Looking for a responsible roommate to share a 2-bedroom."
     },
     {
       id: "rm2",
-      name: "John M.",
-      age: 22,
+      name: "boogie.",
+      age: false,
       course: "Business",
-      year: "3rd Year",
-      budget: "12000-18000",
-      location: "Westlands Area",
-      preferences: ["Social", "Shared cooking", "Pet-friendly"],
-      contact: "+254701234568",
-      description: "Outgoing student looking for someone to share expenses and good times."
+      year: "Any",
+      budget: "onebedroom-8000",
+      location: "lights",
+      preferences: ["Male"],
+      contact: "+254792823310",
+      description: "urgent male roommate needed."
     },
     {
       id: "rm3",
-      name: "Grace W.",
-      age: 19,
-      course: "Medicine",
-      year: "1st Year",
-      budget: "10000-15000",
-      location: "Campus Hostels",
-      preferences: ["Early riser", "Study partner", "Health conscious"],
-      contact: "+254701234569",
-      description: "Medical student seeking a focused study partner and roommate."
+      name: "boogie",
+      age: false,
+      course: "Business",
+      year: "3rd Year",
+      budget: "one bedroom-12000",
+      location: "sparki-lights",
+      preferences: ["male"],
+      contact: "+254792823310",
+      description: "Male roommates needed."
     }
   ];
 
