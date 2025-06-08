@@ -30,7 +30,7 @@ const SecondHand = () => {
       image: "https://i.ibb.co/PGh3sv6N/Whats-App-Image-2025-06-08-at-16-45-51-1.jpg",
       condition: "New",
       likes: 15,
-      timePosted: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+      timePosted: new Date(Date.now(2025-06-08T17:00:00) - 2 * 60 * 60 * 1000), // 2 hours ago
       category: "electronics"
     },
     {
@@ -38,7 +38,7 @@ const SecondHand = () => {
       title: "laptops adapters",
       price: 1200,
       originalPrice: false,
-      description: "copmartible with Hp dell lenovo toshiba ,quality checked fast charging,reliable perfomance",
+      description: "compartible with Hp dell lenovo toshiba ,quality checked fast charging,reliable perfomance",
       seller: "Dencel",
       sellerPhone: "+254757041255",
       location: "mombasa",
