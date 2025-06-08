@@ -18,7 +18,7 @@ interface GossipPost {
   likes: number;
   comments: Comment[];
   isLiked: boolean;
-  category: 'general' | 'love';
+  category: 'trending' | 'love';
 }
 
 interface Comment {
@@ -34,7 +34,7 @@ const TumGossip = () => {
   const [posts, setPosts] = useState<GossipPost[]>([]);
   const [newPost, setNewPost] = useState("");
   const [commentInputs, setCommentInputs] = useState<{ [key: string]: string }>({});
-  const [selectedCategory, setSelectedCategory] = useState<'general' | 'love'>('general');
+  const [selectedCategory, setSelectedCategory] = useState<'trending' | 'love'>('trending');
 
   // Initialize with some sample posts
   useEffect(() => {
@@ -49,7 +49,7 @@ const TumGossip = () => {
           { id: "c2", content: "What exactly happened? Spill the tea! ☕", timestamp: "45 min ago", author: "Anonymous" }
         ],
         isLiked: false,
-        category: 'general'
+        category: 'trending'
       },
       {
         id: "2",
@@ -69,7 +69,7 @@ const TumGossip = () => {
         likes: 12,
         comments: [],
         isLiked: false,
-        category: 'general'
+        category: 'trending'
       },
       {
         id: "4",
@@ -168,7 +168,7 @@ const TumGossip = () => {
     });
   };
 
-  const filteredPosts = (category: 'general' | 'love') => 
+  const filteredPosts = (category: 'trending' | 'love') => 
     posts.filter(post => post.category === category);
 
   const PostsList = ({ posts }: { posts: GossipPost[] }) => (
@@ -276,19 +276,20 @@ const TumGossip = () => {
               Share Something Anonymously
             </CardTitle>
             <CardDescription>
-              What's happening on campus? Share news, events, or just chat with fellow students.
+              What's happening on campus? Share trending stories or campus love stories.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex space-x-2 mb-4">
                 <Button
-                  variant={selectedCategory === 'general' ? 'default' : 'outline'}
+                  variant={selectedCategory === 'trending' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setSelectedCategory('general')}
-                  className={selectedCategory === 'general' ? 'bg-blue-600' : ''}
+                  onClick={() => setSelectedCategory('trending')}
+                  className={selectedCategory === 'trending' ? 'bg-blue-600' : ''}
                 >
-                  General
+                  <TrendingUp className="w-4 h-4 mr-1" />
+                  Trending Stories
                 </Button>
                 <Button
                   variant={selectedCategory === 'love' ? 'default' : 'outline'}
@@ -296,11 +297,12 @@ const TumGossip = () => {
                   onClick={() => setSelectedCategory('love')}
                   className={selectedCategory === 'love' ? 'bg-pink-600' : ''}
                 >
-                  Campus Love
+                  <Heart className="w-4 h-4 mr-1" />
+                  Campus Love Stories
                 </Button>
               </div>
               <Textarea
-                placeholder={selectedCategory === 'love' ? "Share something about campus love... 💕" : "What's the tea? Share something happening on campus..."}
+                placeholder={selectedCategory === 'love' ? "Share something about campus love... 💕" : "What's trending on campus? Share the latest news..."}
                 value={newPost}
                 onChange={(e) => setNewPost(e.target.value)}
                 className="min-h-[100px]"
@@ -320,20 +322,20 @@ const TumGossip = () => {
         </Card>
 
         {/* Posts Feed with Tabs */}
-        <Tabs defaultValue="general" className="space-y-6">
+        <Tabs defaultValue="trending" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="general" className="flex items-center space-x-2">
-              <MessageSquare className="w-4 h-4" />
-              <span>All Anonymous Messages</span>
+            <TabsTrigger value="trending" className="flex items-center space-x-2">
+              <TrendingUp className="w-4 h-4" />
+              <span>Trending Stories</span>
             </TabsTrigger>
             <TabsTrigger value="love" className="flex items-center space-x-2">
               <Heart className="w-4 h-4" />
-              <span>Campus Love</span>
+              <span>Campus Love Stories</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="general">
-            <PostsList posts={filteredPosts('general')} />
+          <TabsContent value="trending">
+            <PostsList posts={filteredPosts('trending')} />
           </TabsContent>
 
           <TabsContent value="love">

@@ -19,12 +19,30 @@ interface ItemCardProps {
     image: string;
     condition: string;
     likes: number;
-    timePosted: string;
+    timePosted: Date;
   };
   isLiked: boolean;
   onLike: (itemId: number) => void;
   onContact: (item: any) => void;
 }
+
+const getTimeAgo = (date: Date): string => {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} seconds ago`;
+  } else if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+  } else if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+  } else {
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+  }
+};
 
 const ItemCard = ({ item, isLiked, onLike, onContact }: ItemCardProps) => {
   return (
@@ -77,7 +95,7 @@ const ItemCard = ({ item, isLiked, onLike, onContact }: ItemCardProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-1 text-gray-500">
             <Clock className="w-3 h-3" />
-            <span className="text-xs">{item.timePosted}</span>
+            <span className="text-xs">{getTimeAgo(item.timePosted)}</span>
           </div>
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-1 text-gray-500">
