@@ -22,7 +22,7 @@ const SecondHand = () => {
       id: 1,
       title: "Google Pixel 6pro",
       price: 25000,
-      originalPrice: false,
+      originalPrice: not indicated,
       description: "12gb ram, single sim+esim ,goggle tensor,,small dot on screen",
       seller: "massive",
       sellerPhone: "+254793754495",
@@ -33,8 +33,23 @@ const SecondHand = () => {
       timePosted: new Date(Date.now(2025-06-08T17:00:00) - 2 * 60 * 60 * 1000), // 2 hours ago
       category: "electronics"
     },
-    {
+      {
       id: 2,
+      title: "laptop adapters",
+      price: 1200,
+      originalPrice: not indicated,
+      description: "compartible with Hp dell lenovo toshiba ,quality checked fast charging,reliable perfomance",
+      seller: "Dencel",
+      sellerPhone: "+254757041255",
+      location: "mombasa",
+      image: "https://i.ibb.co/C3y7jM8q/Whats-App-Image-2025-06-08-at-16-45-51.jpg",
+      condition: "New",
+      likes: 15,
+      timePosted: new Date(Date.now(2025-06-08T17:00:00) - 2 * 60 * 60 * 1000), // 2 hours ago
+      category: "electronics"
+    }, 
+    {
+      id: 6,
       title: "laptops adapters",
       price: 1200,
       originalPrice: false,
