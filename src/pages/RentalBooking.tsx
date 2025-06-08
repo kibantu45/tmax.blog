@@ -38,7 +38,7 @@ const RentalBooking = () => {
       type: "hostel",
       bedrooms: false,
       bathrooms: false,
-      amenities: ["close to the road", "24/7 water supply","Wifi available" "token electricity", "clean environment","tight security"],
+      amenities: ["close to the road", "24/7 water supply", "Wifi available", "token electricity", "clean environment","tight security"],
       image: "https://ibb.co/HpxZGQbB",
       available: true,
       sellerPhone: "+254702752033",
