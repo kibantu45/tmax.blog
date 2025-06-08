@@ -22,7 +22,7 @@ const ServiceCarousel = () => {
       price: "Available Now",
       rating: 4.9,
       badge: "New Edition",
-      link: "https://wa.me/254702752033?text=Hi, I'm interested in the CCC Magazine 2nd Edition",
+      link: "https://www.instagram.com/cane_carter_?igsh=anBraWVzdnc1ZnAw",
       bgColor: "bg-gradient-to-r from-blue-600 to-blue-800"
     },
    {
