@@ -43,10 +43,10 @@ const RentalBooking = () => {
       available: true,
       sellerPhone: "+254702752033",
       photos: [
-        "https://ibb.co/HpxZGQbB",
-        "https://ibb.co/jPYzN2yd",
-        "https://ibb.co/YFK6vgJB",
-        "https://ibb.co/twmkVDHW"
+        "https://i.ibb.co/8nKT19mS/h1.jpg",
+        "https://i.ibb.co/S412qSHw/h2.jpg",
+        "https://i.ibb.co/Q3VkgRPZ/h3.jpg",
+        "https://i.ibb.co/h1Z02v4L/h4.jpg"
       ]
     },
     {
