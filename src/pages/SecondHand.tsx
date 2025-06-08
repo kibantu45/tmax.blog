@@ -20,33 +20,33 @@ const SecondHand = () => {
   const items = [
     {
       id: 1,
-      title: "MacBook Pro 13-inch",
-      price: 85000,
-      originalPrice: 150000,
-      description: "Perfect for students, excellent battery life and performance",
-      seller: "John Kimani",
-      sellerPhone: "+254701234567",
-      location: "Main Campus",
-      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80",
-      condition: "Like New",
+      title: "Google Pixel 6pro",
+      price: 25000,
+      originalPrice: false,
+      description: "12gb ram, single sim+esim ,goggle tensor,,small dot on screen",
+      seller: "massive",
+      sellerPhone: "+254793754495",
+      location: "mombasa",
+      image: "https://i.ibb.co/PGh3sv6N/Whats-App-Image-2025-06-08-at-16-45-51-1.jpg",
+      condition: "New",
       likes: 15,
       timePosted: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
       category: "electronics"
     },
     {
       id: 2,
-      title: "Engineering Textbooks Set",
-      price: 3500,
-      originalPrice: 8000,
-      description: "Complete set of Year 2 Engineering books in excellent condition",
-      seller: "Mary Wanjiku",
-      sellerPhone: "+254702345678",
-      location: "Library Area",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
-      condition: "Good",
+      title: "laptops adapters",
+      price: 1200,
+      originalPrice: false,
+      description: "copmartible with Hp dell lenovo toshiba ,quality checked fast charging,reliable perfomance",
+      seller: "Dencel",
+      sellerPhone: "+254757041255",
+      location: "mombasa",
+      image: "https://i.ibb.co/C3y7jM8q/Whats-App-Image-2025-06-08-at-16-45-51.jpg",
+      condition: "new",
       likes: 8,
-      timePosted: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
-      category: "books"
+      timePosted: new Date(Date.now("2025-06-08T17:00:00") - 5 * 60 * 60 * 1000), // 5 hours ago
+      category: "electonics"
     },
     {
       id: 3,
