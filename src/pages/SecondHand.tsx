@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,55 +17,54 @@ const SecondHand = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [likedItems, setLikedItems] = useState<number[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const items = [
+  const [items, setItems] = useState([
     {
       id: 1,
-      title: "Google Pixel 6pro",
+      title: "Google Pixel 6 Pro",
       price: 25000,
-      originalPrice: not indicated,
-      description: "12gb ram, single sim+esim ,goggle tensor,,small dot on screen",
+      originalPrice: 45000,
+      description: "12gb ram, single sim+esim, google tensor, small dot on screen",
       seller: "massive",
       sellerPhone: "+254793754495",
       location: "mombasa",
       image: "https://i.ibb.co/PGh3sv6N/Whats-App-Image-2025-06-08-at-16-45-51-1.jpg",
-      condition: "New",
+      condition: "Good",
       likes: 15,
-      timePosted: new Date(Date.now(2025-06-08T17:00:00) - 2 * 60 * 60 * 1000), // 2 hours ago
+      timePosted: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
       category: "electronics"
     },
-      {
-      id: 2,
-      title: "laptop adapters",
-      price: 1200,
-      originalPrice: not indicated,
-      description: "compartible with Hp dell lenovo toshiba ,quality checked fast charging,reliable perfomance",
-      seller: "Dencel",
-      sellerPhone: "+254757041255",
-      location: "mombasa",
-      image: "https://i.ibb.co/C3y7jM8q/Whats-App-Image-2025-06-08-at-16-45-51.jpg",
-      condition: "New",
-      likes: 15,
-      timePosted: new Date(Date.now(2025-06-08T17:00:00) - 2 * 60 * 60 * 1000), // 2 hours ago
-      category: "electronics"
-    }, 
     {
-      id: 6,
-      title: "laptops adapters",
-      price: 1200,
-      originalPrice: false,
-      description: "compartible with Hp dell lenovo toshiba ,quality checked fast charging,reliable perfomance",
-      seller: "Dencel",
-      sellerPhone: "+254757041255",
-      location: "mombasa",
-      image: "https://i.ibb.co/C3y7jM8q/Whats-App-Image-2025-06-08-at-16-45-51.jpg",
-      condition: "new",
-      likes: 8,
-      timePosted: new Date(Date.now("2025-06-08T17:00:00") - 5 * 60 * 60 * 1000), // 5 hours ago
-      category: "electonics"
+      id: 2,
+      title: "iPhone 12 Pro",
+      price: 55000,
+      originalPrice: 85000,
+      description: "128GB, excellent condition, with original charger and box",
+      seller: "TechSeller",
+      sellerPhone: "+254701234567",
+      location: "Nairobi",
+      image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=400&q=80",
+      condition: "Excellent",
+      likes: 28,
+      timePosted: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago
+      category: "electronics"
     },
     {
       id: 3,
+      title: "laptop adapters",
+      price: 1200,
+      originalPrice: 2500,
+      description: "compatible with Hp dell lenovo toshiba, quality checked fast charging, reliable performance",
+      seller: "Dencel",
+      sellerPhone: "+254757041255",
+      location: "mombasa",
+      image: "https://i.ibb.co/C3y7jM8q/Whats-App-Image-2025-06-08-at-16-45-51.jpg",
+      condition: "New",
+      likes: 15,
+      timePosted: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
+      category: "electronics"
+    },
+    {
+      id: 4,
       title: "Gaming Chair",
       price: 12000,
       originalPrice: 25000,
@@ -79,7 +79,7 @@ const SecondHand = () => {
       category: "furniture"
     },
     {
-      id: 4,
+      id: 5,
       title: "Scientific Calculator",
       price: 800,
       originalPrice: 1500,
@@ -90,11 +90,11 @@ const SecondHand = () => {
       image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=400&q=80",
       condition: "Like New",
       likes: 5,
-      timePosted: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
+      timePosted: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
       category: "electronics"
     },
     {
-      id: 5,
+      id: 6,
       title: "Winter Jacket",
       price: 2500,
       originalPrice: 5000,
@@ -109,7 +109,7 @@ const SecondHand = () => {
       category: "clothing"
     },
     {
-      id: 6,
+      id: 7,
       title: "Desk Lamp",
       price: 1200,
       originalPrice: 2500,
@@ -120,10 +120,10 @@ const SecondHand = () => {
       image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=80",
       condition: "Excellent",
       likes: 7,
-      timePosted: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
+      timePosted: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
       category: "furniture"
     }
-  ];
+  ]);
 
   const categories = ["all", "electronics", "books", "clothing", "furniture"];
 
@@ -149,6 +149,24 @@ const SecondHand = () => {
   };
 
   const handleSellItem = (itemData: any) => {
+    const newItem = {
+      id: items.length + 1,
+      title: itemData.title,
+      price: parseInt(itemData.price),
+      originalPrice: itemData.originalPrice ? parseInt(itemData.originalPrice) : parseInt(itemData.price) + 1000,
+      description: itemData.description,
+      seller: "You", // In a real app, this would come from user profile
+      sellerPhone: "+254700000000", // In a real app, this would come from user profile
+      location: itemData.location,
+      image: itemData.images.length > 0 ? URL.createObjectURL(itemData.images[0]) : "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=80",
+      condition: itemData.condition,
+      likes: 0,
+      timePosted: new Date(),
+      category: itemData.category
+    };
+
+    setItems(prev => [newItem, ...prev]);
+    
     toast({
       title: "Item Listed!",
       description: "Your item has been posted successfully. Buyers will contact you directly.",
