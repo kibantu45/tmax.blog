@@ -67,18 +67,21 @@ const RentalBooking = () => {
     },
     {
       id: 4,
-      title: "Luxury 2-Bedroom Flat",
-      price: 650,
-      location: "Westlands",
+      title: "2 Bedroom Makupa",
+      price: 25000,
+      location: "Makupa",
       type: "2bedroom",
       bedrooms: 2,
-      bathrooms: 2,
-      amenities: ["WiFi", "Gym", "Pool", "Security"],
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=300&fit=crop",
+      bathrooms: 1,
+      amenities: ["executive finish", "24/7 water supply", "token electricity", "tight security", "close to road"],
+      image: "https://i.ibb.co/SwLvCxmj/Whats-App-Image-2025-06-08-at-15-26-30-1.jpg",
       available: true,
-      sellerPhone: "+254701234570",
+      sellerPhone: "+254702752033",
       photos: [
-        "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=300&fit=crop"
+        "https://i.ibb.co/qLQcxqHC/Whats-App-Image-2025-06-08-at-15-26-30-3.jpg",
+        "https://i.ibb.co/JWVGYF0k/Whats-App-Image-2025-06-08-at-15-26-30-2.jpg",
+        "https://i.ibb.co/SwLvCxmj/Whats-App-Image-2025-06-08-at-15-26-30-1.jpg",
+        "https://i.ibb.co/0jPmRJ8d/Whats-App-Image-2025-06-08-at-15-26-30.jpg"
       ]
     },
     {
@@ -104,18 +107,21 @@ const RentalBooking = () => {
     },
     {
       id: 6,
-      title: "Single Room in Shared House",
-      price: 250,
-      location: "Karen",
+      title: "Single Room",
+      price: 3000,
+      location: "lights(sokomjinga)",
       type: "single",
-      bedrooms: 1,
-      bathrooms: 1,
-      amenities: ["WiFi", "Shared Kitchen", "Garden"],
-      image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop",
+      bedrooms: false,
+      bathrooms: false,
+      amenities: ["near road", "token available", "nice finish"],
+      image: "https://i.ibb.co/RWfjv5Y/Whats-App-Image-2025-06-08-at-15-16-19-1.jpg",
       available: true,
-      sellerPhone: "+254701234572",
+      sellerPhone: "+254702752033",
       photos: [
-        "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop"
+        "https://i.ibb.co/W40LKcP5/Whats-App-Image-2025-06-08-at-15-16-20.jpg",
+        "https://i.ibb.co/S4RTg6ns/Whats-App-Image-2025-06-08-at-15-16-19-2.jpg",
+        "https://i.ibb.co/RWfjv5Y/Whats-App-Image-2025-06-08-at-15-16-19-1.jpg",
+        "https://i.ibb.co/20Ccq23F/Whats-App-Image-2025-06-08-at-15-16-19.jpg"
       ]
     }
   ];
