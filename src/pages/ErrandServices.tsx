@@ -148,35 +148,35 @@ const ErrandServices = () => {
         },
         {
           id: "cyber2",
-          name: "Document Typing",
-          price: 50,
+          name: "certificate of good conduct application",
+          price: 150,
           image: "⌨️",
-          description: "Professional typing services per page"
+          description: "application and editing(if recently applied"
         },
         {
           id: "cyber3",
           name: "CV/Resume Design",
-          price: 300,
+          price: 150-300,
           image: "📄",
-          description: "Professional CV and resume creation"
+          description: "any writing services"
         },
         {
           id: "cyber4",
-          name: "Project Binding",
-          price: 150,
+          name: "HEF portal updates",
+          price: 200,
           image: "📚",
-          description: "Spiral or hardcover project binding"
+          description: "all hef and helb services"
         },
         {
           id: "cyber5",
-          name: "Lamination Service",
-          price: 20,
+          name: "KRA services",
+          price: 50-100,
           image: "🛡️",
-          description: "Document lamination and protection"
+          description:"filing of nil and employed returns with or without p9"
         },
         {
           id: "cyber6",
-          name: "Scanning Service",
+          name: "Scanning Services",
           price: 30,
           image: "📱",
           description: "Document scanning to PDF format"
@@ -191,9 +191,9 @@ const ErrandServices = () => {
         {
           id: "cyber8",
           name: "Internet Browsing",
-          price: 5,
+          price: 10,
           image: "🌐",
-          description: "Per minute internet access"
+          description: "Per 3hrs of internet access"
         }
       ]
     },
@@ -236,10 +236,10 @@ const ErrandServices = () => {
         },
         {
           id: "nec5",
-          name: "Bank Account Opening",
-          price: 400,
+          name: "travelling passport",
+          price: 450,
           image: "🏦",
-          description: "Open student bank account"
+          description: "application assistance 10days passport out"
         },
         {
           id: "nec6",
