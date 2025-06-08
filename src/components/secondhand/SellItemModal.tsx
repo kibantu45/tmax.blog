@@ -1,163 +1,210 @@
 
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload } from "lucide-react";
-
-interface SellFormData {
-  title: string;
-  description: string;
-  price: string;
-  category: string;
-  condition: string;
-  location: string;
-  sellerPhone: string;
-  images: string[];
-}
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Upload, X } from "lucide-react";
 
 interface SellItemModalProps {
   isOpen: boolean;
-  formData: SellFormData;
   onClose: () => void;
-  onFormChange: (data: Partial<SellFormData>) => void;
-  onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: () => void;
+  onSubmit: (itemData: any) => void;
 }
 
-const SellItemModal = ({ 
-  isOpen, 
-  formData, 
-  onClose, 
-  onFormChange, 
-  onImageUpload, 
-  onSubmit 
-}: SellItemModalProps) => {
-  if (!isOpen) return null;
+const SellItemModal = ({ isOpen, onClose, onSubmit }: SellItemModalProps) => {
+  const [formData, setFormData] = useState({
+    title: "",
+    price: "",
+    originalPrice: "",
+    description: "",
+    category: "",
+    condition: "",
+    location: "",
+    images: [] as File[]
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+    setFormData({
+      title: "",
+      price: "",
+      originalPrice: "",
+      description: "",
+      category: "",
+      condition: "",
+      location: "",
+      images: []
+    });
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newImages = Array.from(e.target.files);
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...newImages].slice(0, 5) // Max 5 images
+      }));
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
+  };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-green-700">Sell Your Item</h2>
-          <Button variant="ghost" onClick={onClose}>×</Button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold text-green-700">Sell Your Item</DialogTitle>
+        </DialogHeader>
         
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Item Title *</label>
-            <Input
-              value={formData.title}
-              onChange={(e) => onFormChange({ title: e.target.value })}
-              placeholder="e.g., MacBook Air M1 2020"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Description</label>
-            <Textarea
-              value={formData.description}
-              onChange={(e) => onFormChange({ description: e.target.value })}
-              placeholder="Describe your item's condition, features, etc."
-              rows={3}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Price (KSh) *</label>
+              <label className="block text-sm font-medium mb-2">Item Title *</label>
               <Input
+                required
+                value={formData.title}
+                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="e.g., MacBook Pro 13-inch"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-2">Category *</label>
+              <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="electronics">Electronics</SelectItem>
+                  <SelectItem value="books">Books</SelectItem>
+                  <SelectItem value="clothing">Clothing</SelectItem>
+                  <SelectItem value="furniture">Furniture</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Selling Price (KSh) *</label>
+              <Input
+                required
                 type="number"
                 value={formData.price}
-                onChange={(e) => onFormChange({ price: e.target.value })}
-                placeholder="e.g., 50000"
+                onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
+                placeholder="e.g., 85000"
               />
             </div>
+            
             <div>
-              <label className="block text-sm font-medium mb-2">Category</label>
-              <select
-                value={formData.category}
-                onChange={(e) => onFormChange({ category: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              >
-                <option value="electronics">Electronics</option>
-                <option value="textbooks">Textbooks</option>
-                <option value="furniture">Furniture</option>
-                <option value="clothing">Clothing</option>
-              </select>
+              <label className="block text-sm font-medium mb-2">Original Price (KSh)</label>
+              <Input
+                type="number"
+                value={formData.originalPrice}
+                onChange={(e) => setFormData(prev => ({ ...prev, originalPrice: e.target.value }))}
+                placeholder="e.g., 150000"
+              />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Condition</label>
-              <select
-                value={formData.condition}
-                onChange={(e) => onFormChange({ condition: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              >
-                <option value="like-new">Like New</option>
-                <option value="excellent">Excellent</option>
-                <option value="good">Good</option>
-                <option value="fair">Fair</option>
-              </select>
+              <label className="block text-sm font-medium mb-2">Condition *</label>
+              <Select value={formData.condition} onValueChange={(value) => setFormData(prev => ({ ...prev, condition: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select condition" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Like New">Like New</SelectItem>
+                  <SelectItem value="Excellent">Excellent</SelectItem>
+                  <SelectItem value="Good">Good</SelectItem>
+                  <SelectItem value="Fair">Fair</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+            
             <div>
-              <label className="block text-sm font-medium mb-2">Location</label>
+              <label className="block text-sm font-medium mb-2">Location *</label>
               <Input
+                required
                 value={formData.location}
-                onChange={(e) => onFormChange({ location: e.target.value })}
-                placeholder="e.g., Campus West"
+                onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                placeholder="e.g., Main Campus"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Your WhatsApp Number *</label>
-            <Input
-              value={formData.sellerPhone}
-              onChange={(e) => onFormChange({ sellerPhone: e.target.value })}
-              placeholder="e.g., +254701234567"
+            <label className="block text-sm font-medium mb-2">Description *</label>
+            <Textarea
+              required
+              value={formData.description}
+              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              placeholder="Describe your item, its condition, and any important details..."
+              rows={4}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Photos (Max 5)</label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+            <label className="block text-sm font-medium mb-2">Images (Max 5)</label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
               <input
                 type="file"
                 multiple
                 accept="image/*"
-                onChange={onImageUpload}
+                onChange={handleImageUpload}
                 className="hidden"
                 id="image-upload"
               />
               <label htmlFor="image-upload" className="cursor-pointer">
-                <div className="text-center">
-                  <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-                  <p className="text-gray-600">Click to upload photos</p>
-                </div>
+                <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                <p className="text-gray-600">Click to upload images</p>
+                <p className="text-sm text-gray-400">PNG, JPG up to 10MB each</p>
               </label>
-              {formData.images.length > 0 && (
-                <div className="grid grid-cols-3 gap-2 mt-4">
-                  {formData.images.map((image, index) => (
-                    <img key={index} src={image} alt={`Upload ${index + 1}`} className="w-full h-20 object-cover rounded" />
-                  ))}
-                </div>
-              )}
             </div>
+            
+            {formData.images.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {formData.images.map((image, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt={`Preview ${index + 1}`}
+                      className="w-20 h-20 object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="flex gap-4 pt-4">
-            <Button variant="outline" onClick={onClose} className="flex-1">
+          <div className="flex gap-3 pt-4">
+            <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Cancel
             </Button>
-            <Button onClick={onSubmit} className="flex-1 bg-green-600 hover:bg-green-700">
+            <Button type="submit" className="flex-1 bg-green-600 hover:bg-green-700">
               List Item
             </Button>
           </div>
-        </div>
-      </div>
-    </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 

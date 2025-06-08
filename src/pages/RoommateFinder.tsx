@@ -15,7 +15,7 @@ const RoommateFinder = () => {
       id: "rm1",
       name: "Boogie.",
       age: false,
-      course: false ,
+      course: "Any Course",
       year: "any year",
       budget: "2bedroom 18000",
       location: "Hongera",

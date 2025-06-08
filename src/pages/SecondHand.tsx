@@ -148,7 +148,11 @@ const SecondHand = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-yellow-50 pb-20">
-      <SecondHandHeader />
+      <SecondHandHeader 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onSellClick={() => setIsModalOpen(true)}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Actions */}
@@ -203,8 +207,7 @@ const SecondHand = () => {
         {/* Category Tabs */}
         {!searchQuery && (
           <TabSection 
-            categories={categories}
-            categorizedItems={categorizedItems}
+            electronics={categorizedItems("electronics")}
             likedItems={likedItems}
             onLike={handleLike}
             onContact={handleContact}
