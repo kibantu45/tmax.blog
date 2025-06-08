@@ -4,138 +4,38 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Search, Plus, Minus, Phone } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ShoppingCart, Star, Clock, MapPin, Plus, Phone, Search, Apple, Beef, Milk } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import BottomNavigation from "@/components/BottomNavigation";
 
 const Groceries = () => {
   const { addToCart } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
 
   const groceryItems = [
-    {
-      id: "onions",
-      name: "Red Onions",
-      price: 100,
-      unit: "per kg",
-      category: "vegetables",
-      image: "https://i.ibb.co/Jj5v9xPD/onions.jpg",
-      description: "Fresh red onions, perfect for cooking"
-    },
-    {
-      id: "garlic",
-      name: "Fresh Garlic",
-      price: 30,
-      unit: "per piece",
-      category: "vegetables",
-      image: "https://i.ibb.co/7JCJdhzZ/garlic.jpg",
-      description: "Fresh garlic bulbs for flavoring"
-    },
-    {
-      id: "oranges",
-      name: "Sweet Oranges",
-      price: 15,
-      unit: "per piece",
-      category: "fruits",
-      image: "/lovable-uploads/closeup-shot-oranges-top-each-other-white-surface-great-background.jpg",
-      description: "Juicy sweet oranges, vitamin C rich"
-    },
-    {
-      id: "mangoes",
-      name: "Ripe Mangoes",
-      price: 20,
-      unit: "per piece",
-      category: "fruits",
-      image: "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=400&q=80",
-      description: "Sweet ripe mangoes, locally sourced"
-    },
-    {
-      id: "bananas",
-      name: "Fresh Bananas",
-      price: 10,
-      unit: "each",
-      category: "fruits",
-      image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80",
-      description: "Fresh bananas, perfect for snacking"
-    },
-    {
-      id: "carrots",
-      name: "Fresh Carrots",
-      price: 90,
-      unit: "per kg",
-      category: "vegetables",
-      image: "https://i.ibb.co/fdQGMbyb/carrots.jpg",
-      description: "Crunchy fresh carrots, vitamin A rich"
-    },
-    {
-      id: "cabbage",
-      name: "Green Cabbage",
-      price: 60,
-      unit: "per head",
-      category: "vegetables",
-      image: "https://i.ibb.co/k691Pmt9/cabbage.jpg",
-      description: "Fresh green cabbage for salads and cooking"
-    },
-    {
-      id: "milk",
-      name: "Fresh Milk",
-      price: 60,
-      unit: "per 500ml 30 per 300ml",
-      category: "dairy",
-      image: "https://i.ibb.co/fRSVYcf/milk.jpg",
-      description: "Fresh milk"
-    },
-    {
-      id: "ginger",
-      name: "Fresh Ginger",
-      price: 30,
-      unit: "per piece",
-      category: "spices",
-      image: "https://i.ibb.co/9zhDqNZ/ginger.jpg",
-      description: "Fresh ginger root for cooking and tea"
-    },
-    {
-      id: "pilipilihoho",
-      name: "Pilipili Hoho (Bell Peppers)",
-      price: 15,
-      unit: "per piece",
-      category: "vegetables",
-      image: "https://i.ibb.co/cchn5QTX/pilipili-hoho.jpg",
-      description: "Fresh bell peppers, colorful and crunchy"
-    },
-    {
-      id: "dhania",
-      name: "Dhania (Coriander)",
-      price: 10,
-      unit: "per bunch",
-      category: "herbs",
-      image: "https://i.ibb.co/SD97dTHQ/dhania.jpg",
-      description: "Fresh coriander leaves for garnishing"
-    },
-    {
-      id: "tomatoes",
-      name: "Fresh Tomatoes",
-      price: 10,
-      unit: "per piece",
-      category: "vegetables",
-      image: "https://i.ibb.co/TMtQjfRL/tomatoes.jpg",
-      description: "Fresh red tomatoes, perfect for cooking"
-    },
-    {
-      id: "eggs",
-      name: "Fresh Eggs",
-      price: 480,
-      unit: "per tray (30 pieces)",
-      category: "dairy",
-      image: "https://i.ibb.co/zWkcPNPW/eggs.jpg",
-      description: "Fresh farm eggs, high protein"
-    }
+    // Fresh Produce
+    { id: "grocery1", name: "Fresh Bananas", price: 80, description: "Sweet ripe bananas", image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+    { id: "grocery2", name: "Tomatoes", price: 120, description: "Fresh red tomatoes", image: "https://images.unsplash.com/photo-1546470427-e5ac29847-7e9?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+    { id: "grocery3", name: "Carrots", price: 60, description: "Organic carrots", image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+    { id: "grocery4", name: "Green Vegetables", price: 100, description: "Mixed green leafy vegetables", image: "https://images.unsplash.com/photo-1574316071802-0d684efa7bf5?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+    
+    // Dairy Products
+    { id: "grocery5", name: "Fresh Milk", price: 60, description: "1 liter fresh milk", image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
+    { id: "grocery6", name: "Yogurt", price: 80, description: "Natural yogurt", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
+    { id: "grocery7", name: "Cheese", price: 200, description: "Processed cheese", image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
+    { id: "grocery8", name: "Eggs", price: 300, description: "One tray of eggs", image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
+    
+    // Meat Products
+    { id: "grocery9", name: "Chicken", price: 500, description: "Fresh chicken - 1kg", image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=400&q=80", category: "meat", store: "Butchery Plus", whatsapp: "+254702752035" },
+    { id: "grocery10", name: "Beef", price: 600, description: "Fresh beef - 1kg", image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=400&q=80", category: "meat", store: "Butchery Plus", whatsapp: "+254702752035" },
+    { id: "grocery11", name: "Fish", price: 400, description: "Fresh tilapia fish", image: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=400&q=80", category: "meat", store: "Butchery Plus", whatsapp: "+254702752035" },
+    { id: "grocery12", name: "Sausages", price: 250, description: "Pork sausages", image: "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=400&q=80", category: "meat", store: "Butchery Plus", whatsapp: "+254702752035" }
   ];
 
-  const categories = ["all", "fruits", "vegetables", "dairy", "spices", "herbs"];
-
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const categories = ["all", "produce", "dairy", "meat"];
 
   const filteredItems = groceryItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -157,30 +57,31 @@ const Groceries = () => {
         id: item.id,
         name: item.name,
         price: item.price,
-        category: item.category,
-        image: item.image
+        image: item.image,
+        category: "Groceries",
+        provider: item.store
       });
     }
   };
 
   const handleOrderNow = (item: any) => {
     const quantity = quantities[item.id] || 1;
-    const message = `Hi! I'd like to order: ${item.name} - KES ${item.price} x ${quantity} = KES ${item.price * quantity}. Please confirm availability and delivery.`;
-    const whatsappUrl = `https://wa.me/254702752033?text=${encodeURIComponent(message)}`;
+    const message = `Hi ${item.store}! I'd like to order: ${item.name} - KES ${item.price} x ${quantity} = KES ${item.price * quantity}. Please confirm availability and delivery time.`;
+    const whatsappUrl = `https://wa.me/${item.whatsapp.replace('+', '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
-      {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 pb-20">
+      {/* Header with glassmorphism */}
+      <header className="glass backdrop-blur-xl bg-white/20 border-b border-white/30 shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-gray-800 flex items-center">
-              <ShoppingCart className="w-8 h-8 mr-3" />
+            <h1 className="text-3xl font-bold text-gray-800 flex items-center animate-fade-in">
+              <ShoppingCart className="w-8 h-8 mr-3 animate-bounce" />
               Groceries
             </h1>
-            <Button onClick={() => window.history.back()} variant="outline">
+            <Button onClick={() => window.history.back()} variant="outline" className="glass hover:scale-105 transition-all duration-300">
               Back to Home
             </Button>
           </div>
@@ -188,14 +89,14 @@ const Groceries = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Filter */}
-        <div className="mb-8 space-y-4">
+        {/* Search and Filter with glassmorphism */}
+        <div className="mb-8 space-y-4 animate-fade-in">
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <Input
               type="text"
               placeholder="Search groceries..."
-              className="pl-10 bg-white/80"
+              className="pl-10 glass backdrop-blur-lg bg-white/30 border-white/20 hover:bg-white/40 transition-all duration-300"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -206,36 +107,36 @@ const Groceries = () => {
               <Badge
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
-                className={`cursor-pointer capitalize ${
+                className={`cursor-pointer capitalize transition-all duration-300 hover:scale-105 ${
                   selectedCategory === category 
-                    ? "bg-blue-600 hover:bg-blue-700" 
-                    : "hover:bg-blue-50"
+                    ? "bg-green-600 hover:bg-green-700 shadow-lg animate-pulse" 
+                    : "glass bg-white/20 hover:bg-green-50/50 backdrop-blur-sm"
                 }`}
                 onClick={() => setSelectedCategory(category)}
               >
-                {category}
+                {category === "produce" ? "Fresh Produce" : category === "dairy" ? "Dairy Products" : category === "meat" ? "Meat & Fish" : category}
               </Badge>
             ))}
           </div>
         </div>
 
-        {/* Items Grid */}
+        {/* Items Grid with enhanced effects */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredItems.map((item) => (
-            <Card key={item.id} className="bg-white/90 hover:shadow-lg transition-shadow overflow-hidden">
-              <div className="aspect-square bg-gray-100 overflow-hidden">
+          {filteredItems.map((item, index) => (
+            <Card key={item.id} className="glass backdrop-blur-lg bg-white/30 hover:bg-white/40 border-white/20 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
+              <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden rounded-t-lg">
                 <img 
                   src={item.image} 
                   alt={item.name}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                 />
               </div>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">{item.name}</CardTitle>
                 <CardDescription className="text-sm">{item.description}</CardDescription>
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-blue-600">KSh {item.price}</span>
-                  <span className="text-sm text-gray-500">{item.unit}</span>
+                  <span className="text-lg font-bold text-green-600 animate-pulse">KSh {item.price}</span>
+                  <span className="text-sm text-gray-500">{item.store}</span>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
@@ -245,16 +146,16 @@ const Groceries = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-8 h-8 p-0"
+                      className="w-8 h-8 p-0 glass hover:scale-110 transition-all duration-200"
                       onClick={() => updateQuantity(item.id, -1)}
                     >
-                      <Minus className="w-4 h-4" />
+                      <Plus className="w-4 h-4 rotate-45" />
                     </Button>
-                    <span className="w-8 text-center">{quantities[item.id] || 1}</span>
+                    <span className="w-8 text-center font-semibold">{quantities[item.id] || 1}</span>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-8 h-8 p-0"
+                      className="w-8 h-8 p-0 glass hover:scale-110 transition-all duration-200"
                       onClick={() => updateQuantity(item.id, 1)}
                     >
                       <Plus className="w-4 h-4" />
@@ -264,7 +165,7 @@ const Groceries = () => {
                 <div className="space-y-2">
                   <Button 
                     onClick={() => handleAddToCart(item)}
-                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    className="w-full bg-green-600 hover:bg-green-700 hover:scale-105 transition-all duration-300 shadow-lg"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Add to Cart
@@ -272,7 +173,7 @@ const Groceries = () => {
                   <Button 
                     onClick={() => handleOrderNow(item)}
                     variant="outline"
-                    className="w-full border-green-600 text-green-600 hover:bg-green-50"
+                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 glass hover:scale-105 transition-all duration-300"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Order Now
@@ -284,8 +185,8 @@ const Groceries = () => {
         </div>
 
         {filteredItems.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No items found matching your search.</p>
+          <div className="text-center py-12 animate-fade-in">
+            <p className="text-gray-500">No grocery items found matching your search.</p>
           </div>
         )}
       </div>

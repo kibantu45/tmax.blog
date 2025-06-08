@@ -126,9 +126,31 @@
     @apply transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1;
   }
   
-  /* Glassmorphism effects */
+  /* Enhanced Glassmorphism effects */
   .glass {
     @apply backdrop-blur-lg bg-white/30 border border-white/20 shadow-lg;
+  }
+
+  .glass-light {
+    @apply backdrop-blur-sm bg-white/10 border border-white/10;
+  }
+
+  .glass-medium {
+    @apply backdrop-blur-md bg-white/20 border border-white/20;
+  }
+
+  .glass-heavy {
+    @apply backdrop-blur-xl bg-white/30 border border-white/30;
+  }
+
+  /* Interactive glassmorphism */
+  .glass-interactive {
+    @apply glass-medium hover:bg-white/40 transition-all duration-300 cursor-pointer;
+  }
+
+  .glass-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   }
 
   /* Neumorphism effects */
@@ -228,6 +250,24 @@
   }
 }
 
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .slide-in {
   animation: slideIn 0.4s ease-out;
 }
@@ -257,6 +297,14 @@
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
+}
+
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
 }
 
 /* Premium button effects */
