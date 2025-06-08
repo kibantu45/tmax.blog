@@ -83,18 +83,23 @@ const RentalBooking = () => {
     },
     {
       id: 5,
-      title: "Airbnb Studio Downtown",
-      price: 500,
-      location: "CBD",
+      title: "Airbnb Studio 1bedroom",
+      price: 3500,
+      location: "makupa",
       type: "airbnb",
       bedrooms: 1,
       bathrooms: 1,
-      amenities: ["WiFi", "Kitchen", "TV", "AC"],
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+      amenities: ["cabro access", "tight security", "near the road", "fully furnished"],
+      image: "https://i.ibb.co/cKTGxwR7/Whats-App-Image-2025-06-08-at-14-28-24.jpg",
       available: true,
       sellerPhone: "+254701234571",
       photos: [
-        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop"
+        "https://i.ibb.co/DDRxvsQ2/Whats-App-Image-2025-06-08-at-14-28-25-2.jpg",
+        "https://i.ibb.co/67kDT7wv/Whats-App-Image-2025-06-08-at-14-28-25-1.jpg",
+        "https://i.ibb.co/6736Qy5t/Whats-App-Image-2025-06-08-at-14-28-25.jpg",
+        "https://i.ibb.co/bj5WpxcH/Whats-App-Image-2025-06-08-at-14-28-24-2.jpg",
+        "https://i.ibb.co/WWJ9rHkj/Whats-App-Image-2025-06-08-at-14-28-24-1.jpg",
+        "https://i.ibb.co/cKTGxwR7/Whats-App-Image-2025-06-08-at-14-28-24.jpg"
       ]
     },
     {
