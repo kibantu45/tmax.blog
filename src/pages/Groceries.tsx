@@ -17,22 +17,21 @@ const Groceries = () => {
 
   const groceryItems = [
     // Fresh Produce
-    { id: "grocery1", name: "Fresh Bananas", price: 80, description: "Sweet ripe bananas", image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
-    { id: "grocery2", name: "Tomatoes", price: 120, description: "Fresh red tomatoes", image: "https://images.unsplash.com/photo-1546470427-e5ac29847-7e9?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
-    { id: "grocery3", name: "Carrots", price: 60, description: "Organic carrots", image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
-    { id: "grocery4", name: "Green Vegetables", price: 100, description: "Mixed green leafy vegetables", image: "https://images.unsplash.com/photo-1574316071802-0d684efa7bf5?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+    { id: "grocery1", name: "Fresh Bananas", price: 10, description: "Sweet ripe bananas", image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+    { id: "grocery2", name: "Tomatoes", price: 10, description: "Fresh red tomatoes", image: "https://i.ibb.co/TMtQjfRL/tomatoes.jpg", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+    { id: "grocery3", name: "Carrots", price: 10, description: "Organic carrots", image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+    { id: "grocery4", name: "sukuma wiki", price: 10, description: "Mixed green leafy vegetables", image: "https://i.ibb.co/7Jjk7dRg/sukuma.jpg", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
+     { id: "grocery5", name: "onion", price: 10, description: "Red onions", image: "https://i.ibb.co/Jj5v9xPD/onions.jpg", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
     
     // Dairy Products
-    { id: "grocery5", name: "Fresh Milk", price: 60, description: "1 liter fresh milk", image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
-    { id: "grocery6", name: "Yogurt", price: 80, description: "Natural yogurt", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
-    { id: "grocery7", name: "Cheese", price: 200, description: "Processed cheese", image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
-    { id: "grocery8", name: "Eggs", price: 300, description: "One tray of eggs", image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
+    { id: "grocery6", name: "Fresh Milk", price: 60, description: "500ml fresh milk", image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
+    { id: "grocery7", name: "yogurt", price: 60, description: "300ml sweet natural yogurt", image: "https://i.ibb.co/Y4KHsHfN/yogurt.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
+    { id: "grocery8", name: "Cheese", price: 25, description: "https://i.ibb.co/Z6DYT2pP/cupcakes.jpg", image: "https://i.ibb.co/Z6DYT2pP/cupcakes.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752033" },
+    { id: "grocery9", name: "Eggs", price: 480, description: "One tray of eggs", image: "https://i.ibb.co/zWkcPNPW/eggs.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
     
     // Meat Products
-    { id: "grocery9", name: "Chicken", price: 500, description: "Fresh chicken - 1kg", image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=400&q=80", category: "meat", store: "Butchery Plus", whatsapp: "+254702752035" },
-    { id: "grocery10", name: "Beef", price: 600, description: "Fresh beef - 1kg", image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=400&q=80", category: "meat", store: "Butchery Plus", whatsapp: "+254702752035" },
-    { id: "grocery11", name: "Fish", price: 400, description: "Fresh tilapia fish", image: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=400&q=80", category: "meat", store: "Butchery Plus", whatsapp: "+254702752035" },
-    { id: "grocery12", name: "Sausages", price: 250, description: "Pork sausages", image: "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=400&q=80", category: "meat", store: "Butchery Plus", whatsapp: "+254702752035" }
+    { id: "grocery10", name: "Chicken", price: 500, description: "Fresh chicken - 1kg", image: "https://i.ibb.co/dwyBFk0n/freshchick.webp", category: "meat", store: "Butchery Plus", whatsapp: "+254702752033" },
+    { id: "grocery11", name: "beef", price: 300, description: "Fresh beef", image: "https://i.ibb.co/PvM52KPf/beef.jpg", category: "meat", store: "Butchery Plus", whatsapp: "+254702752033" },
   ];
 
   const categories = ["all", "produce", "dairy", "meat"];
