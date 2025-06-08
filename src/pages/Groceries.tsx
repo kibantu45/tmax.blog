@@ -26,11 +26,11 @@ const Groceries = () => {
     // Dairy Products
     { id: "grocery6", name: "Fresh Milk", price: 60, description: "500ml fresh milk", image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
     { id: "grocery7", name: "yogurt", price: 60, description: "300ml sweet natural yogurt", image: "https://i.ibb.co/Y4KHsHfN/yogurt.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
-    { id: "grocery8", name: "Cheese", price: 25, description: "https://i.ibb.co/Z6DYT2pP/cupcakes.jpg", image: "https://i.ibb.co/Z6DYT2pP/cupcakes.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752033" },
+    { id: "grocery8", name: "cupcakes", price: 25, description: "sweet cupcakes", image: "https://i.ibb.co/Z6DYT2pP/cupcakes.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752033" },
     { id: "grocery9", name: "Eggs", price: 480, description: "One tray of eggs", image: "https://i.ibb.co/zWkcPNPW/eggs.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
     
     // Meat Products
-    { id: "grocery10", name: "Chicken", price: 500, description: "Fresh chicken - 1kg", image: "https://i.ibb.co/dwyBFk0n/freshchick.webp", category: "meat", store: "Butchery Plus", whatsapp: "+254702752033" },
+    { id: "grocery10", name: "Chicken", price: 500, description: "Fresh chicken - 1kg", image: "https://i.ibb.co/7J7Kc8n5/chick.jpg", category: "meat", store: "Butchery Plus", whatsapp: "+254702752033" },
     { id: "grocery11", name: "beef", price: 300, description: "Fresh beef", image: "https://i.ibb.co/PvM52KPf/beef.jpg", category: "meat", store: "Butchery Plus", whatsapp: "+254702752033" },
   ];
 
