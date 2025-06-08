@@ -16,7 +16,7 @@ const FoodDelivery = () => {
 
   const allMenuItems = [
     // Campus Eats
-    { id: "food1", name: "Ugali & Sukuma Wiki", price: 150, description: "Traditional Kenyan meal", image: "🍽️", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
+    { id: "food1", name: "Ugali fish & Sukuma Wiki", price: 150, description: "Traditional Kenyan meal", image: "https://i.ibb.co/Ng9txnbf/ugali.jpg", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food2", name: "Nyama Choma", price: 300, description: "Grilled meat with sides", image: "🥩", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food3", name: "Pilau Rice", price: 200, description: "Spiced rice with meat", image: "🍚", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food4", name: "Chapati & Beans", price: 120, description: "Flatbread with beans", image: "🫓", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
