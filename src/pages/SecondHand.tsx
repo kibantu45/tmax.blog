@@ -100,17 +100,17 @@ const SecondHand = () => {
     },
     {
       id: 2,
-      title: "iPhone 13 Pro",
-      price: 65000,
-      originalPrice: 99900,
-      description: "Minor scratches on back, screen protector applied since day 1.",
-      seller: "Sarah Kim",
-      sellerPhone: "+254701234568",
-      location: "Campus East",
-      image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop",
+      title: "Study table",
+      price: 1500,
+      originalPrice: 2500,
+      description: "new paint, Good as new.",
+      seller: "Monteh",
+      sellerPhone: "+254702213756",
+      location: "Tum main campus",
+      image: "https://i.ibb.co/pv3y3b0j/Whats-App-Image-2025-06-08-at-12-49-54-1.jpg",
       condition: "Good",
       likes: 18,
-      timePosted: "5 hours ago"
+      timePosted: "8th june"
     }
   ];
 
