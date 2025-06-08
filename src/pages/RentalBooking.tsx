@@ -39,7 +39,7 @@ const RentalBooking = () => {
       bedrooms: false,
       bathrooms: false,
       amenities: ["close to the road", "24/7 water supply", "Wifi available", "token electricity", "clean environment","tight security"],
-      image: "https://ibb.co/HpxZGQbB",
+      image: "https://i.ibb.co/h1Z02v4L/h4.jpg",
       available: true,
       sellerPhone: "+254702752033",
       photos: [
