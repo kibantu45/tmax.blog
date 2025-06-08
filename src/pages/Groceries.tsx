@@ -17,26 +17,26 @@ const Groceries = () => {
     {
       id: "onions",
       name: "Red Onions",
-      price: 80,
+      price: 100,
       unit: "per kg",
       category: "vegetables",
-      image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/Jj5v9xPD/onions.jpg",
       description: "Fresh red onions, perfect for cooking"
     },
     {
       id: "garlic",
       name: "Fresh Garlic",
-      price: 200,
-      unit: "per 250g",
+      price: 30,
+      unit: "per piece",
       category: "vegetables",
-      image: "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/7JCJdhzZ/garlic.jpg",
       description: "Fresh garlic bulbs for flavoring"
     },
     {
       id: "oranges",
       name: "Sweet Oranges",
-      price: 150,
-      unit: "per kg",
+      price: 15,
+      unit: "per piece",
       category: "fruits",
       image: "/lovable-uploads/closeup-shot-oranges-top-each-other-white-surface-great-background.jpg",
       description: "Juicy sweet oranges, vitamin C rich"
@@ -44,7 +44,7 @@ const Groceries = () => {
     {
       id: "mangoes",
       name: "Ripe Mangoes",
-      price: 120,
+      price: 20,
       unit: "per piece",
       category: "fruits",
       image: "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=400&q=80",
@@ -53,8 +53,8 @@ const Groceries = () => {
     {
       id: "bananas",
       name: "Fresh Bananas",
-      price: 100,
-      unit: "per bunch",
+      price: 10,
+      unit: "each",
       category: "fruits",
       image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80",
       description: "Fresh bananas, perfect for snacking"
@@ -65,7 +65,7 @@ const Groceries = () => {
       price: 90,
       unit: "per kg",
       category: "vegetables",
-      image: "https://images.unsplash.com/photo-1445282768818-728615cc910a?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/fdQGMbyb/carrots.jpg",
       description: "Crunchy fresh carrots, vitamin A rich"
     },
     {
@@ -74,61 +74,61 @@ const Groceries = () => {
       price: 60,
       unit: "per head",
       category: "vegetables",
-      image: "https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/k691Pmt9/cabbage.jpg",
       description: "Fresh green cabbage for salads and cooking"
     },
     {
       id: "milk",
       name: "Fresh Milk",
       price: 60,
-      unit: "per 500ml",
+      unit: "per 500ml 30 per 300ml",
       category: "dairy",
-      image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=400&q=80",
-      description: "Fresh cow milk, pasteurized"
+      image: "https://i.ibb.co/fRSVYcf/milk.jpg",
+      description: "Fresh milk"
     },
     {
       id: "ginger",
       name: "Fresh Ginger",
-      price: 250,
-      unit: "per 250g",
+      price: 30,
+      unit: "per piece",
       category: "spices",
-      image: "https://images.unsplash.com/photo-1599909533908-5e9afeee7201?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/9zhDqNZ/ginger.jpg",
       description: "Fresh ginger root for cooking and tea"
     },
     {
       id: "pilipilihoho",
       name: "Pilipili Hoho (Bell Peppers)",
-      price: 30,
+      price: 15,
       unit: "per piece",
       category: "vegetables",
-      image: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/cchn5QTX/pilipili-hoho.jpg",
       description: "Fresh bell peppers, colorful and crunchy"
     },
     {
       id: "dhania",
       name: "Dhania (Coriander)",
-      price: 20,
+      price: 10,
       unit: "per bunch",
       category: "herbs",
-      image: "https://images.unsplash.com/photo-1622143623765-46ff90a8139e?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/SD97dTHQ/dhania.jpg",
       description: "Fresh coriander leaves for garnishing"
     },
     {
       id: "tomatoes",
       name: "Fresh Tomatoes",
-      price: 120,
-      unit: "per kg",
+      price: 10,
+      unit: "per piece",
       category: "vegetables",
-      image: "https://images.unsplash.com/photo-1546470427-e40b4ba3762b?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/TMtQjfRL/tomatoes.jpg",
       description: "Fresh red tomatoes, perfect for cooking"
     },
     {
       id: "eggs",
       name: "Fresh Eggs",
-      price: 350,
+      price: 480,
       unit: "per tray (30 pieces)",
       category: "dairy",
-      image: "https://images.unsplash.com/photo-1569288063643-5d29ad64df09?auto=format&fit=crop&w=400&q=80",
+      image: "https://i.ibb.co/zWkcPNPW/eggs.jpg",
       description: "Fresh farm eggs, high protein"
     }
   ];
