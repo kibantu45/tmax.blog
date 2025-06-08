@@ -1,45 +1,16 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Pill, Heart, Thermometer, Shield, Search, ShoppingCart, Edit, Plus, Trash2, Phone } from "lucide-react";
+import { Pill, Heart, Thermometer, Shield, Search, ShoppingCart, Phone } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 
 const Chemist = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { addToCart } = useCart();
-  const [isAdminMode, setIsAdminMode] = useState(false);
-  const [editingTab, setEditingTab] = useState<any>(null);
-  const [newTabForm, setNewTabForm] = useState({
-    id: "",
-    name: "",
-    icon: "Pill"
-  });
-
-  // Check if admin mode is enabled
-  const checkAdminMode = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('admin') === 'true';
-  };
-
-  // Initialize admin mode check
-  useState(() => {
-    setIsAdminMode(checkAdminMode());
-  });
-
-  const [chemistTabs, setChemistTabs] = useState([
-    { id: "medications", name: "Medications", icon: "Pill" },
-    { id: "pain-relief", name: "Pain Relief", icon: "Heart" },
-    { id: "cold-flu", name: "Cold & Flu", icon: "Thermometer" },
-    { id: "digestion", name: "Digestion", icon: "Shield" },
-    { id: "health-products", name: "Health Products", icon: "Heart" },
-    { id: "services", name: "Services", icon: "Thermometer" },
-    { id: "emergency", name: "Emergency", icon: "Shield" }
-  ]);
 
   const medications = [
     { 
@@ -134,26 +105,6 @@ const Chemist = () => {
     },
     { 
       id: "med10", 
-      name: "Mediven Cough Syrup", 
-      price: 180, 
-      description: "Cough suppressant", 
-      category: "cold-flu", 
-      prescription: false, 
-      stock: 50,
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med11", 
-      name: "Cypro-B Syrup", 
-      price: 250, 
-      description: "Appetite stimulant", 
-      category: "vitamins", 
-      prescription: false, 
-      stock: 30,
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med12", 
       name: "ABZ Tablets", 
       price: 100, 
       description: "Deworming medication", 
@@ -161,178 +112,6 @@ const Chemist = () => {
       prescription: false, 
       stock: 40,
       image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med13", 
-      name: "Clozole-B Cream", 
-      price: 80, 
-      description: "Antifungal cream", 
-      category: "medications", 
-      prescription: false, 
-      stock: 55,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
-    }
-  ];
-
-  const painReliefMeds = [
-    { 
-      id: "pain1", 
-      name: "Panadol Extra", 
-      price: 60, 
-      description: "Enhanced paracetamol for severe pain", 
-      category: "pain-relief", 
-      prescription: false, 
-      stock: 80,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "pain2", 
-      name: "Brufen 400mg", 
-      price: 90, 
-      description: "Ibuprofen for inflammation", 
-      category: "pain-relief", 
-      prescription: false, 
-      stock: 70,
-      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "pain3", 
-      name: "Aspirin 75mg", 
-      price: 40, 
-      description: "Low dose aspirin", 
-      category: "pain-relief", 
-      prescription: false, 
-      stock: 100,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "pain4", 
-      name: "Diclofenac Gel", 
-      price: 120, 
-      description: "Topical pain relief", 
-      category: "pain-relief", 
-      prescription: false, 
-      stock: 45,
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
-    }
-  ];
-
-  const coldFluMeds = [
-    { 
-      id: "cold1", 
-      name: "Piriton Tablets", 
-      price: 80, 
-      description: "Antihistamine for cold symptoms", 
-      category: "cold-flu", 
-      prescription: false, 
-      stock: 90,
-      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "cold2", 
-      name: "Actifed Syrup", 
-      price: 160, 
-      description: "Decongestant syrup", 
-      category: "cold-flu", 
-      prescription: false, 
-      stock: 35,
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "cold3", 
-      name: "Vicks VapoRub", 
-      price: 200, 
-      description: "Chest rub for congestion", 
-      category: "cold-flu", 
-      prescription: false, 
-      stock: 60,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
-    }
-  ];
-
-  const digestionMeds = [
-    { 
-      id: "dig1", 
-      name: "Eno Fruit Salt", 
-      price: 100, 
-      description: "Antacid for indigestion", 
-      category: "digestion", 
-      prescription: false, 
-      stock: 75,
-      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "dig2", 
-      name: "Gestid Tablets", 
-      price: 120, 
-      description: "Antacid tablets", 
-      category: "digestion", 
-      prescription: false, 
-      stock: 50,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "dig3", 
-      name: "Buscopan Tablets", 
-      price: 180, 
-      description: "Stomach cramp relief", 
-      category: "digestion", 
-      prescription: false, 
-      stock: 40,
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "dig4", 
-      name: "Feminax Tablets", 
-      price: 150, 
-      description: "Menstrual cramp relief", 
-      category: "digestion", 
-      prescription: false, 
-      stock: 65,
-      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
-    }
-  ];
-
-  const healthProducts = [
-    { 
-      id: "health1", 
-      name: "Digital Thermometer", 
-      price: 800, 
-      description: "Accurate temperature measurement", 
-      category: "devices", 
-      prescription: false, 
-      stock: 20,
-      image: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "health2", 
-      name: "Blood Pressure Monitor", 
-      price: 2500, 
-      description: "Home BP monitoring", 
-      category: "devices", 
-      prescription: false, 
-      stock: 10,
-      image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "health3", 
-      name: "First Aid Kit", 
-      price: 1200, 
-      description: "Complete emergency kit", 
-      category: "emergency", 
-      prescription: false, 
-      stock: 15,
-      image: "https://images.unsplash.com/photo-1603398938277-9c29e5dc1b3e?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "health4", 
-      name: "Hand Sanitizer 500ml", 
-      price: 300, 
-      description: "99.9% germ protection", 
-      category: "hygiene", 
-      prescription: false, 
-      stock: 200,
-      image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?auto=format&fit=crop&w=400&q=80"
     }
   ];
 
@@ -359,53 +138,17 @@ const Chemist = () => {
     window.open(`https://wa.me/254702752033?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const handleEditTab = (tab: any) => {
-    setEditingTab(tab);
-  };
-
-  const handleSaveTab = () => {
-    if (editingTab) {
-      setChemistTabs(prev => prev.map(tab => 
-        tab.id === editingTab.id ? editingTab : tab
-      ));
-      setEditingTab(null);
-    }
-  };
-
-  const handleDeleteTab = (tabId: string) => {
-    if (confirm("Are you sure you want to delete this tab?")) {
-      setChemistTabs(prev => prev.filter(tab => tab.id !== tabId));
-    }
-  };
-
-  const handleAddNewTab = () => {
-    const newTab = {
-      ...newTabForm,
-      id: newTabForm.id || `tab_${Date.now()}`
-    };
-    setChemistTabs(prev => [...prev, newTab]);
-    setNewTabForm({
-      id: "",
-      name: "",
-      icon: "Pill"
-    });
-  };
-
   const filteredMedications = medications.filter(med => 
     med.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const filteredHealthProducts = healthProducts.filter(product => 
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const renderMedicationCard = (med: any) => (
-    <Card key={med.id} className="hover:shadow-lg transition-shadow bg-white/90">
-      <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
+  const renderMedicationCard = (med: any, index: number) => (
+    <Card key={med.id} className="glass backdrop-blur-lg bg-white/30 hover:bg-white/40 border-white/20 hover:shadow-2xl transition-all duration-500 hover:scale-105 animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
+      <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-t-lg overflow-hidden">
         <img 
           src={med.image} 
           alt={med.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
         />
       </div>
       <CardHeader>
@@ -414,17 +157,17 @@ const Chemist = () => {
             <CardTitle className="text-lg">{med.name}</CardTitle>
             <CardDescription>{med.description}</CardDescription>
           </div>
-          {med.prescription && <Badge variant="destructive">Prescription Required</Badge>}
+          {med.prescription && <Badge variant="destructive" className="animate-pulse">Prescription Required</Badge>}
         </div>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-4">
-          <span className="text-2xl font-bold text-blue-600">KSh {med.price}</span>
-          <Badge variant="outline">{med.stock} in stock</Badge>
+          <span className="text-2xl font-bold text-blue-600 animate-pulse">KSh {med.price}</span>
+          <Badge variant="outline" className="glass">{med.stock} in stock</Badge>
         </div>
         <div className="flex gap-2">
           <Button 
-            className="flex-1 bg-blue-600 hover:bg-blue-700"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-all duration-300 shadow-lg"
             onClick={() => handleAddToCart(med)}
             disabled={med.stock === 0}
           >
@@ -432,7 +175,7 @@ const Chemist = () => {
             Add to Cart
           </Button>
           <Button 
-            className="flex-1 bg-green-600 hover:bg-green-700"
+            className="flex-1 bg-green-600 hover:bg-green-700 hover:scale-105 transition-all duration-300 shadow-lg"
             onClick={() => handleOrderNow(med)}
             disabled={med.stock === 0}
           >
@@ -446,29 +189,27 @@ const Chemist = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-blue-200">
+      {/* Header with glassmorphism */}
+      <header className="glass backdrop-blur-xl bg-white/20 border-b border-white/30 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-blue-700">Campus Pharmacy</h1>
+            <div className="animate-fade-in">
+              <h1 className="text-3xl font-bold text-blue-700 flex items-center">
+                <Pill className="w-8 h-8 mr-3 animate-bounce" />
+                Campus Pharmacy
+              </h1>
               <p className="text-gray-600 mt-2">Your health and wellness partner</p>
             </div>
-            <div className="flex items-center space-x-4">
-              {isAdminMode && (
-                <Badge variant="outline" className="bg-red-100 text-red-800">Admin Mode</Badge>
-              )}
-              <Button onClick={() => window.history.back()} variant="outline">
-                Back to Home
-              </Button>
-            </div>
+            <Button onClick={() => window.history.back()} variant="outline" className="glass hover:scale-105 transition-all duration-300">
+              Back to Home
+            </Button>
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search Bar */}
-        <div className="mb-8">
+        {/* Search Bar with glassmorphism */}
+        <div className="mb-8 animate-fade-in">
           <div className="relative max-w-md mx-auto">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
@@ -476,89 +217,49 @@ const Chemist = () => {
               placeholder="Search medications and health products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white/90"
+              className="pl-10 glass backdrop-blur-lg bg-white/30 border-white/20 hover:bg-white/40 transition-all duration-300"
             />
           </div>
         </div>
 
         <Tabs defaultValue="medications" className="space-y-6">
-          <TabsList className="grid w-full bg-white/80" style={{ gridTemplateColumns: `repeat(${chemistTabs.length}, 1fr)` }}>
-            {chemistTabs.map((tab) => (
-              <TabsTrigger 
-                key={tab.id}
-                value={tab.id} 
-                className="data-[state=active]:bg-blue-500 data-[state=active]:text-white"
-              >
-                {tab.name}
-              </TabsTrigger>
-            ))}
+          <TabsList className="grid w-full grid-cols-3 glass backdrop-blur-lg bg-white/30 border-white/20">
+            <TabsTrigger 
+              value="medications" 
+              className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-700 transition-all duration-300 hover:scale-105"
+            >
+              <Pill className="w-4 h-4 mr-2" />
+              Medications
+            </TabsTrigger>
+            <TabsTrigger 
+              value="services" 
+              className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-700 transition-all duration-300 hover:scale-105"
+            >
+              <Heart className="w-4 h-4 mr-2" />
+              Services
+            </TabsTrigger>
+            <TabsTrigger 
+              value="emergency" 
+              className="data-[state=active]:bg-red-500/20 data-[state=active]:text-red-700 transition-all duration-300 hover:scale-105"
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              Emergency
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="medications" className="space-y-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredMedications.map(renderMedicationCard)}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="pain-relief" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {painReliefMeds.map(renderMedicationCard)}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="cold-flu" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {coldFluMeds.map(renderMedicationCard)}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="digestion" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {digestionMeds.map(renderMedicationCard)}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="health-products" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredHealthProducts.map((product) => (
-                <Card key={product.id} className="hover:shadow-lg transition-shadow bg-white/90">
-                  <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <CardHeader>
-                    <CardTitle className="text-lg">{product.name}</CardTitle>
-                    <CardDescription>{product.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-2xl font-bold text-blue-600">KSh {product.price}</span>
-                      <Badge variant="outline">{product.stock} in stock</Badge>
-                    </div>
-                    <Button 
-                      className="w-full bg-blue-600 hover:bg-blue-700"
-                      onClick={() => handleAddToCart(product)}
-                      disabled={product.stock === 0}
-                    >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      Add to Cart
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+              {filteredMedications.map((med, index) => renderMedicationCard(med, index))}
             </div>
           </TabsContent>
 
           <TabsContent value="services" className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               {services.map((service, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow bg-white/90">
+                <Card key={index} className="glass backdrop-blur-lg bg-white/30 hover:bg-white/40 border-white/20 hover:shadow-2xl transition-all duration-500 hover:scale-105 animate-fade-in" style={{animationDelay: `${index * 150}ms`}}>
                   <CardHeader>
                     <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 glass bg-blue-100/50 rounded-lg flex items-center justify-center">
                         <service.icon className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
@@ -569,11 +270,11 @@ const Chemist = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-blue-600">
+                      <span className="text-xl font-bold text-blue-600 animate-pulse">
                         {service.price === "Free" ? "Free" : `KSh ${service.price}`}
                       </span>
                       <Button 
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-all duration-300 shadow-lg"
                         onClick={() => window.open(`https://wa.me/254702752033?text=Hi, I would like to book ${service.name}`, '_blank')}
                       >
                         Book Now
@@ -586,33 +287,33 @@ const Chemist = () => {
           </TabsContent>
 
           <TabsContent value="emergency" className="space-y-6">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+            <div className="glass backdrop-blur-lg bg-red-50/30 border-red-200/30 rounded-lg p-6 mb-6 animate-fade-in">
               <h3 className="text-lg font-semibold text-red-800 mb-2">Emergency Contacts</h3>
               <p className="text-red-700 mb-4">For medical emergencies, contact these numbers immediately:</p>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <span>Campus Health Center:</span>
-                  <Button size="sm" onClick={() => window.open('tel:+254702752033')}>
+                  <Button size="sm" className="bg-red-600 hover:bg-red-700 hover:scale-105 transition-all duration-300" onClick={() => window.open('tel:+254702752033')}>
                     Call Now
                   </Button>
                 </div>
                 <div className="flex justify-between items-center">
                   <span>Ambulance Services:</span>
-                  <Button size="sm" onClick={() => window.open('tel:999')}>
+                  <Button size="sm" className="bg-red-600 hover:bg-red-700 hover:scale-105 transition-all duration-300" onClick={() => window.open('tel:999')}>
                     Call 999
                   </Button>
                 </div>
               </div>
             </div>
             
-            <Card className="bg-white/90">
+            <Card className="glass backdrop-blur-lg bg-white/30 border-white/20 animate-fade-in">
               <CardHeader>
-                <CardTitle>Emergency Medicine Kit</CardTitle>
+                <CardTitle className="text-red-800">Emergency Medicine Kit</CardTitle>
                 <CardDescription>Quick access to essential emergency medications</CardDescription>
               </CardHeader>
               <CardContent>
                 <Button 
-                  className="w-full bg-red-600 hover:bg-red-700"
+                  className="w-full bg-red-600 hover:bg-red-700 hover:scale-105 transition-all duration-500 shadow-lg animate-pulse"
                   onClick={() => window.open('https://wa.me/254702752033?text=Hi, I need emergency medications. This is urgent.', '_blank')}
                 >
                   Request Emergency Kit

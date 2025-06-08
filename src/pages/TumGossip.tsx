@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageSquare, Heart, Send, User, Clock, TrendingUp } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -32,9 +30,7 @@ const TumGossip = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [posts, setPosts] = useState<GossipPost[]>([]);
-  const [newPost, setNewPost] = useState("");
   const [commentInputs, setCommentInputs] = useState<{ [key: string]: string }>({});
-  const [selectedCategory, setSelectedCategory] = useState<'trending' | 'love'>('trending');
 
   // Initialize with some sample posts
   useEffect(() => {
@@ -81,38 +77,33 @@ const TumGossip = () => {
         ],
         isLiked: false,
         category: 'love'
+      },
+      {
+        id: "5",
+        content: "The new cafeteria menu is actually fire! Finally some good food on campus 🔥",
+        timestamp: "6 hours ago",
+        likes: 31,
+        comments: [
+          { id: "c5", content: "Which items did you try?", timestamp: "5 hours ago", author: "Anonymous" },
+          { id: "c6", content: "The chicken is amazing!", timestamp: "4 hours ago", author: "Anonymous" }
+        ],
+        isLiked: false,
+        category: 'trending'
+      },
+      {
+        id: "6",
+        content: "Anyone else think the guy from engineering block is cute? Asking for a friend 😏",
+        timestamp: "8 hours ago",
+        likes: 27,
+        comments: [
+          { id: "c7", content: "Which one? There are many cute guys there! 😂", timestamp: "7 hours ago", author: "Anonymous" }
+        ],
+        isLiked: false,
+        category: 'love'
       }
     ];
     setPosts(samplePosts);
   }, []);
-
-  const handleSubmitPost = () => {
-    if (!newPost.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter some content for your post",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const post: GossipPost = {
-      id: Date.now().toString(),
-      content: newPost,
-      timestamp: "Just now",
-      likes: 0,
-      comments: [],
-      isLiked: false,
-      category: selectedCategory
-    };
-
-    setPosts([post, ...posts]);
-    setNewPost("");
-    toast({
-      title: "Posted!",
-      description: "Your anonymous message has been shared",
-    });
-  };
 
   const handleLike = (postId: string) => {
     if (!user) {
@@ -173,8 +164,8 @@ const TumGossip = () => {
 
   const PostsList = ({ posts }: { posts: GossipPost[] }) => (
     <div className="space-y-6">
-      {posts.map((post) => (
-        <Card key={post.id} className="bg-white/90 hover:shadow-lg transition-shadow">
+      {posts.map((post, index) => (
+        <Card key={post.id} className="glass backdrop-blur-lg bg-white/30 hover:bg-white/40 border-white/20 hover:shadow-2xl transition-all duration-500 animate-fade-in" style={{animationDelay: `${index * 150}ms`}}>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
@@ -191,17 +182,17 @@ const TumGossip = () => {
             <p className="text-gray-800 mb-4">{post.content}</p>
             
             {/* Like and Comment Actions */}
-            <div className="flex items-center space-x-4 mb-4 pb-4 border-b">
+            <div className="flex items-center space-x-4 mb-4 pb-4 border-b border-white/20">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => handleLike(post.id)}
-                className={`${post.isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
+                className={`${post.isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500 hover:scale-110 transition-all duration-300`}
               >
-                <Heart className={`w-4 h-4 mr-1 ${post.isLiked ? 'fill-current' : ''}`} />
+                <Heart className={`w-4 h-4 mr-1 ${post.isLiked ? 'fill-current animate-pulse' : ''}`} />
                 {post.likes}
               </Button>
-              <Button variant="ghost" size="sm" className="text-gray-500">
+              <Button variant="ghost" size="sm" className="text-gray-500 hover:scale-110 transition-all duration-300">
                 <MessageSquare className="w-4 h-4 mr-1" />
                 {post.comments.length}
               </Button>
@@ -211,7 +202,7 @@ const TumGossip = () => {
             {post.comments.length > 0 && (
               <div className="space-y-3 mb-4">
                 {post.comments.map((comment) => (
-                  <div key={comment.id} className="bg-gray-50 rounded-lg p-3">
+                  <div key={comment.id} className="glass bg-white/20 rounded-lg p-3 backdrop-blur-sm">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-medium text-gray-600">{comment.author}</span>
                       <span className="text-xs text-gray-500">{comment.timestamp}</span>
@@ -231,12 +222,12 @@ const TumGossip = () => {
                   ...commentInputs,
                   [post.id]: e.target.value
                 })}
-                className="flex-1"
+                className="flex-1 glass backdrop-blur-sm bg-white/20 border-white/30 hover:bg-white/30 transition-all duration-300"
               />
               <Button 
                 size="sm"
                 onClick={() => handleComment(post.id)}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-all duration-300 shadow-lg"
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -249,18 +240,18 @@ const TumGossip = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
-      {/* Header */}
-      <header className="bg-white/90 backdrop-blur-sm border-b border-blue-200">
+      {/* Header with glassmorphism */}
+      <header className="glass backdrop-blur-xl bg-white/20 border-b border-white/30 shadow-lg">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <div>
+            <div className="animate-fade-in">
               <h1 className="text-3xl font-bold text-blue-700 flex items-center">
-                <MessageSquare className="w-8 h-8 mr-3" />
+                <MessageSquare className="w-8 h-8 mr-3 animate-bounce" />
                 TUM Gossip
               </h1>
-              <p className="text-gray-600 mt-2">Share campus news and discussions anonymously</p>
+              <p className="text-gray-600 mt-2">Campus news and discussions</p>
             </div>
-            <Button onClick={() => window.history.back()} variant="outline">
+            <Button onClick={() => window.history.back()} variant="outline" className="glass hover:scale-105 transition-all duration-300">
               Back to Home
             </Button>
           </div>
@@ -268,67 +259,14 @@ const TumGossip = () => {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Post Creation */}
-        <Card className="mb-8 bg-white/90">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <User className="w-5 h-5 mr-2" />
-              Share Something Anonymously
-            </CardTitle>
-            <CardDescription>
-              What's happening on campus? Share trending stories or campus love stories.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex space-x-2 mb-4">
-                <Button
-                  variant={selectedCategory === 'trending' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedCategory('trending')}
-                  className={selectedCategory === 'trending' ? 'bg-blue-600' : ''}
-                >
-                  <TrendingUp className="w-4 h-4 mr-1" />
-                  Trending Stories
-                </Button>
-                <Button
-                  variant={selectedCategory === 'love' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedCategory('love')}
-                  className={selectedCategory === 'love' ? 'bg-pink-600' : ''}
-                >
-                  <Heart className="w-4 h-4 mr-1" />
-                  Campus Love Stories
-                </Button>
-              </div>
-              <Textarea
-                placeholder={selectedCategory === 'love' ? "Share something about campus love... 💕" : "What's trending on campus? Share the latest news..."}
-                value={newPost}
-                onChange={(e) => setNewPost(e.target.value)}
-                className="min-h-[100px]"
-              />
-              <div className="flex justify-between items-center">
-                <Badge variant="outline">Anonymous Post</Badge>
-                <Button 
-                  onClick={handleSubmitPost}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Send className="w-4 h-4 mr-2" />
-                  Post Anonymously
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Posts Feed with Tabs */}
-        <Tabs defaultValue="trending" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="trending" className="flex items-center space-x-2">
+        {/* Posts Feed with Tabs and glassmorphism */}
+        <Tabs defaultValue="trending" className="space-y-6 animate-fade-in">
+          <TabsList className="grid w-full grid-cols-2 glass backdrop-blur-lg bg-white/30 border-white/20">
+            <TabsTrigger value="trending" className="flex items-center space-x-2 data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-700 transition-all duration-300 hover:scale-105">
               <TrendingUp className="w-4 h-4" />
               <span>Trending Stories</span>
             </TabsTrigger>
-            <TabsTrigger value="love" className="flex items-center space-x-2">
+            <TabsTrigger value="love" className="flex items-center space-x-2 data-[state=active]:bg-pink-500/20 data-[state=active]:text-pink-700 transition-all duration-300 hover:scale-105">
               <Heart className="w-4 h-4" />
               <span>Campus Love Stories</span>
             </TabsTrigger>
@@ -343,8 +281,8 @@ const TumGossip = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Guidelines */}
-        <Card className="mt-8 bg-blue-50 border-blue-200">
+        {/* Guidelines with glassmorphism */}
+        <Card className="mt-8 glass backdrop-blur-lg bg-blue-50/30 border-blue-200/30 animate-fade-in">
           <CardHeader>
             <CardTitle className="text-blue-800">Community Guidelines</CardTitle>
           </CardHeader>
