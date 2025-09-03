@@ -78,7 +78,7 @@ const Cart = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4 p-4 border rounded-lg">
+                  <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 p-4 border rounded-lg">
                     <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                       <img 
                         src={item.image || "/placeholder.svg"} 
@@ -87,50 +87,52 @@ const Cart = () => {
                       />
                     </div>
                     
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-800 truncate">{item.name}</h3>
+                    <div className="flex-1 min-w-0 w-full sm:w-auto">
+                      <h3 className="font-semibold text-gray-800">{item.name}</h3>
                       <p className="text-sm text-gray-600 capitalize">{item.category}</p>
                       <p className="font-bold text-tmaxGreen-600">KSh {item.price}</p>
                     </div>
 
-                    <div className="flex items-center space-x-2 flex-shrink-0">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0"
-                        onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
-                      >
-                        <Minus className="w-4 h-4" />
-                      </Button>
-                      
-                      <Input
-                        type="number"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 1)}
-                        className="w-16 text-center"
-                      />
-                      
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      >
-                        <Plus className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col sm:space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0"
+                          onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                        >
+                          <Minus className="w-4 h-4" />
+                        </Button>
+                        
+                        <Input
+                          type="number"
+                          min="1"
+                          value={item.quantity}
+                          onChange={(e) => updateQuantity(item.id, parseInt(e.target.value) || 1)}
+                          className="w-16 text-center"
+                        />
+                        
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
 
-                    <div className="text-right flex-shrink-0">
-                      <p className="font-bold">KSh {item.price * item.quantity}</p>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-red-600 hover:text-red-700 p-1"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      <div className="text-right">
+                        <p className="font-bold">KSh {item.price * item.quantity}</p>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-600 hover:text-red-700 p-1"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}

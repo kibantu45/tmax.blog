@@ -29,6 +29,7 @@ import ErrandServices from '@/pages/ErrandServices';
 import SalonBeauty from '@/pages/SalonBeauty';
 import Profile from '@/pages/Profile';
 import TransportServices from '@/pages/TransportServices';
+import EShop from '@/pages/EShop';
 
 // Education pages
 import MenstrualCycle from '@/pages/education/MenstrualCycle';
@@ -72,6 +73,7 @@ function App() {
               <Route path="/bloom-period-tracker" element={<BloomPeriodTracker />} />
               <Route path="/errand-services" element={<ErrandServices />} />
               <Route path="/transport-services" element={<TransportServices />} />
+              <Route path="/e-shop" element={<EShop />} />
               
               {/* Education routes */}
               <Route path="/education/menstrual-cycle" element={<MenstrualCycle />} />

@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -48,6 +47,9 @@ const ServiceCarousel = () => {
         plugins={[
           Autoplay({
             delay: 4000,
+            stopOnInteraction: false,
+            stopOnMouseEnter: false,
+            stopOnFocusIn: false,
           }),
         ]}
         className="w-full"

@@ -134,11 +134,11 @@ const Index = () => {
       link: "/transport-services" 
     },
     { 
-      title: "Bloom Period Tracker", 
-      description: "Track your menstrual cycle and health", 
-      icon: Calendar, 
-      color: "bg-pink-500",
-      link: "/bloom-period-tracker" 
+      title: "E-Shop", 
+      description: "Cooking oils, sugar, flour & more", 
+      icon: ShoppingCart, 
+      color: "bg-orange-500",
+      link: "/e-shop" 
     },
     { 
       title: "Errand Services", 
