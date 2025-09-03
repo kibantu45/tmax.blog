@@ -31,19 +31,22 @@ import {
   Star,
   Heart,
   Zap,
-  Shield
+  Shield,
+  Globe
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import BingwaSokoni from "@/components/BingwaSokoni";
 import BottomNavigation from "@/components/BottomNavigation";
+import { WebViewModal } from "@/components/WebViewModal";
 
 const Index = () => {
   const { user } = useAuth();
   const { itemCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isWebViewOpen, setIsWebViewOpen] = useState(false);
 
   const services = [
     { 
@@ -143,6 +146,13 @@ const Index = () => {
       icon: Zap, 
       color: "bg-violet-500",
       link: "/errand-services" 
+    },
+    { 
+      title: "Official Website", 
+      description: "Access full Tmax website", 
+      icon: Globe, 
+      color: "bg-gradient-to-r from-blue-500 to-purple-600",
+      isWebView: true
     }
   ];
 
@@ -280,9 +290,13 @@ const Index = () => {
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Our Services</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredServices.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer bg-white/90" onClick={() => window.location.href = service.link}>
+              <Card 
+                key={index} 
+                className="hover:shadow-lg transition-shadow cursor-pointer bg-white/90 hover:scale-105 transform transition-all duration-200" 
+                onClick={() => service.isWebView ? setIsWebViewOpen(true) : window.location.href = service.link}
+              >
                 <CardHeader className="text-center">
-                  <div className={`w-16 h-16 ${service.color} rounded-xl flex items-center justify-center mx-auto mb-4`}>
+                  <div className={`w-16 h-16 ${service.color} rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
                     <service.icon className="w-8 h-8 text-white" />
                   </div>
                   <CardTitle className="text-lg">{service.title}</CardTitle>
@@ -378,6 +392,13 @@ const Index = () => {
       </footer>
 
       <BottomNavigation />
+      
+      <WebViewModal
+        isOpen={isWebViewOpen}
+        onClose={() => setIsWebViewOpen(false)}
+        url="https://tmax.co.ke"
+        title="Official Tmax Website"
+      />
     </div>
   );
 };
