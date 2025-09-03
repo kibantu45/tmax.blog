@@ -38,9 +38,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         // Handle email verification redirect
         if (event === 'SIGNED_IN' && session?.user?.email_confirmed_at) {
-          // Check if this is from email verification
+          // Only redirect if this is specifically from email verification
           const urlParams = new URLSearchParams(window.location.search);
-          if (urlParams.get('type') === 'confirmation' || window.location.pathname === '/') {
+          if (urlParams.get('type') === 'confirmation') {
             // Clear any URL parameters and redirect to login
             window.history.replaceState({}, document.title, window.location.pathname);
             // Small delay to ensure state is updated
