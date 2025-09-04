@@ -30,6 +30,8 @@ import SalonBeauty from '@/pages/SalonBeauty';
 import Profile from '@/pages/Profile';
 import TransportServices from '@/pages/TransportServices';
 import EShop from '@/pages/EShop';
+import ServiceProviders from '@/pages/ServiceProviders';
+import AdminPanel from '@/pages/AdminPanel';
 
 // Education pages
 import MenstrualCycle from '@/pages/education/MenstrualCycle';
@@ -74,6 +76,8 @@ function App() {
               <Route path="/errand-services" element={<ErrandServices />} />
               <Route path="/transport-services" element={<TransportServices />} />
               <Route path="/e-shop" element={<EShop />} />
+              <Route path="/service-providers" element={<ServiceProviders />} />
+              <Route path="/admin" element={<AdminPanel />} />
               
               {/* Education routes */}
               <Route path="/education/menstrual-cycle" element={<MenstrualCycle />} />

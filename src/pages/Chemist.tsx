@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,113 +7,45 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Pill, Heart, Thermometer, Shield, Search, ShoppingCart, Phone } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { supabase } from "@/integrations/supabase/client";
+import BottomNavigation from "@/components/BottomNavigation";
+
+interface Medicine {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  category: string;
+  prescription_required: boolean;
+  stock: number;
+  image_url: string;
+}
 
 const Chemist = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { addToCart } = useCart();
+  const [medications, setMedications] = useState<Medicine[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const medications = [
-    { 
-      id: "med1", 
-      name: "Paracetamol 500mg", 
-      price: 50, 
-      description: "Pain and fever relief", 
-      category: "pain-relief", 
-      prescription: false, 
-      stock: 100,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med2", 
-      name: "Ibuprofen 400mg", 
-      price: 80, 
-      description: "Anti-inflammatory", 
-      category: "pain-relief", 
-      prescription: false, 
-      stock: 50,
-      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med3", 
-      name: "Amoxicillin 250mg", 
-      price: 200, 
-      description: "Antibiotic", 
-      category: "prescription", 
-      prescription: true, 
-      stock: 30,
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med4", 
-      name: "Vitamin C Tablets", 
-      price: 120, 
-      description: "Immune system support", 
-      category: "vitamins", 
-      prescription: false, 
-      stock: 75,
-      image: "/lovable-uploads/vitamin-c.jpg"
-    },
-    { 
-      id: "med5", 
-      name: "Postinor 2", 
-      price: 60, 
-      description: "Emergency contraceptive", 
-      category: "contraceptive", 
-      prescription: false, 
-      stock: 75,
-      image: "https://www.assetpharmacy.com/wp-content/uploads/2017/09/Postinor-2-Tablets-2-Tablets-2.jpg"
-    },
-    { 
-      id: "med6", 
-      name: "Diclofenac 50mg", 
-      price: 90, 
-      description: "Anti-inflammatory pain relief", 
-      category: "pain-relief", 
-      prescription: false, 
-      stock: 60,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med7", 
-      name: "Omeprazole 20mg", 
-      price: 150, 
-      description: "Acid reducer for stomach ulcers", 
-      category: "digestion", 
-      prescription: false, 
-      stock: 40,
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med8", 
-      name: "Cetirizine 10mg", 
-      price: 70, 
-      description: "Antihistamine for allergies", 
-      category: "cold-flu", 
-      prescription: false, 
-      stock: 80,
-      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med9", 
-      name: "Strepsils Lozenges", 
-      price: 120, 
-      description: "Sore throat relief", 
-      category: "cold-flu", 
-      prescription: false, 
-      stock: 90,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=400&q=80"
-    },
-    { 
-      id: "med10", 
-      name: "ABZ Tablets", 
-      price: 100, 
-      description: "Deworming medication", 
-      category: "medications", 
-      prescription: false, 
-      stock: 40,
-      image: "https://images.unsplash.com/photo-1585435557343-3b092031333c?auto=format&fit=crop&w=400&q=80"
+  useEffect(() => {
+    fetchMedicines();
+  }, []);
+
+  const fetchMedicines = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('medicines')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setMedications(data || []);
+    } catch (error) {
+      console.error('Error fetching medicines:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const services = [
     { name: "Prescription Consultation", description: "Get advice on your medications", icon: Pill, price: "Free" },
@@ -122,18 +54,18 @@ const Chemist = () => {
     { name: "Health Screening", description: "Basic health checkup", icon: Shield, price: "500" }
   ];
 
-  const handleAddToCart = (item: any) => {
+  const handleAddToCart = (item: Medicine) => {
     console.log('Adding to cart:', item);
     addToCart({
       id: item.id,
       name: item.name,
       price: item.price,
-      image: item.image || "/placeholder.svg",
+      image: item.image_url || "/placeholder.svg",
       category: "pharmacy"
     });
   };
 
-  const handleOrderNow = (item: any) => {
+  const handleOrderNow = (item: Medicine) => {
     const message = `Hi, I want to order ${item.name} - ${item.description}. Price: KSh ${item.price}`;
     window.open(`https://wa.me/254702752033?text=${encodeURIComponent(message)}`, '_blank');
   };
@@ -142,11 +74,11 @@ const Chemist = () => {
     med.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const renderMedicationCard = (med: any, index: number) => (
+  const renderMedicationCard = (med: Medicine, index: number) => (
     <Card key={med.id} className="glass backdrop-blur-lg bg-white/30 hover:bg-white/40 border-white/20 hover:shadow-2xl transition-all duration-500 hover:scale-105 animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
       <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-t-lg overflow-hidden">
         <img 
-          src={med.image} 
+          src={med.image_url} 
           alt={med.name}
           className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
         />
@@ -157,7 +89,7 @@ const Chemist = () => {
             <CardTitle className="text-lg">{med.name}</CardTitle>
             <CardDescription>{med.description}</CardDescription>
           </div>
-          {med.prescription && <Badge variant="destructive" className="animate-pulse">Prescription Required</Badge>}
+          {med.prescription_required && <Badge variant="destructive" className="animate-pulse">Prescription Required</Badge>}
         </div>
       </CardHeader>
       <CardContent>
@@ -186,6 +118,17 @@ const Chemist = () => {
       </CardContent>
     </Card>
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Loading medicines...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
@@ -323,6 +266,8 @@ const Chemist = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      <BottomNavigation />
     </div>
   );
 };

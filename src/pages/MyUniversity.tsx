@@ -1,9 +1,91 @@
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, GraduationCap, Users, Bell, BookOpen, Clock, MapPin, Star, Phone } from "lucide-react";
+import { Calendar, GraduationCap, Users, Bell, BookOpen, Clock, MapPin, Star, Phone, ExternalLink, CreditCard } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import BottomNavigation from "@/components/BottomNavigation";
+
+interface UniversityLink {
+  id: string;
+  name: string;
+  url: string;
+  description: string;
+  icon: string;
+}
+
+const SpecialLinksTab = () => {
+  const [links, setLinks] = useState<UniversityLink[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLinks();
+  }, []);
+
+  const fetchLinks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('university_links')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      setLinks(data || []);
+    } catch (error) {
+      console.error('Error fetching links:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'GraduationCap': return <GraduationCap className="w-6 h-6" />;
+      case 'Users': return <Users className="w-6 h-6" />;
+      case 'CreditCard': return <CreditCard className="w-6 h-6" />;
+      default: return <BookOpen className="w-6 h-6" />;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center py-8">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading special links...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {links.map((link, index) => (
+        <Card key={link.id} className="glass backdrop-blur-lg bg-white/30 hover:bg-white/40 border-white/20 hover:shadow-xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 animate-fade-in" style={{animationDelay: `${index * 150}ms`}}>
+          <CardHeader>
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-white">
+                {getIcon(link.icon)}
+              </div>
+              <div>
+                <CardTitle className="text-lg">{link.name}</CardTitle>
+                <CardDescription className="text-sm">{link.description}</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 hover:scale-105 transition-all duration-300"
+              onClick={() => window.open(link.url, '_blank')}
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Open Portal
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+};
 
 const MyUniversity = () => {
   const announcements = [
@@ -120,7 +202,7 @@ const MyUniversity = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="announcements" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 glass bg-white/30 backdrop-blur-sm border-white/20">
+          <TabsList className="grid w-full grid-cols-4 glass bg-white/30 backdrop-blur-sm border-white/20">
             <TabsTrigger 
               value="announcements" 
               className="data-[state=active]:bg-white/50 data-[state=active]:shadow-lg transition-all duration-300"
@@ -141,6 +223,13 @@ const MyUniversity = () => {
             >
               <Users className="w-4 h-4 mr-2" />
               Services
+            </TabsTrigger>
+            <TabsTrigger 
+              value="special-links" 
+              className="data-[state=active]:bg-white/50 data-[state=active]:shadow-lg transition-all duration-300"
+            >
+              <BookOpen className="w-4 h-4 mr-2" />
+              Special Links
             </TabsTrigger>
           </TabsList>
 
@@ -230,6 +319,10 @@ const MyUniversity = () => {
                 </Card>
               ))}
             </div>
+          </TabsContent>
+
+          <TabsContent value="special-links" className="mt-6">
+            <SpecialLinksTab />
           </TabsContent>
         </Tabs>
       </div>

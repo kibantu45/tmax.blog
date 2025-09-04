@@ -4,108 +4,70 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MessageSquare, Heart, Send, User, Clock, TrendingUp } from "lucide-react";
+import { MessageSquare, Heart, Send, User, Clock, TrendingUp, Image, Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import BottomNavigation from "@/components/BottomNavigation";
 
 interface GossipPost {
   id: string;
   content: string;
-  timestamp: string;
-  likes: number;
-  comments: Comment[];
-  isLiked: boolean;
+  image_url?: string;
+  likes_count: number;
   category: 'trending' | 'love';
-}
-
-interface Comment {
-  id: string;
-  content: string;
-  timestamp: string;
-  author: string;
+  created_at: string;
+  user_id?: string;
+  isLiked: boolean;
 }
 
 const TumGossip = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [posts, setPosts] = useState<GossipPost[]>([]);
-  const [commentInputs, setCommentInputs] = useState<{ [key: string]: string }>({});
+  const [newPost, setNewPost] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<'trending' | 'love'>('trending');
+  const [loading, setLoading] = useState(true);
 
-  // Initialize with some sample posts
   useEffect(() => {
-    const samplePosts: GossipPost[] = [
-      {
-        id: "1",
-        content: "Did anyone see what happened at the library yesterday? The drama was unreal! 👀",
-        timestamp: "2 hours ago",
-        likes: 23,
-        comments: [
-          { id: "c1", content: "I was there! Can't believe it happened", timestamp: "1 hour ago", author: "Anonymous" },
-          { id: "c2", content: "What exactly happened? Spill the tea! ☕", timestamp: "45 min ago", author: "Anonymous" }
-        ],
-        isLiked: false,
-        category: 'trending'
-      },
-      {
-        id: "2",
-        content: "Looking for someone special to share campus life with 💕 DM if interested",
-        timestamp: "5 hours ago",
-        likes: 45,
-        comments: [
-          { id: "c3", content: "Good luck finding someone!", timestamp: "4 hours ago", author: "Anonymous" }
-        ],
-        isLiked: false,
-        category: 'love'
-      },
-      {
-        id: "3",
-        content: "Someone left their laptop charger in LT5. Check the lost and found!",
-        timestamp: "1 day ago",
-        likes: 12,
-        comments: [],
-        isLiked: false,
-        category: 'trending'
-      },
-      {
-        id: "4",
-        content: "Saw my crush at the cafeteria today but couldn't work up the courage to say hi 😅",
-        timestamp: "3 hours ago",
-        likes: 18,
-        comments: [
-          { id: "c4", content: "You got this! Just say hello next time", timestamp: "2 hours ago", author: "Anonymous" }
-        ],
-        isLiked: false,
-        category: 'love'
-      },
-      {
-        id: "5",
-        content: "The new cafeteria menu is actually fire! Finally some good food on campus 🔥",
-        timestamp: "6 hours ago",
-        likes: 31,
-        comments: [
-          { id: "c5", content: "Which items did you try?", timestamp: "5 hours ago", author: "Anonymous" },
-          { id: "c6", content: "The chicken is amazing!", timestamp: "4 hours ago", author: "Anonymous" }
-        ],
-        isLiked: false,
-        category: 'trending'
-      },
-      {
-        id: "6",
-        content: "Anyone else think the guy from engineering block is cute? Asking for a friend 😏",
-        timestamp: "8 hours ago",
-        likes: 27,
-        comments: [
-          { id: "c7", content: "Which one? There are many cute guys there! 😂", timestamp: "7 hours ago", author: "Anonymous" }
-        ],
-        isLiked: false,
-        category: 'love'
-      }
-    ];
-    setPosts(samplePosts);
+    fetchPosts();
   }, []);
 
-  const handleLike = (postId: string) => {
+  const fetchPosts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('gossip_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Check which posts the current user has liked
+      const postsWithLikes = await Promise.all(
+        (data || []).map(async (post) => {
+          let isLiked = false;
+          if (user) {
+            const { data: likeData } = await supabase
+              .from('gossip_likes')
+              .select('id')
+              .eq('post_id', post.id)
+              .eq('user_id', user.id)
+              .single();
+            isLiked = !!likeData;
+          }
+          return { ...post, isLiked };
+        })
+      );
+
+      setPosts(postsWithLikes);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLike = async (postId: string) => {
     if (!user) {
       toast({
         title: "Login Required",
@@ -115,52 +77,108 @@ const TumGossip = () => {
       return;
     }
 
-    setPosts(posts.map(post => 
-      post.id === postId 
-        ? { 
-            ...post, 
-            likes: post.isLiked ? post.likes - 1 : post.likes + 1,
-            isLiked: !post.isLiked 
-          }
-        : post
-    ));
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    try {
+      if (post.isLiked) {
+        // Unlike the post
+        await supabase
+          .from('gossip_likes')
+          .delete()
+          .eq('post_id', postId)
+          .eq('user_id', user.id);
+
+        await supabase
+          .from('gossip_posts')
+          .update({ likes_count: post.likes_count - 1 })
+          .eq('id', postId);
+      } else {
+        // Like the post
+        await supabase
+          .from('gossip_likes')
+          .insert({ post_id: postId, user_id: user.id });
+
+        await supabase
+          .from('gossip_posts')
+          .update({ likes_count: post.likes_count + 1 })
+          .eq('id', postId);
+      }
+
+      // Update local state
+      setPosts(posts.map(p => 
+        p.id === postId 
+          ? { 
+              ...p, 
+              likes_count: p.isLiked ? p.likes_count - 1 : p.likes_count + 1,
+              isLiked: !p.isLiked 
+            }
+          : p
+      ));
+    } catch (error) {
+      console.error('Error updating like:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update like",
+        variant: "destructive"
+      });
+    }
   };
 
-  const handleComment = (postId: string) => {
+  const handleCreatePost = async () => {
     if (!user) {
       toast({
         title: "Login Required",
-        description: "Please login to comment",
+        description: "Please login to create posts",
         variant: "destructive"
       });
       return;
     }
 
-    const commentContent = commentInputs[postId];
-    if (!commentContent?.trim()) return;
+    if (!newPost.trim()) return;
 
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      content: commentContent,
-      timestamp: "Just now",
-      author: "Anonymous"
-    };
+    try {
+      const { error } = await supabase
+        .from('gossip_posts')
+        .insert({
+          content: newPost,
+          category: selectedCategory,
+          user_id: user.id,
+          likes_count: 0
+        });
 
-    setPosts(posts.map(post => 
-      post.id === postId 
-        ? { ...post, comments: [...post.comments, newComment] }
-        : post
-    ));
+      if (error) throw error;
 
-    setCommentInputs({ ...commentInputs, [postId]: "" });
-    toast({
-      title: "Comment added!",
-      description: "Your comment has been posted anonymously",
-    });
+      setNewPost("");
+      toast({
+        title: "Post created!",
+        description: "Your post has been published",
+      });
+      fetchPosts();
+    } catch (error) {
+      console.error('Error creating post:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create post",
+        variant: "destructive"
+      });
+    }
   };
 
   const filteredPosts = (category: 'trending' | 'love') => 
     posts.filter(post => post.category === category);
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInHours / 24);
+    
+    if (diffInDays > 0) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    if (diffInHours > 0) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    return 'Just now';
+  };
 
   const PostsList = ({ posts }: { posts: GossipPost[] }) => (
     <div className="space-y-6">
@@ -174,14 +192,25 @@ const TumGossip = () => {
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-500">
                 <Clock className="w-4 h-4" />
-                <span>{post.timestamp}</span>
+                <span>{formatTimeAgo(post.created_at)}</span>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <p className="text-gray-800 mb-4">{post.content}</p>
             
-            {/* Like and Comment Actions */}
+            {/* Image display */}
+            {post.image_url && (
+              <div className="mb-4">
+                <img 
+                  src={post.image_url} 
+                  alt="Post image" 
+                  className="w-full max-h-64 object-cover rounded-lg"
+                />
+              </div>
+            )}
+            
+            {/* Only Like Actions - No Comments */}
             <div className="flex items-center space-x-4 mb-4 pb-4 border-b border-white/20">
               <Button
                 variant="ghost"
@@ -190,46 +219,7 @@ const TumGossip = () => {
                 className={`${post.isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500 hover:scale-110 transition-all duration-300`}
               >
                 <Heart className={`w-4 h-4 mr-1 ${post.isLiked ? 'fill-current animate-pulse' : ''}`} />
-                {post.likes}
-              </Button>
-              <Button variant="ghost" size="sm" className="text-gray-500 hover:scale-110 transition-all duration-300">
-                <MessageSquare className="w-4 h-4 mr-1" />
-                {post.comments.length}
-              </Button>
-            </div>
-
-            {/* Comments Section */}
-            {post.comments.length > 0 && (
-              <div className="space-y-3 mb-4">
-                {post.comments.map((comment) => (
-                  <div key={comment.id} className="glass bg-white/20 rounded-lg p-3 backdrop-blur-sm">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-gray-600">{comment.author}</span>
-                      <span className="text-xs text-gray-500">{comment.timestamp}</span>
-                    </div>
-                    <p className="text-sm text-gray-800">{comment.content}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Add Comment */}
-            <div className="flex space-x-2">
-              <Input
-                placeholder="Add a comment..."
-                value={commentInputs[post.id] || ""}
-                onChange={(e) => setCommentInputs({
-                  ...commentInputs,
-                  [post.id]: e.target.value
-                })}
-                className="flex-1 glass backdrop-blur-sm bg-white/20 border-white/30 hover:bg-white/30 transition-all duration-300"
-              />
-              <Button 
-                size="sm"
-                onClick={() => handleComment(post.id)}
-                className="bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-all duration-300 shadow-lg"
-              >
-                <Send className="w-4 h-4" />
+                {post.likes_count}
               </Button>
             </div>
           </CardContent>
@@ -237,6 +227,17 @@ const TumGossip = () => {
       ))}
     </div>
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Loading gossip...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pb-20">
@@ -259,6 +260,54 @@ const TumGossip = () => {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Create Post Section */}
+        {user && (
+          <Card className="mb-8 glass backdrop-blur-lg bg-white/30 border-white/20 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-lg">Share Something</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <textarea
+                  placeholder="What's happening on campus?"
+                  value={newPost}
+                  onChange={(e) => setNewPost(e.target.value)}
+                  className="w-full p-3 border border-white/20 rounded-lg bg-white/20 backdrop-blur-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={3}
+                />
+                <div className="flex justify-between items-center">
+                  <div className="flex space-x-2">
+                    <Button
+                      variant={selectedCategory === 'trending' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedCategory('trending')}
+                    >
+                      <TrendingUp className="w-4 h-4 mr-1" />
+                      Trending
+                    </Button>
+                    <Button
+                      variant={selectedCategory === 'love' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedCategory('love')}
+                    >
+                      <Heart className="w-4 h-4 mr-1" />
+                      Love Stories
+                    </Button>
+                  </div>
+                  <Button 
+                    onClick={handleCreatePost}
+                    disabled={!newPost.trim()}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Post
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Posts Feed with Tabs and glassmorphism */}
         <Tabs defaultValue="trending" className="space-y-6 animate-fade-in">
           <TabsList className="grid w-full grid-cols-2 glass backdrop-blur-lg bg-white/30 border-white/20">
@@ -293,6 +342,7 @@ const TumGossip = () => {
               <li>• Keep it campus-related</li>
               <li>• No sharing of personal information</li>
               <li>• Anonymous doesn't mean irresponsible</li>
+              <li>• Only reactions (likes) are allowed - no comments</li>
             </ul>
           </CardContent>
         </Card>

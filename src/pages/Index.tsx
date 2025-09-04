@@ -32,8 +32,10 @@ import {
   Heart,
   Zap,
   Shield,
-  Globe
+  Globe,
+  Wrench
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import ServiceCarousel from "@/components/ServiceCarousel";
@@ -44,6 +46,7 @@ import { WebViewModal } from "@/components/WebViewModal";
 const Index = () => {
   const { user } = useAuth();
   const { itemCount } = useCart();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isWebViewOpen, setIsWebViewOpen] = useState(false);
@@ -148,11 +151,11 @@ const Index = () => {
       link: "/errand-services" 
     },
     { 
-      title: "Official Website", 
-      description: "Access full Tmax website", 
-      icon: Globe, 
+      title: "Get Cheap Services", 
+      description: "Find affordable service providers", 
+      icon: Wrench, 
       color: "bg-gradient-to-r from-blue-500 to-purple-600",
-      isWebView: true
+      link: "/service-providers"
     }
   ];
 
@@ -293,7 +296,7 @@ const Index = () => {
               <Card 
                 key={index} 
                 className="hover:shadow-lg transition-shadow cursor-pointer bg-white/90 hover:scale-105 transform transition-all duration-200" 
-                onClick={() => service.isWebView ? setIsWebViewOpen(true) : window.location.href = service.link}
+                onClick={() => service.link ? navigate(service.link) : setIsWebViewOpen(true)}
               >
                 <CardHeader className="text-center">
                   <div className={`w-16 h-16 ${service.color} rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>

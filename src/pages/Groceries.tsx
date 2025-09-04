@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,32 +7,47 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingCart, Star, Clock, MapPin, Plus, Phone, Search, Apple, Beef, Milk } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { supabase } from "@/integrations/supabase/client";
 import BottomNavigation from "@/components/BottomNavigation";
+
+interface GroceryItem {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image_url: string;
+  category: string;
+  store_name: string;
+  whatsapp: string;
+}
 
 const Groceries = () => {
   const { addToCart } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+  const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const groceryItems = [
-    // Fresh Produce
-    { id: "grocery1", name: "Fresh Bananas", price: 10, description: "Sweet ripe bananas", image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
-    { id: "grocery2", name: "Tomatoes", price: 10, description: "Fresh red tomatoes", image: "https://i.ibb.co/TMtQjfRL/tomatoes.jpg", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
-    { id: "grocery3", name: "Carrots", price: 10, description: "Organic carrots", image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=400&q=80", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
-    { id: "grocery4", name: "sukuma wiki", price: 10, description: "Mixed green leafy vegetables", image: "https://i.ibb.co/7Jjk7dRg/sukuma.jpg", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
-     { id: "grocery5", name: "onion", price: 10, description: "Red onions", image: "https://i.ibb.co/Jj5v9xPD/onions.jpg", category: "produce", store: "Fresh Market", whatsapp: "+254702752033" },
-    
-    // Dairy Products
-    { id: "grocery6", name: "Fresh Milk", price: 60, description: "500ml fresh milk", image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=400&q=80", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
-    { id: "grocery7", name: "yogurt", price: 60, description: "300ml sweet natural yogurt", image: "https://i.ibb.co/Y4KHsHfN/yogurt.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
-    { id: "grocery8", name: "cupcakes", price: 25, description: "sweet cupcakes", image: "https://i.ibb.co/Z6DYT2pP/cupcakes.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752033" },
-    { id: "grocery9", name: "Eggs", price: 480, description: "One tray of eggs", image: "https://i.ibb.co/zWkcPNPW/eggs.jpg", category: "dairy", store: "Dairy Corner", whatsapp: "+254702752034" },
-    
-    // Meat Products
-    { id: "grocery10", name: "Chicken", price: 500, description: "Fresh chicken - 1kg", image: "https://i.ibb.co/7J7Kc8n5/chick.jpg", category: "meat", store: "Butchery Plus", whatsapp: "+254702752033" },
-    { id: "grocery11", name: "beef", price: 300, description: "Fresh beef", image: "https://i.ibb.co/PvM52KPf/beef.jpg", category: "meat", store: "Butchery Plus", whatsapp: "+254702752033" },
-  ];
+  useEffect(() => {
+    fetchGroceries();
+  }, []);
+
+  const fetchGroceries = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('groceries')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setGroceryItems(data || []);
+    } catch (error) {
+      console.error('Error fetching groceries:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const categories = ["all", "produce", "dairy", "meat"];
 
@@ -49,26 +64,37 @@ const Groceries = () => {
     }));
   };
 
-  const handleAddToCart = (item: any) => {
+  const handleAddToCart = (item: GroceryItem) => {
     const quantity = quantities[item.id] || 1;
     for (let i = 0; i < quantity; i++) {
       addToCart({
         id: item.id,
         name: item.name,
         price: item.price,
-        image: item.image,
+        image: item.image_url,
         category: "Groceries",
-        provider: item.store
+        provider: item.store_name
       });
     }
   };
 
-  const handleOrderNow = (item: any) => {
+  const handleOrderNow = (item: GroceryItem) => {
     const quantity = quantities[item.id] || 1;
-    const message = `Hi ${item.store}! I'd like to order: ${item.name} - KES ${item.price} x ${quantity} = KES ${item.price * quantity}. Please confirm availability and delivery time.`;
+    const message = `Hi ${item.store_name}! I'd like to order: ${item.name} - KES ${item.price} x ${quantity} = KES ${item.price * quantity}. Please confirm availability and delivery time.`;
     const whatsappUrl = `https://wa.me/${item.whatsapp.replace('+', '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600"></div>
+          <p className="mt-4 text-gray-600">Loading groceries...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 pb-20">
@@ -125,7 +151,7 @@ const Groceries = () => {
             <Card key={item.id} className="glass backdrop-blur-lg bg-white/30 hover:bg-white/40 border-white/20 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
               <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden rounded-t-lg">
                 <img 
-                  src={item.image} 
+                  src={item.image_url} 
                   alt={item.name}
                   className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                 />
@@ -135,7 +161,7 @@ const Groceries = () => {
                 <CardDescription className="text-sm">{item.description}</CardDescription>
                 <div className="flex items-center justify-between">
                   <span className="text-lg font-bold text-green-600 animate-pulse">KSh {item.price}</span>
-                  <span className="text-sm text-gray-500">{item.store}</span>
+                  <span className="text-sm text-gray-500">{item.store_name}</span>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
