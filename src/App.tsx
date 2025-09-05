@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
@@ -32,6 +31,7 @@ import TransportServices from '@/pages/TransportServices';
 import EShop from '@/pages/EShop';
 import ServiceProviders from '@/pages/ServiceProviders';
 import AdminPanel from '@/pages/AdminPanel';
+import Marketplace from '@/pages/Marketplace';
 
 // Education pages
 import MenstrualCycle from '@/pages/education/MenstrualCycle';
@@ -78,6 +78,7 @@ function App() {
               <Route path="/e-shop" element={<EShop />} />
               <Route path="/service-providers" element={<ServiceProviders />} />
               <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/marketplace" element={<Marketplace />} />
               
               {/* Education routes */}
               <Route path="/education/menstrual-cycle" element={<MenstrualCycle />} />

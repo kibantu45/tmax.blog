@@ -102,11 +102,11 @@ const Index = () => {
       link: "/rental-booking" 
     },
     { 
-      title: "Second Hand", 
-      description: "Buy & sell used items", 
+      title: "Marketplace", 
+      description: "Buy & sell secondhand items", 
       icon: Heart, 
       color: "bg-yellow-500",
-      link: "/second-hand" 
+      link: "/marketplace" 
     },
     { 
       title: "Chemist", 

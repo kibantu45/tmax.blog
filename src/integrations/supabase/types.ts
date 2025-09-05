@@ -148,6 +148,51 @@ export type Database = {
         }
         Relationships: []
       }
+      items: {
+        Row: {
+          category: string | null
+          condition: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          price: number
+          seller_phone: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          condition?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          price: number
+          seller_phone?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          condition?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          price?: number
+          seller_phone?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       medicines: {
         Row: {
           category: string
@@ -390,6 +435,89 @@ export type Database = {
           speciality?: string | null
           updated_at?: string
           whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      shop_products: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          price: number
+          shop_id: string
+          stock: number | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          price: number
+          shop_id: string
+          stock?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          price?: number
+          shop_id?: string
+          stock?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shop_products_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shops: {
+        Row: {
+          category: string
+          contact_number: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          owner_id: string | null
+          shop_name: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          contact_number?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          owner_id?: string | null
+          shop_name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          contact_number?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          owner_id?: string | null
+          shop_name?: string
+          updated_at?: string
         }
         Relationships: []
       }

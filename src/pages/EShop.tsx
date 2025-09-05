@@ -1,336 +1,367 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ShoppingCart, Star, Search, Plus, Phone, Package, Droplets, Wheat } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import BottomNavigation from "@/components/BottomNavigation";
+import React, { useState, useEffect } from 'react';
+import { ShoppingCart, Plus, Minus, MessageCircle, Package2, Store, Search } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
+import { useCart } from '@/contexts/CartContext';
+import { supabase } from '@/integrations/supabase/client';
+import BottomNavigation from '@/components/BottomNavigation';
+
+interface Shop {
+  id: string;
+  shop_name: string;
+  category: string;
+  contact_number: string | null;
+  description: string | null;
+  image_url: string | null;
+  created_at?: string;
+}
+
+interface ShopProduct {
+  id: string;
+  shop_id: string;
+  name: string;
+  price: number;
+  stock: number | null;
+  image_url: string | null;
+  description: string | null;
+  category: string | null;
+  shops?: Shop;
+}
 
 const EShop = () => {
-  const { addToCart } = useCart();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedShop, setSelectedShop] = useState<string | null>(null);
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+  const [shops, setShops] = useState<Shop[]>([]);
+  const [products, setProducts] = useState<ShopProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+  const { addToCart } = useCart();
 
-  const products = [
-    // Cooking Oils
-    { 
-      id: "oil1", 
-      name: "Cooking Oil", 
-      price: 280, 
-      description: "Pure cooking oil - 500ml", 
-      image: "/lovable-uploads/vitamin-c.jpg", 
-      category: "oils", 
-      store: "Fresh Mart", 
-      whatsapp: "+254702752033" 
-    },
-    { 
-      id: "oil2", 
-      name: "Sunflower Oil", 
-      price: 320, 
-      description: "Premium sunflower oil - 500ml", 
-      image: "/lovable-uploads/vitamin-c.jpg", 
-      category: "oils", 
-      store: "Fresh Mart", 
-      whatsapp: "+254702752033" 
-    },
-    { 
-      id: "oil3", 
-      name: "Olive Oil", 
-      price: 450, 
-      description: "Extra virgin olive oil - 250ml", 
-      image: "/lovable-uploads/vitamin-c.jpg", 
-      category: "oils", 
-      store: "Fresh Mart", 
-      whatsapp: "+254702752033" 
-    },
+  useEffect(() => {
+    fetchShops();
+    fetchProducts();
+  }, []);
 
-    // Sugar & Sweeteners
-    { 
-      id: "sugar1", 
-      name: "White Sugar", 
-      price: 180, 
-      description: "Pure white sugar - 2kg", 
-      image: "/lovable-uploads/closeup-shot-oranges-top-each-other-white-surface-great-background.jpg", 
-      category: "sugar", 
-      store: "Sweet Shop", 
-      whatsapp: "+254702752034" 
-    },
-    { 
-      id: "sugar2", 
-      name: "Brown Sugar", 
-      price: 220, 
-      description: "Natural brown sugar - 1kg", 
-      image: "/lovable-uploads/closeup-shot-oranges-top-each-other-white-surface-great-background.jpg", 
-      category: "sugar", 
-      store: "Sweet Shop", 
-      whatsapp: "+254702752034" 
-    },
-    { 
-      id: "sugar3", 
-      name: "Honey", 
-      price: 380, 
-      description: "Pure natural honey - 500g", 
-      image: "/lovable-uploads/closeup-shot-oranges-top-each-other-white-surface-great-background.jpg", 
-      category: "sugar", 
-      store: "Sweet Shop", 
-      whatsapp: "+254702752034" 
-    },
+  const fetchShops = async () => {
+    const { data, error } = await supabase
+      .from('shops')
+      .select('*')
+      .order('shop_name');
 
-    // Flour & Grains
-    { 
-      id: "flour1", 
-      name: "All Purpose Flour", 
-      price: 160, 
-      description: "Premium all purpose flour - 2kg", 
-      image: "/lovable-uploads/l1.jpeg", 
-      category: "flour", 
-      store: "Grain Store", 
-      whatsapp: "+254702752035" 
-    },
-    { 
-      id: "flour2", 
-      name: "Wheat Flour", 
-      price: 140, 
-      description: "Whole wheat flour - 2kg", 
-      image: "/lovable-uploads/l2.jpeg", 
-      category: "flour", 
-      store: "Grain Store", 
-      whatsapp: "+254702752035" 
-    },
-    { 
-      id: "flour3", 
-      name: "Maize Flour", 
-      price: 120, 
-      description: "Fine maize flour - 2kg", 
-      image: "/lovable-uploads/l3.jpeg", 
-      category: "flour", 
-      store: "Grain Store", 
-      whatsapp: "+254702752035" 
-    },
+    if (error) {
+      console.error('Error fetching shops:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load shops",
+        variant: "destructive"
+      });
+    } else {
+      setShops(data || []);
+    }
+  };
 
-    // Spices & Condiments
-    { 
-      id: "spice1", 
-      name: "Salt", 
-      price: 50, 
-      description: "Iodized table salt - 500g", 
-      image: "/lovable-uploads/l4.jpeg", 
-      category: "spices", 
-      store: "Spice Corner", 
-      whatsapp: "+254702752036" 
-    },
-    { 
-      id: "spice2", 
-      name: "Black Pepper", 
-      price: 180, 
-      description: "Ground black pepper - 100g", 
-      image: "/lovable-uploads/l5.jpeg", 
-      category: "spices", 
-      store: "Spice Corner", 
-      whatsapp: "+254702752036" 
-    },
-    { 
-      id: "spice3", 
-      name: "Curry Powder", 
-      price: 120, 
-      description: "Mixed curry powder - 100g", 
-      image: "/lovable-uploads/l4.jpeg", 
-      category: "spices", 
-      store: "Spice Corner", 
-      whatsapp: "+254702752036" 
-    },
-  ];
+  const fetchProducts = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('shop_products')
+      .select(`
+        *,
+        shops (
+          id,
+          shop_name,
+          category,
+          contact_number,
+          description,
+          image_url
+        )
+      `)
+      .order('name');
 
-  const categories = ["all", "oils", "sugar", "flour", "spices"];
+    if (error) {
+      console.error('Error fetching products:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load products",
+        variant: "destructive"
+      });
+    } else {
+      setProducts(data || []);
+    }
+    setLoading(false);
+  };
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Filter products based on search, category, and shop
+  const filterProducts = () => {
+    return products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+      const matchesShop = !selectedShop || product.shop_id === selectedShop;
+      return matchesSearch && matchesCategory && matchesShop;
+    });
+  };
 
   const updateQuantity = (productId: string, change: number) => {
     setQuantities(prev => ({
       ...prev,
-      [productId]: Math.max(0, (prev[productId] || 1) + change)
+      [productId]: Math.max(1, (prev[productId] || 1) + change)
     }));
   };
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: ShopProduct) => {
     const quantity = quantities[product.id] || 1;
     for (let i = 0; i < quantity; i++) {
       addToCart({
         id: product.id,
         name: product.name,
         price: product.price,
-        image: product.image,
+        image: product.image_url || '/lovable-uploads/vitamin-c.jpg',
         category: "E-Shop",
-        provider: product.store
+        provider: product.shops?.shop_name || 'Unknown Shop'
       });
     }
+    toast({
+      title: "Added to Cart",
+      description: `${product.name} x${quantity} added to cart`,
+      variant: "default"
+    });
   };
 
-  const handleOrderNow = (product: any) => {
+  const handleOrderNow = (product: ShopProduct) => {
     const quantity = quantities[product.id] || 1;
-    const message = `Hi ${product.store}! I'd like to order: ${product.name} - KES ${product.price} x ${quantity} = KES ${product.price * quantity}. Please confirm availability and delivery time.`;
-    const whatsappUrl = `https://wa.me/${product.whatsapp.replace('+', '')}?text=${encodeURIComponent(message)}`;
+    const total = product.price * quantity;
+    const shopName = product.shops?.shop_name || 'Shop';
+    const contactNumber = product.shops?.contact_number;
+    
+    if (!contactNumber) {
+      toast({
+        title: "Contact Info Missing",
+        description: "Shop contact information is not available",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const message = `Hi! I'd like to order:\n\n${product.name}\nQuantity: ${quantity}\nTotal: KSh ${total.toLocaleString()}\n\nFrom: ${shopName}`;
+    const whatsappUrl = `https://wa.me/${contactNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case "oils": return <Droplets className="w-4 h-4" />;
-      case "sugar": return <Star className="w-4 h-4" />;
-      case "flour": return <Wheat className="w-4 h-4" />;
-      case "spices": return <Package className="w-4 h-4" />;
-      default: return <Package className="w-4 h-4" />;
-    }
-  };
-
-  const getCategoryName = (category: string) => {
-    switch (category) {
-      case "oils": return "Cooking Oils";
-      case "sugar": return "Sugar & Sweeteners";
-      case "flour": return "Flour & Grains";
-      case "spices": return "Spices & Condiments";
-      default: return "All Products";
-    }
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Loading shops...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-yellow-50 pb-20">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="glass backdrop-blur-xl bg-white/20 border-b border-white/30 shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-gray-800 flex items-center animate-fade-in">
-              <ShoppingCart className="w-8 h-8 mr-3 animate-bounce" />
-              E-Shop
-            </h1>
-            <Button onClick={() => window.history.back()} variant="outline" className="glass hover:scale-105 transition-all duration-300">
-              Back to Home
-            </Button>
-          </div>
+      <div className="bg-primary text-primary-foreground p-4">
+        <h1 className="text-2xl font-bold mb-4 text-center">E-Shop</h1>
+        
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
         </div>
-      </header>
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs defaultValue="all" className="space-y-6" onValueChange={setSelectedCategory}>
-          <TabsList className="grid w-full grid-cols-5 bg-white/80">
-            <TabsTrigger value="all" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">
-              <Package className="w-4 h-4 mr-2" />
-              All
-            </TabsTrigger>
-            <TabsTrigger value="oils" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">
-              <Droplets className="w-4 h-4 mr-2" />
-              Oils
-            </TabsTrigger>
-            <TabsTrigger value="sugar" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">
-              <Star className="w-4 h-4 mr-2" />
-              Sugar
-            </TabsTrigger>
-            <TabsTrigger value="flour" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">
-              <Wheat className="w-4 h-4 mr-2" />
-              Flour
-            </TabsTrigger>
-            <TabsTrigger value="spices" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white">
-              <Package className="w-4 h-4 mr-2" />
-              Spices
-            </TabsTrigger>
+      <div className="p-4">
+        <Tabs defaultValue="shops" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="shops">Shops</TabsTrigger>
+            <TabsTrigger value="products">All Products</TabsTrigger>
           </TabsList>
 
-          {/* Search Bar */}
-          <div className="relative max-w-md animate-fade-in">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Search products..."
-              className="pl-10 glass backdrop-blur-lg bg-white/30 border-white/20 hover:bg-white/40 transition-all duration-300"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          {categories.map((category) => (
-            <TabsContent key={category} value={category} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredProducts
-                  .filter(product => category === "all" || product.category === category)
-                  .map((product, index) => (
-                    <Card key={product.id} className="glass backdrop-blur-lg bg-white/30 hover:bg-white/40 border-white/20 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 animate-fade-in" style={{animationDelay: `${index * 100}ms`}}>
-                      <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden rounded-t-lg">
+          {/* Shops Tab */}
+          <TabsContent value="shops" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {shops.map((shop) => (
+                <Card key={shop.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => {
+                  setSelectedShop(shop.id);
+                  setSelectedCategory('all');
+                }}>
+                  <CardContent className="p-4">
+                    {shop.image_url && (
+                      <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-muted">
                         <img 
-                          src={product.image} 
-                          alt={product.name}
-                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                          src={shop.image_url} 
+                          alt={shop.shop_name}
+                          className="w-full h-full object-cover"
                         />
                       </div>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex items-center">
-                          {getCategoryIcon(product.category)}
-                          <span className="ml-2">{product.name}</span>
-                        </CardTitle>
-                        <CardDescription className="text-sm">{product.description}</CardDescription>
-                        <div className="flex items-center justify-between">
-                          <span className="text-lg font-bold text-orange-600 animate-pulse">KSh {product.price}</span>
-                          <span className="text-sm text-gray-500">{product.store}</span>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-sm text-gray-600">Quantity:</span>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-8 h-8 p-0 glass hover:scale-110 transition-all duration-200"
-                              onClick={() => updateQuantity(product.id, -1)}
-                            >
-                              <Plus className="w-4 h-4 rotate-45" />
-                            </Button>
-                            <span className="w-8 text-center font-semibold">{quantities[product.id] || 1}</span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-8 h-8 p-0 glass hover:scale-110 transition-all duration-200"
-                              onClick={() => updateQuantity(product.id, 1)}
-                            >
-                              <Plus className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          <Button 
-                            onClick={() => handleAddToCart(product)}
-                            className="w-full bg-orange-600 hover:bg-orange-700 hover:scale-105 transition-all duration-300 shadow-lg"
-                          >
-                            <ShoppingCart className="w-4 h-4 mr-2" />
-                            Add to Cart
-                          </Button>
-                          <Button 
-                            onClick={() => handleOrderNow(product)}
-                            variant="outline"
-                            className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 glass hover:scale-105 transition-all duration-300"
-                          >
-                            <Phone className="w-4 h-4 mr-2" />
-                            Order Now
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-              </div>
+                    )}
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Store className="h-5 w-5 text-primary" />
+                        <h3 className="font-semibold text-lg">{shop.shop_name}</h3>
+                      </div>
+                      {shop.description && (
+                        <p className="text-muted-foreground text-sm">{shop.description}</p>
+                      )}
+                      <Badge variant="secondary">{shop.category}</Badge>
+                      {shop.contact_number && (
+                        <p className="text-sm text-muted-foreground">{shop.contact_number}</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
 
-              {filteredProducts.filter(product => category === "all" || product.category === category).length === 0 && (
-                <div className="text-center py-12 animate-fade-in">
-                  <p className="text-gray-500">No products found in {getCategoryName(category)}.</p>
-                </div>
+          {/* Products Tab */}
+          <TabsContent value="products" className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              {selectedShop && (
+                <Button variant="outline" onClick={() => setSelectedShop(null)} size="sm">
+                  ← Back to All Shops
+                </Button>
               )}
-            </TabsContent>
-          ))}
+            </div>
+            
+            <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
+              <Badge
+                variant={selectedCategory === 'all' ? "default" : "outline"}
+                className="cursor-pointer whitespace-nowrap"
+                onClick={() => setSelectedCategory('all')}
+              >
+                All
+              </Badge>
+              <Badge
+                variant={selectedCategory === 'electronics' ? "default" : "outline"}
+                className="cursor-pointer whitespace-nowrap"
+                onClick={() => setSelectedCategory('electronics')}
+              >
+                Electronics
+              </Badge>
+              <Badge
+                variant={selectedCategory === 'clothing' ? "default" : "outline"}
+                className="cursor-pointer whitespace-nowrap"
+                onClick={() => setSelectedCategory('clothing')}
+              >
+                Clothing
+              </Badge>
+              <Badge
+                variant={selectedCategory === 'beauty' ? "default" : "outline"}
+                className="cursor-pointer whitespace-nowrap"
+                onClick={() => setSelectedCategory('beauty')}
+              >
+                Beauty
+              </Badge>
+              <Badge
+                variant={selectedCategory === 'groceries' ? "default" : "outline"}
+                className="cursor-pointer whitespace-nowrap"
+                onClick={() => setSelectedCategory('groceries')}
+              >
+                Groceries
+              </Badge>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filterProducts().map((product) => (
+                <Card key={product.id} className="group hover:shadow-lg transition-shadow duration-200">
+                  <CardContent className="p-4">
+                    <div className="aspect-square mb-4 rounded-lg overflow-hidden bg-muted">
+                      <img 
+                        src={product.image_url || '/lovable-uploads/vitamin-c.jpg'} 
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                      />
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between">
+                        <h3 className="font-semibold text-lg leading-tight">{product.name}</h3>
+                        <Badge variant="secondary" className="text-xs">
+                          {product.category || 'General'}
+                        </Badge>
+                      </div>
+                      
+                      <p className="text-muted-foreground text-sm">{product.description || 'No description available'}</p>
+                      <p className="text-2xl font-bold text-primary">KSh {product.price.toLocaleString()}</p>
+                      <div className="flex items-center justify-between text-sm">
+                        <p className="text-muted-foreground">From: {product.shops?.shop_name || 'Unknown Shop'}</p>
+                        {product.stock !== null && (
+                          <p className="text-muted-foreground">Stock: {product.stock}</p>
+                        )}
+                      </div>
+                      
+                      {/* Quantity Controls */}
+                      <div className="flex items-center gap-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updateQuantity(product.id, -1)}
+                          disabled={(quantities[product.id] || 1) <= 1}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="font-medium min-w-[2rem] text-center">
+                          {quantities[product.id] || 1}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updateQuantity(product.id, 1)}
+                          disabled={product.stock !== null && (quantities[product.id] || 1) >= product.stock}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 pt-2">
+                        <Button 
+                          onClick={() => handleAddToCart(product)} 
+                          className="flex-1 gap-2"
+                          size="sm"
+                          disabled={product.stock === 0}
+                        >
+                          <ShoppingCart className="h-4 w-4" />
+                          Add to Cart
+                        </Button>
+                        <Button 
+                          onClick={() => handleOrderNow(product)} 
+                          variant="outline" 
+                          className="flex-1 gap-2"
+                          size="sm"
+                          disabled={!product.shops?.contact_number}
+                        >
+                          <MessageCircle className="h-4 w-4" />
+                          Order Now
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            {filterProducts().length === 0 && (
+              <div className="text-center py-12">
+                <Package2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">No products found matching your criteria.</p>
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
       </div>
 
