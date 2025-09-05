@@ -29,10 +29,10 @@ export const usePeriodTracking = () => {
     
     setLoading(true);
     const { data, error } = await supabase
-      .from('period_tracking')
+      .from('pregnancy_tracking')
       .select('*')
       .eq('user_id', user.id)
-      .order('period_start_date', { ascending: false });
+      .order('pregnancy_start_date', { ascending: false });
 
     if (error) {
       console.error('Error fetching period data:', error);
@@ -45,15 +45,15 @@ export const usePeriodTracking = () => {
       // Transform the data to match our interface
       const transformedData = (data || []).map(item => ({
         id: item.id,
-        period_start_date: item.period_start_date,
-        period_end_date: item.period_end_date,
-        cycle_length: item.cycle_length,
-        flow_intensity: item.flow_intensity as 'light' | 'medium' | 'heavy',
-        symptoms: item.symptoms || [],
-        mood: item.mood,
-        notes: item.notes,
-        is_pregnancy_mode: item.is_pregnancy_mode,
-        pregnancy_week: item.pregnancy_week,
+        period_start_date: item.pregnancy_start_date,
+        period_end_date: '', // Not in pregnancy table
+        cycle_length: 28, // Default value
+        flow_intensity: 'medium' as 'light' | 'medium' | 'heavy',
+        symptoms: Array.isArray(item.symptoms) ? item.symptoms.map(s => String(s)) : [],
+        mood: '', // Not in pregnancy table
+        notes: item.notes || '',
+        is_pregnancy_mode: true,
+        pregnancy_week: item.current_week,
         due_date: item.due_date,
       }));
       setPeriodData(transformedData);
@@ -65,14 +65,19 @@ export const usePeriodTracking = () => {
     if (!user) return;
 
     setLoading(true);
-    const periodEntry = {
-      ...data,
+    const pregnancyEntry = {
+      id: data.id,
       user_id: user.id,
+      pregnancy_start_date: data.period_start_date,
+      current_week: data.pregnancy_week || 1,
+      due_date: data.due_date || new Date().toISOString().split('T')[0],
+      notes: data.notes,
+      symptoms: data.symptoms,
     };
 
     const { error } = await supabase
-      .from('period_tracking')
-      .upsert(periodEntry);
+      .from('pregnancy_tracking')
+      .upsert(pregnancyEntry);
 
     if (error) {
       console.error('Error saving period data:', error);

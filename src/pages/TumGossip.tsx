@@ -13,11 +13,11 @@ import BottomNavigation from "@/components/BottomNavigation";
 interface GossipPost {
   id: string;
   content: string;
-  image_url?: string;
-  likes_count: number;
-  category: 'trending' | 'love';
+  image_url?: string | null;
+  likes_count: number | null;
+  category: string | null;
   created_at: string;
-  user_id?: string;
+  user_id?: string | null;
   isLiked: boolean;
 }
 
@@ -55,7 +55,12 @@ const TumGossip = () => {
               .single();
             isLiked = !!likeData;
           }
-          return { ...post, isLiked };
+          return { 
+            ...post, 
+            isLiked,
+            likes_count: post.likes_count || 0,
+            category: post.category || 'trending'
+          };
         })
       );
 
