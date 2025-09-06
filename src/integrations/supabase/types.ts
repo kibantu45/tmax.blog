@@ -286,6 +286,7 @@ export type Database = {
           full_name: string | null
           id: string
           phone: string | null
+          role: string | null
           university: string | null
           updated_at: string
           year_of_study: number | null
@@ -298,6 +299,7 @@ export type Database = {
           full_name?: string | null
           id: string
           phone?: string | null
+          role?: string | null
           university?: string | null
           updated_at?: string
           year_of_study?: number | null
@@ -310,6 +312,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          role?: string | null
           university?: string | null
           updated_at?: string
           year_of_study?: number | null
