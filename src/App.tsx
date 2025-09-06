@@ -32,6 +32,7 @@ import EShop from '@/pages/EShop';
 import ServiceProviders from '@/pages/ServiceProviders';
 import AdminPanel from '@/pages/AdminPanel';
 import AdminLogin from '@/pages/AdminLogin';
+import AdminSetup from '@/pages/AdminSetup';
 import Marketplace from '@/pages/Marketplace';
 
 // Education pages
@@ -80,6 +81,7 @@ function App() {
               <Route path="/service-providers" element={<ServiceProviders />} />
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/setup" element={<AdminSetup />} />
               <Route path="/marketplace" element={<Marketplace />} />
               
               {/* Education routes */}
