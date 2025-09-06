@@ -45,9 +45,9 @@ const AdminPanel = () => {
 
     try {
       const { data, error } = await supabase
-        .from('user_roles')
+        .from('profiles')
         .select('role')
-        .eq('user_id', user.id)
+        .eq('id', user.id)
         .eq('role', 'admin')
         .single();
 
@@ -366,8 +366,8 @@ const AdminPanel = () => {
             <Shield className="w-16 h-16 mx-auto text-gray-400 mb-4" />
             <h2 className="text-2xl font-bold mb-2">Admin Access Required</h2>
             <p className="text-gray-600 mb-4">Please log in to access the admin panel.</p>
-            <Button onClick={() => window.location.href = '/login'}>
-              Go to Login
+            <Button onClick={() => window.location.href = '/admin/login'}>
+              Go to Admin Login
             </Button>
           </CardContent>
         </Card>
