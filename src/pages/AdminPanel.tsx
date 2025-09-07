@@ -19,6 +19,7 @@ const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState("medicines");
   const [editingItem, setEditingItem] = useState<any>(null);
   const [formData, setFormData] = useState<any>({});
+  const [uploading, setUploading] = useState(false);
 
   // Data states
   const [medicines, setMedicines] = useState([]);
@@ -147,6 +148,43 @@ const AdminPanel = () => {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { data, error } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file);
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath);
+
+      setFormData({...formData, image_url: publicUrl});
+      
+      toast({
+        title: "Success",
+        description: "Image uploaded successfully"
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const renderForm = () => {
     const commonFields = (
       <>
@@ -178,12 +216,27 @@ const AdminPanel = () => {
           />
         </div>
         <div>
-          <label className="text-sm font-medium">Image URL</label>
-          <Input
-            value={formData.image_url || ''}
-            onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-            placeholder="Enter image URL"
-          />
+          <label className="text-sm font-medium">Image</label>
+          <div className="space-y-2">
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="cursor-pointer"
+            />
+            <Input
+              value={formData.image_url || ''}
+              onChange={(e) => setFormData({...formData, image_url: e.target.value})}
+              placeholder="Or enter image URL"
+            />
+            {formData.image_url && (
+              <img 
+                src={formData.image_url} 
+                alt="Preview" 
+                className="w-20 h-20 object-cover rounded border"
+              />
+            )}
+          </div>
         </div>
       </>
     );
@@ -261,6 +314,30 @@ const AdminPanel = () => {
               placeholder="Enter description"
             />
           </div>
+          <div>
+            <label className="text-sm font-medium">Image</label>
+            <div className="space-y-2">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="cursor-pointer"
+                disabled={uploading}
+              />
+              <Input
+                value={formData.image_url || ''}
+                onChange={(e) => setFormData({...formData, image_url: e.target.value})}
+                placeholder="Or enter image URL"
+              />
+              {formData.image_url && (
+                <img 
+                  src={formData.image_url} 
+                  alt="Preview" 
+                  className="w-20 h-20 object-cover rounded border"
+                />
+              )}
+            </div>
+          </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium">Phone</label>
@@ -286,6 +363,90 @@ const AdminPanel = () => {
                 placeholder="Enter location"
               />
             </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (activeTab === "rentals") {
+      return (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium">Title</label>
+              <Input
+                value={formData.title || ''}
+                onChange={(e) => setFormData({...formData, title: e.target.value})}
+                placeholder="Enter title"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Price per Day</label>
+              <Input
+                type="number"
+                value={formData.price_per_day || ''}
+                onChange={(e) => setFormData({...formData, price_per_day: parseInt(e.target.value)})}
+                placeholder="Enter price per day"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium">Description</label>
+            <Textarea
+              value={formData.description || ''}
+              onChange={(e) => setFormData({...formData, description: e.target.value})}
+              placeholder="Enter description"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium">Category</label>
+              <Select value={formData.category || ''} onValueChange={(value) => setFormData({...formData, category: value})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="room">Room</SelectItem>
+                  <SelectItem value="apartment">Apartment</SelectItem>
+                  <SelectItem value="house">House</SelectItem>
+                  <SelectItem value="hostel">Hostel</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Location</label>
+              <Input
+                value={formData.location || ''}
+                onChange={(e) => setFormData({...formData, location: e.target.value})}
+                placeholder="Enter location"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium">Contact Phone</label>
+              <Input
+                value={formData.contact_phone || ''}
+                onChange={(e) => setFormData({...formData, contact_phone: e.target.value})}
+                placeholder="Enter contact phone"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Contact WhatsApp</label>
+              <Input
+                value={formData.contact_whatsapp || ''}
+                onChange={(e) => setFormData({...formData, contact_whatsapp: e.target.value})}
+                placeholder="Enter WhatsApp number"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium">Amenities (comma separated)</label>
+            <Input
+              value={formData.amenities ? formData.amenities.join(', ') : ''}
+              onChange={(e) => setFormData({...formData, amenities: e.target.value.split(', ').filter(Boolean)})}
+              placeholder="e.g., WiFi, Parking, Security"
+            />
           </div>
         </div>
       );
@@ -425,9 +586,9 @@ const AdminPanel = () => {
             <CardContent>
               {renderForm()}
               <div className="flex gap-2 mt-6">
-                <Button onClick={handleSave} className="flex-1">
+                <Button onClick={handleSave} className="flex-1" disabled={uploading}>
                   <Save className="w-4 h-4 mr-2" />
-                  Save
+                  {uploading ? 'Uploading...' : 'Save'}
                 </Button>
                 {editingItem && (
                   <Button 

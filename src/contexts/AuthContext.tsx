@@ -63,6 +63,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
+    // Check if user already exists
+    const { data: existingUser } = await supabase.auth.signInWithPassword({
+      email,
+      password: 'dummy_password' // Just to check if user exists
+    });
+
+    // If we get back any user data, it means the account exists
+    if (existingUser?.user) {
+      return { error: { message: 'Account already exists. Please go to login page.' } };
+    }
+
+    // Check for existing user by email through profiles table
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', email);
+
+    if (profiles && profiles.length > 0) {
+      return { error: { message: 'Account already exists. Please go to login page.' } };
+    }
+
     const redirectUrl = `${window.location.origin}/login`;
     
     const { error } = await supabase.auth.signUp({

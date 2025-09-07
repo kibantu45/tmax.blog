@@ -26,11 +26,20 @@ const SignUp = () => {
     const { error } = await signUp(email, password, fullName);
     
     if (error) {
-      toast({
-        title: "Sign Up Failed",
-        description: error.message,
-        variant: "destructive",
-      });
+      if (error.message.includes('Account already exists')) {
+        toast({
+          title: "Account Already Exists",
+          description: "This account already exists. Redirecting to login page...",
+          variant: "destructive",
+        });
+        setTimeout(() => navigate("/login"), 2000);
+      } else {
+        toast({
+          title: "Sign Up Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     } else {
       toast({
         title: "Account Created!",
