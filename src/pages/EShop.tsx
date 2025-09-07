@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -184,59 +184,61 @@ const EShop = () => {
       </div>
 
       <div className="p-4">
-        <Tabs defaultValue="shops" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="shops">Shops</TabsTrigger>
-            <TabsTrigger value="products">All Products</TabsTrigger>
-          </TabsList>
-
-          {/* Shops Tab */}
-          <TabsContent value="shops" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {shops.map((shop) => (
-                <Card key={shop.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => {
-                  setSelectedShop(shop.id);
-                  setSelectedCategory('all');
-                }}>
-                  <CardContent className="p-4">
-                    {shop.image_url && (
-                      <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-muted">
-                        <img 
-                          src={shop.image_url} 
-                          alt={shop.shop_name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Store className="h-5 w-5 text-primary" />
-                        <h3 className="font-semibold text-lg">{shop.shop_name}</h3>
-                      </div>
-                      {shop.description && (
-                        <p className="text-muted-foreground text-sm">{shop.description}</p>
-                      )}
-                      <Badge variant="secondary">{shop.category}</Badge>
-                      {shop.contact_number && (
-                        <p className="text-sm text-muted-foreground">{shop.contact_number}</p>
-                      )}
+        {!selectedShop ? (
+          // Show Shops Grid
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {shops.map((shop) => (
+              <Card key={shop.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => {
+                setSelectedShop(shop.id);
+                setSelectedCategory('all');
+              }}>
+                <CardContent className="p-4">
+                  {shop.image_url && (
+                    <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-muted">
+                      <img 
+                        src={shop.image_url} 
+                        alt={shop.shop_name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          {/* Products Tab */}
-          <TabsContent value="products" className="space-y-4">
-            <div className="flex items-center gap-2 mb-4">
-              {selectedShop && (
-                <Button variant="outline" onClick={() => setSelectedShop(null)} size="sm">
-                  ← Back to All Shops
-                </Button>
-              )}
+                  )}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Store className="h-5 w-5 text-primary" />
+                      <h3 className="font-semibold text-lg">{shop.shop_name}</h3>
+                    </div>
+                    {shop.description && (
+                      <p className="text-muted-foreground text-sm">{shop.description}</p>
+                    )}
+                    <Badge variant="secondary">{shop.category}</Badge>
+                    {shop.contact_number && (
+                      <p className="text-sm text-muted-foreground">{shop.contact_number}</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          // Show Products from Selected Shop
+          <div className="space-y-4">
+            {/* Back Button and Shop Info */}
+            <div className="flex items-center gap-4 mb-6">
+              <Button variant="outline" onClick={() => setSelectedShop(null)} size="sm" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Shops
+              </Button>
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold">
+                  {shops.find(shop => shop.id === selectedShop)?.shop_name || 'Shop Products'}
+                </h2>
+                <p className="text-muted-foreground text-sm">
+                  Browse products from this shop
+                </p>
+              </div>
             </div>
             
+            {/* Category Filter */}
             <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
               <Badge
                 variant={selectedCategory === 'all' ? "default" : "outline"}
@@ -275,6 +277,7 @@ const EShop = () => {
               </Badge>
             </div>
 
+            {/* Products Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filterProducts().map((product) => (
                 <Card key={product.id} className="group hover:shadow-lg transition-shadow duration-200">
@@ -361,8 +364,8 @@ const EShop = () => {
                 <p className="text-muted-foreground">No products found matching your criteria.</p>
               </div>
             )}
-          </TabsContent>
-        </Tabs>
+          </div>
+        )}
       </div>
 
       <BottomNavigation />
