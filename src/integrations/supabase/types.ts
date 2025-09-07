@@ -360,6 +360,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          image_url: string | null
           location: string | null
           price_per_day: number
           title: string
@@ -373,6 +374,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          image_url?: string | null
           location?: string | null
           price_per_day: number
           title: string
@@ -386,6 +388,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          image_url?: string | null
           location?: string | null
           price_per_day?: number
           title?: string

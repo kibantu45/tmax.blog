@@ -1,130 +1,66 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MapPin, Bed, Bath, Wifi, Car, Home, Users, Phone, Eye, MessageCircle } from "lucide-react";
+import { MapPin, Bed, Bath, Wifi, Car, Home, Users, Phone, Eye, MessageCircle, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const RentalBooking = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [accommodations, setAccommodations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-  const accommodations = [
-    {
-      id: 1,
-      title: "Bedsitter Near Campus",
-      price: 10000,
-      location: "leisure",
-      type: "bedsitter",
-      bedrooms: false,
-      bathrooms: false,
-      amenities: ["elecricity", "water", "security"],
-      image: "/lovable-uploads/l1.jpeg",
-      available: true,
-      sellerPhone: "+254702752033",
-      photos: [
-        "/lovable-uploads/l1.jpeg",
-        "/lovable-uploads/l2.jpeg",
-        "/lovable-uploads/l3.jpeg",
-        "/lovable-uploads/l4.jpeg",
-        "/lovable-uploads/l5.jpeg"
-      ]
-    },
-    {
-      id: 2,
-      title: "Private Hostel Available",
-      price: 4000,
-      location: "Near Tum and Kenya Coast",
-      type: "hostel",
-      bedrooms: false,
-      bathrooms: false,
-      amenities: ["close to the road", "24/7 water supply", "Wifi available", "token electricity", "clean environment","tight security"],
-      image: "https://i.ibb.co/h1Z02v4L/h4.jpg",
-      available: true,
-      sellerPhone: "+254702752033",
-      photos: [
-        "https://i.ibb.co/8nKT19mS/h1.jpg",
-        "https://i.ibb.co/S412qSHw/h2.jpg",
-        "https://i.ibb.co/Q3VkgRPZ/h3.jpg",
-        "https://i.ibb.co/h1Z02v4L/h4.jpg"
-      ]
-    },
-    {
-      id: 3,
-      title: "Spacious 1-Bedroom Apartment",
-      price: 450,
-      location: "City Center",
-      type: "1bedroom",
-      bedrooms: 1,
-      bathrooms: 1,
-      amenities: ["WiFi", "Gym", "Security"],
-      image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
-      available: true,
-      sellerPhone: "+254701234569",
-      photos: [
-        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop"
-      ]
-    },
-    {
-      id: 4,
-      title: "2 Bedroom Makupa",
-      price: 25000,
-      location: "Makupa",
-      type: "2bedroom",
-      bedrooms: 2,
-      bathrooms: 1,
-      amenities: ["executive finish", "24/7 water supply", "token electricity", "tight security", "close to road"],
-      image: "https://i.ibb.co/SwLvCxmj/Whats-App-Image-2025-06-08-at-15-26-30-1.jpg",
-      available: true,
-      sellerPhone: "+254702752033",
-      photos: [
-        "https://i.ibb.co/qLQcxqHC/Whats-App-Image-2025-06-08-at-15-26-30-3.jpg",
-        "https://i.ibb.co/JWVGYF0k/Whats-App-Image-2025-06-08-at-15-26-30-2.jpg",
-        "https://i.ibb.co/SwLvCxmj/Whats-App-Image-2025-06-08-at-15-26-30-1.jpg",
-        "https://i.ibb.co/0jPmRJ8d/Whats-App-Image-2025-06-08-at-15-26-30.jpg"
-      ]
-    },
-    {
-      id: 5,
-      title: "Airbnb Studio 1bedroom",
-      price: 3500,
-      location: "makupa",
-      type: "airbnb",
-      bedrooms: 1,
-      bathrooms: 1,
-      amenities: ["cabro access", "tight security", "near the road", "fully furnished"],
-      image: "https://i.ibb.co/cKTGxwR7/Whats-App-Image-2025-06-08-at-14-28-24.jpg",
-      available: true,
-      sellerPhone: "+254701234571",
-      photos: [
-        "https://i.ibb.co/DDRxvsQ2/Whats-App-Image-2025-06-08-at-14-28-25-2.jpg",
-        "https://i.ibb.co/67kDT7wv/Whats-App-Image-2025-06-08-at-14-28-25-1.jpg",
-        "https://i.ibb.co/6736Qy5t/Whats-App-Image-2025-06-08-at-14-28-25.jpg",
-        "https://i.ibb.co/bj5WpxcH/Whats-App-Image-2025-06-08-at-14-28-24-2.jpg",
-        "https://i.ibb.co/WWJ9rHkj/Whats-App-Image-2025-06-08-at-14-28-24-1.jpg",
-        "https://i.ibb.co/cKTGxwR7/Whats-App-Image-2025-06-08-at-14-28-24.jpg"
-      ]
-    },
-    {
-      id: 6,
-      title: "Single Room",
-      price: 3000,
-      location: "lights(sokomjinga)",
-      type: "single",
-      bedrooms: false,
-      bathrooms: false,
-      amenities: ["near road", "token available", "nice finish"],
-      image: "https://i.ibb.co/RWfjv5Y/Whats-App-Image-2025-06-08-at-15-16-19-1.jpg",
-      available: true,
-      sellerPhone: "+254702752033",
-      photos: [
-        "https://i.ibb.co/W40LKcP5/Whats-App-Image-2025-06-08-at-15-16-20.jpg",
-        "https://i.ibb.co/S4RTg6ns/Whats-App-Image-2025-06-08-at-15-16-19-2.jpg",
-        "https://i.ibb.co/RWfjv5Y/Whats-App-Image-2025-06-08-at-15-16-19-1.jpg",
-        "https://i.ibb.co/20Ccq23F/Whats-App-Image-2025-06-08-at-15-16-19.jpg"
-      ]
+  useEffect(() => {
+    fetchRentals();
+  }, []);
+
+  const fetchRentals = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('rentals')
+        .select(`
+          *,
+          rental_photos (
+            image_url,
+            is_primary
+          )
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Transform data to match the expected format
+      const transformedData = data.map(rental => ({
+        id: rental.id,
+        title: rental.title,
+        price: rental.price_per_day,
+        location: rental.location,
+        type: rental.category,
+        bedrooms: rental.category?.includes('bedroom') ? parseInt(rental.category.charAt(0)) || 0 : false,
+        bathrooms: rental.category?.includes('bedroom') ? 1 : false,
+        amenities: rental.amenities || [],
+        image: rental.image_url || (rental.rental_photos?.find((p: any) => p.is_primary)?.image_url) || '/placeholder.svg',
+        available: true, // You can add an availability field to the database if needed
+        sellerPhone: rental.contact_phone || rental.contact_whatsapp || "+254702752033",
+        photos: rental.rental_photos?.map((p: any) => p.image_url) || []
+      }));
+
+      setAccommodations(transformedData);
+    } catch (error: any) {
+      console.error('Error fetching rentals:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load rentals",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const filteredAccommodations = selectedFilter === "all" 
     ? accommodations 
@@ -234,8 +170,18 @@ const RentalBooking = () => {
         </Tabs>
 
         {/* Listings */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAccommodations.map((accommodation) => (
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-tmaxGreen-500"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredAccommodations.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500 text-lg">No rentals available for the selected category.</p>
+              </div>
+            ) : (
+              filteredAccommodations.map((accommodation) => (
             <Card key={accommodation.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 border-tmaxGreen-200 group">
               <div className="relative">
                 <img 
@@ -308,25 +254,39 @@ const RentalBooking = () => {
                     Book Now
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {/* Photo Viewer Modal */}
       {showPhotos && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" onClick={() => setShowPhotos(false)}>
-          <div className="bg-white rounded-lg p-4 max-w-4xl max-h-[90vh] overflow-auto">
+          <div className="bg-white rounded-lg p-4 max-w-4xl max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Property Photos</h3>
-              <Button variant="ghost" onClick={() => setShowPhotos(false)}>×</Button>
+              <Button variant="ghost" onClick={() => setShowPhotos(false)}>
+                <X className="w-4 h-4" />
+              </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {selectedPhotos.map((photo, index) => (
-                <img key={index} src={photo} alt={`Property photo ${index + 1}`} className="w-full h-64 object-cover rounded" />
-              ))}
-            </div>
+            {selectedPhotos.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No additional photos available for this property.</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {selectedPhotos.map((photo, index) => (
+                  <img 
+                    key={index} 
+                    src={photo} 
+                    alt={`Property photo ${index + 1}`} 
+                    className="w-full h-64 object-cover rounded cursor-pointer hover:scale-105 transition-transform"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

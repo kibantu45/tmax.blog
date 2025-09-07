@@ -93,21 +93,71 @@ const AdminPanel = () => {
       else if (activeTab === "services") table = "service_providers";
       else table = activeTab;
       
-      if (editingItem) {
-        const { error } = await supabase
-          .from(table as any)
-          .update(formData)
-          .eq('id', editingItem.id);
+      // Handle rental photos separately
+      if (activeTab === "rentals") {
+        const { additional_photos, ...rentalData } = formData;
         
-        if (error) throw error;
-        toast({ title: "Success", description: "Item updated successfully" });
+        let savedRental;
+        
+        if (editingItem) {
+          const { data, error } = await supabase
+            .from('rentals')
+            .update(rentalData)
+            .eq('id', editingItem.id)
+            .select()
+            .single();
+          
+          if (error) throw error;
+          savedRental = data;
+          
+          // Delete existing rental photos
+          await supabase
+            .from('rental_photos')
+            .delete()
+            .eq('rental_id', editingItem.id);
+            
+        } else {
+          const { data, error } = await supabase
+            .from('rentals')
+            .insert(rentalData)
+            .select()
+            .single();
+          
+          if (error) throw error;
+          savedRental = data;
+        }
+        
+        // Insert new rental photos
+        if (additional_photos && additional_photos.length > 0) {
+          const rentalPhotos = additional_photos.map((photoUrl: string, index: number) => ({
+            rental_id: savedRental.id,
+            image_url: photoUrl,
+            is_primary: index === 0
+          }));
+          
+          await supabase
+            .from('rental_photos')
+            .insert(rentalPhotos);
+        }
+        
+        toast({ title: "Success", description: "Rental saved successfully" });
       } else {
-        const { error } = await supabase
-          .from(table as any)
-          .insert(formData);
-        
-        if (error) throw error;
-        toast({ title: "Success", description: "Item created successfully" });
+        if (editingItem) {
+          const { error } = await supabase
+            .from(table as any)
+            .update(formData)
+            .eq('id', editingItem.id);
+          
+          if (error) throw error;
+          toast({ title: "Success", description: "Item updated successfully" });
+        } else {
+          const { error } = await supabase
+            .from(table as any)
+            .insert(formData);
+          
+          if (error) throw error;
+          toast({ title: "Success", description: "Item created successfully" });
+        }
       }
       
       setEditingItem(null);
@@ -148,7 +198,7 @@ const AdminPanel = () => {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, isRentalPhoto = false) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -158,17 +208,29 @@ const AdminPanel = () => {
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
 
+      // Choose the appropriate bucket based on the current tab
+      let bucketName = 'product-images';
+      if (activeTab === 'rentals') {
+        bucketName = 'rental-images';
+      }
+
       const { data, error } = await supabase.storage
-        .from('product-images')
+        .from(bucketName)
         .upload(filePath, file);
 
       if (error) throw error;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('product-images')
+        .from(bucketName)
         .getPublicUrl(filePath);
 
-      setFormData({...formData, image_url: publicUrl});
+      if (isRentalPhoto) {
+        // Handle additional rental photos
+        const currentPhotos = formData.additional_photos || [];
+        setFormData({...formData, additional_photos: [...currentPhotos, publicUrl]});
+      } else {
+        setFormData({...formData, image_url: publicUrl});
+      }
       
       toast({
         title: "Success",
@@ -183,6 +245,55 @@ const AdminPanel = () => {
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleRentalPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { data, error } = await supabase.storage
+          .from('rental-images')
+          .upload(filePath, file);
+
+        if (error) throw error;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('rental-images')
+          .getPublicUrl(filePath);
+
+        return publicUrl;
+      });
+
+      const uploadedUrls = await Promise.all(uploadPromises);
+      const currentPhotos = formData.additional_photos || [];
+      setFormData({...formData, additional_photos: [...currentPhotos, ...uploadedUrls]});
+      
+      toast({
+        title: "Success",
+        description: `${uploadedUrls.length} photos uploaded successfully`
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeRentalPhoto = (photoUrl: string) => {
+    const currentPhotos = formData.additional_photos || [];
+    const updatedPhotos = currentPhotos.filter((url: string) => url !== photoUrl);
+    setFormData({...formData, additional_photos: updatedPhotos});
   };
 
   const renderForm = () => {
@@ -398,6 +509,69 @@ const AdminPanel = () => {
               placeholder="Enter description"
             />
           </div>
+          
+          {/* Main Property Image */}
+          <div>
+            <label className="text-sm font-medium">Main Property Image</label>
+            <div className="space-y-2">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e)}
+                className="cursor-pointer"
+              />
+              <Input
+                value={formData.image_url || ''}
+                onChange={(e) => setFormData({...formData, image_url: e.target.value})}
+                placeholder="Or enter image URL"
+              />
+              {formData.image_url && (
+                <img 
+                  src={formData.image_url} 
+                  alt="Preview" 
+                  className="w-20 h-20 object-cover rounded border"
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Additional Photos */}
+          <div>
+            <label className="text-sm font-medium">Additional Photos (for gallery)</label>
+            <div className="space-y-2">
+              <Input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleRentalPhotoUpload}
+                className="cursor-pointer"
+              />
+              <p className="text-xs text-gray-500">Select multiple images for the property gallery</p>
+              {formData.additional_photos && formData.additional_photos.length > 0 && (
+                <div className="grid grid-cols-4 gap-2">
+                  {formData.additional_photos.map((photoUrl: string, index: number) => (
+                    <div key={index} className="relative">
+                      <img 
+                        src={photoUrl} 
+                        alt={`Gallery ${index + 1}`} 
+                        className="w-16 h-16 object-cover rounded border"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute -top-1 -right-1 w-4 h-4 p-0 rounded-full"
+                        onClick={() => removeRentalPhoto(photoUrl)}
+                      >
+                        <X className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium">Category</label>
@@ -406,10 +580,12 @@ const AdminPanel = () => {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="room">Room</SelectItem>
-                  <SelectItem value="apartment">Apartment</SelectItem>
-                  <SelectItem value="house">House</SelectItem>
+                  <SelectItem value="bedsitter">Bedsitter</SelectItem>
                   <SelectItem value="hostel">Hostel</SelectItem>
+                  <SelectItem value="1bedroom">1 Bedroom</SelectItem>
+                  <SelectItem value="2bedroom">2 Bedroom</SelectItem>
+                  <SelectItem value="airbnb">Airbnb</SelectItem>
+                  <SelectItem value="single">Single Room</SelectItem>
                 </SelectContent>
               </Select>
             </div>
