@@ -68,7 +68,15 @@ const AdminPanel = () => {
         supabase.from('groceries').select('*').order('created_at', { ascending: false }),
         supabase.from('eshop_products').select('*').order('created_at', { ascending: false }),
         supabase.from('service_providers').select('*').order('created_at', { ascending: false }),
-        supabase.from('rentals').select('*, rental_photos(*)').order('created_at', { ascending: false })
+        supabase.from('rentals').select(`
+          *,
+          rental_photos:rental_photos (
+            id,
+            image_url,
+            is_primary,
+            rental_id
+          )
+        `).order('created_at', { ascending: false })
       ]);
 
       setMedicines(medicinesRes.data || []);
@@ -181,12 +189,30 @@ const AdminPanel = () => {
       else if (activeTab === "services") table = "service_providers";
       else table = activeTab;
       
-      const { error } = await supabase
-        .from(table as any)
-        .delete()
-        .eq('id', id);
+      // Handle rental deletion with associated photos
+      if (activeTab === "rentals") {
+        // First delete all associated rental photos
+        await supabase
+          .from('rental_photos')
+          .delete()
+          .eq('rental_id', id);
+        
+        // Then delete the rental itself
+        const { error } = await supabase
+          .from('rentals')
+          .delete()
+          .eq('id', id);
+        
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from(table as any)
+          .delete()
+          .eq('id', id);
+        
+        if (error) throw error;
+      }
       
-      if (error) throw error;
       toast({ title: "Success", description: "Item deleted successfully" });
       fetchAllData();
     } catch (error: any) {
