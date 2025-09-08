@@ -53,13 +53,6 @@ const Index = () => {
 
   const services = [
     { 
-      title: "Groceries", 
-      description: "Fresh produce and essentials", 
-      icon: ShoppingCart, 
-      color: "bg-green-500",
-      link: "/groceries" 
-    },
-    { 
       title: "Food Delivery", 
       description: "Delicious meals delivered", 
       icon: Utensils, 

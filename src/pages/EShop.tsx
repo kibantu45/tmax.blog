@@ -185,8 +185,31 @@ const EShop = () => {
 
       <div className="p-4">
         {!selectedShop ? (
-          // Show Shops Grid
+            // Show Shops Grid + Groceries Shop
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Groceries Shop Card */}
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => {
+              window.location.href = '/groceries';
+            }}>
+              <CardContent className="p-4">
+                <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-muted">
+                  <img 
+                    src="/lovable-uploads/vitamin-c.jpg" 
+                    alt="Groceries"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Store className="h-5 w-5 text-primary" />
+                    <h3 className="font-semibold text-lg">Groceries</h3>
+                  </div>
+                  <p className="text-muted-foreground text-sm">Fresh produce and daily essentials</p>
+                  <Badge variant="secondary">groceries</Badge>
+                </div>
+              </CardContent>
+            </Card>
+            
             {shops.map((shop) => (
               <Card key={shop.id} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => {
                 setSelectedShop(shop.id);
