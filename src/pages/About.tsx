@@ -95,7 +95,7 @@ const About = () => {
           <h3 className="text-2xl font-bold text-green-800 mb-6">Our Story</h3>
           <div className="prose prose-green max-w-none">
             <p className="text-green-700 mb-4">
-              Tmax was born from a simple observation: university life shouldn't be complicated by basic needs. 
+              Tmax is a private entity not affiliated with Technical University of Mombasa born from a simple observation: university life shouldn't be complicated by basic needs. 
               As students ourselves, we experienced firsthand the challenges of finding reliable services on campus - 
               from getting groceries delivered to finding trustworthy laundry services.
             </p>
