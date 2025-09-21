@@ -30,7 +30,7 @@ const LaundryServices = () => {
         { id: "laundry9", name: "Suit", price: 190, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry10", name: "Curtains", price: 190, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry11", name: "Jacket", price: 140, image: "⚡", description: "Professional dry cleaning" },
-        { id: "laundry12", name: "Fleeceblanket", price: 290, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry12", name: "Fleeceblanket", price: 280, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry13", name: "Graduation Gown", price: 590, image: "👕", description: "Per kg bulk washing" }
       ]
     },
