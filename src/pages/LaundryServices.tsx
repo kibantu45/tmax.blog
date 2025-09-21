@@ -20,7 +20,7 @@ const LaundryServices = () => {
       whatsapp: "+254702752033",
       services: [
         { id: "laundry1", name: "Washing drying & folding", price: 100 , image: "👔", description: "per kg" },
-        { id: "laundry2", name: "Shirt ", price; 40, image: "🧥", description: "Professional dry cleaning" },
+        { id: "laundry2", name: "Shirt ", price: 40, image: "🧥", description: "Professional dry cleaning" },
         { id: "laundry3", name: "T-shirt", price: 40, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry4", name: "Trouser", price: 40, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry5", name: "Dresses", price: 60, image: "⚡", description: "Professional dry cleaning" },
