@@ -26,7 +26,7 @@ const LaundryServices = () => {
         { id: "laundry5", name: "Dresses", price: 60, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry6", name: "Towels", price: 90, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry7", name: "Jeans", price: 90, image: "⚡", description: "Professional dry cleaning" },
-        { id: "laundry8", name: "Bedsheets and Cases", price: 140, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry8", name: "Bedsheets and pillow Cases", price: 140, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry9", name: "Suit", price: 190, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry10", name: "Curtains", price: 190, image: "⚡", description: "Professional dry cleaning" },
         { id: "laundry11", name: "Jacket", price: 140, image: "⚡", description: "Professional dry cleaning" },
