@@ -14,42 +14,49 @@ const LaundryServices = () => {
   const laundryProviders = [
     {
       id: 1,
-      name: "QuickWash Laundry",
+      name: "Dry Cleaning services",
       rating: 4.8,
-      location: "Campus Center",
+      location: "Sparky",
       whatsapp: "+254702752033",
       services: [
-        { id: "laundry1", name: "Washing & Ironing", price: 200, image: "👔", description: "Complete wash and iron service" },
-        { id: "laundry2", name: "Dry Cleaning", price: 300, image: "🧥", description: "Professional dry cleaning" },
-        { id: "laundry3", name: "Express Service", price: 350, image: "⚡", description: "Same day service" },
-        { id: "laundry4", name: "Bulk Washing", price: 150, image: "👕", description: "Per kg bulk washing" }
+        { id: "laundry1", name: "Washing drying & folding", price: 100 , image: "👔", description: "per kg" },
+        { id: "laundry2", name: "Shirt ", price; 40, image: "🧥", description: "Professional dry cleaning" },
+        { id: "laundry3", name: "T-shirt", price: 40, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry4", name: "Trouser", price: 40, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry5", name: "Dresses", price: 60, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry6", name: "Towels", price: 90, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry7", name: "Jeans", price: 90, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry8", name: "Bedsheets and Cases", price: 140, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry9", name: "Suit", price: 190, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry10", name: "Curtains", price: 190, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry11", name: "Jacket", price: 140, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry12", name: "Fleeceblanket", price: 290, image: "⚡", description: "Professional dry cleaning" },
+        { id: "laundry13", name: "Graduation Gown", price: 590, image: "👕", description: "Per kg bulk washing" }
       ]
     },
     {
       id: 2,
-      name: "Fresh Clean",
+      name: "Monthly Plan",
       rating: 4.6,
-      location: "Near Hostels",
+      location: "Free pick up and delivery",
       whatsapp: "+254702752034",
       services: [
-        { id: "laundry5", name: "Student Package", price: 400, image: "🎒", description: "Weekly laundry package" },
-        { id: "laundry6", name: "Bedding Service", price: 250, image: "🛏️", description: "Sheets and pillowcases" },
-        { id: "laundry7", name: "Shoe Cleaning", price: 100, image: "👟", description: "Shoe wash and polish" },
-        { id: "laundry8", name: "Curtain Cleaning", price: 200, image: "🪟", description: "Curtain wash service" }
-      ]
+        { id: "laundry14", name: "Student Package", price: 1500, image: "🎒", description: "weekly washes for all students" },
+        { id: "laundry15", name: "non student", price: 1700, image: "🛏️", description: "3 washes per month" },
+        { id: "laundry16", name: "Shoe Cleaning", price: 100, image: "👟", description: "Shoe wash and polish" }
+       ]
     },
     {
       id: 3,
-      name: "Campus Cleaners",
+      name: "Special Packages Weekly Plan",
       rating: 4.7,
-      location: "Main Gate",
+      location: "Free pick up and delivery",
       whatsapp: "+254702752035",
       services: [
-        { id: "laundry9", name: "Pickup & Delivery", price: 500, image: "🚚", description: "Door to door service" },
-        { id: "laundry10", name: "Delicate Items", price: 180, image: "🧺", description: "Special care for delicates" },
-        { id: "laundry11", name: "Stain Removal", price: 120, image: "🧽", description: "Tough stain treatment" },
-        { id: "laundry12", name: "Fabric Softening", price: 80, image: "🌸", description: "Fabric softener service" }
-      ]
+        { id: "laundry17", name: "Big basket", price: 800, image: "🚚", description: "free pickup and delivery" },
+        { id: "laundry18", name: "Small basket", price: 450, image: "🧺", description: "free pick up and dekivery" },
+        { id: "laundry19", name: "Ironing only", price: 70, image: "🧽", description: "per piece" },
+        ]
     }
   ];
 
