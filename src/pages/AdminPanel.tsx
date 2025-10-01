@@ -238,6 +238,8 @@ const AdminPanel = () => {
       let bucketName = 'product-images';
       if (activeTab === 'rentals') {
         bucketName = 'rental-images';
+      } else if (activeTab === 'services') {
+        bucketName = 'product-images'; // Service providers use product-images bucket
       }
 
       const { data, error } = await supabase.storage
@@ -263,6 +265,7 @@ const AdminPanel = () => {
         description: "Image uploaded successfully"
       });
     } catch (error: any) {
+      console.error("Upload error:", error);
       toast({
         title: "Error",
         description: error.message,

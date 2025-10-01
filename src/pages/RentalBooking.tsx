@@ -24,30 +24,39 @@ const RentalBooking = () => {
         .from('rentals')
         .select(`
           *,
-          rental_photos (
+          rental_photos:rental_photos (
             image_url,
             is_primary
           )
         `)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Fetch error:', error);
+        throw error;
+      }
 
       // Transform data to match the expected format
-      const transformedData = data.map(rental => ({
-        id: rental.id,
-        title: rental.title,
-        price: rental.price_per_day,
-        location: rental.location,
-        type: rental.category,
-        bedrooms: rental.category?.includes('bedroom') ? parseInt(rental.category.charAt(0)) || 0 : false,
-        bathrooms: rental.category?.includes('bedroom') ? 1 : false,
-        amenities: rental.amenities || [],
-        image: rental.image_url || (rental.rental_photos?.find((p: any) => p.is_primary)?.image_url) || '/placeholder.svg',
-        available: true, // You can add an availability field to the database if needed
-        sellerPhone: rental.contact_phone || rental.contact_whatsapp || "+254702752033",
-        photos: rental.rental_photos?.map((p: any) => p.image_url) || []
-      }));
+      const transformedData = data.map(rental => {
+        const rentalPhotos = rental.rental_photos || [];
+        const primaryPhoto = rentalPhotos.find((p: any) => p.is_primary);
+        const allPhotos = rentalPhotos.map((p: any) => p.image_url).filter(Boolean);
+        
+        return {
+          id: rental.id,
+          title: rental.title,
+          price: rental.price_per_day,
+          location: rental.location,
+          type: rental.category,
+          bedrooms: rental.category?.includes('bedroom') ? parseInt(rental.category.charAt(0)) || 0 : false,
+          bathrooms: rental.category?.includes('bedroom') ? 1 : false,
+          amenities: rental.amenities || [],
+          image: rental.image_url || primaryPhoto?.image_url || '/placeholder.svg',
+          available: true,
+          sellerPhone: rental.contact_phone || rental.contact_whatsapp || "+254702752033",
+          photos: allPhotos.length > 0 ? allPhotos : (rental.image_url ? [rental.image_url] : [])
+        };
+      });
 
       setAccommodations(transformedData);
     } catch (error: any) {
