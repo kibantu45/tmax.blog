@@ -20,17 +20,17 @@ const FoodDelivery = () => {
     { id: "food3", name: "viazi karai", price: 50, description: "you can get for 50 70 and 100", image: "/lovable-uploads/viazikarai.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food4", name: "Chapati", price: 15, description: "one chapati", image: "/lovable-uploads/chapati.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     
-    // Quick Bites - temporarily hidden
-    { id: "food5", name: "Chicken Burger", price: 250, description: "Crispy chicken burger", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
-    { id: "food6", name: "French Fries", price: 100, description: "Golden crispy fries", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
-    { id: "food7", name: "Pizza Slice", price: 180, description: "Margherita pizza slice", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
-    { id: "food8", name: "Sausage Roll", price: 80, description: "Hot sausage roll", image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
+    // Quick Bites - Temporarily hidden
+    //{ id: "food5", name: "Chicken Burger", price: 250, description: "Crispy chicken burger", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
+    //{ id: "food6", name: "French Fries", price: 100, description: "Golden crispy fries", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
+    //{ id: "food7", name: "Pizza Slice", price: 180, description: "Margherita pizza slice", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
+    //{ id: "food8", name: "Sausage Roll", price: 80, description: "Hot sausage roll", image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
     
-    // Healthy Corner - temporarily hidden
-    { id: "food9", name: "Caesar Salad", price: 220, description: "Fresh romaine lettuce salad", image: "https://images.unsplash.com/photo-1512621776951-a500c9a57435?auto=format&fit=crop&w=400&q=80", category: "healthy", restaurant: "Healthy Corner", whatsapp: "+254702752033" },
-    { id: "food10", name: "Grilled Chicken", price: 280, description: "Lean grilled chicken breast", image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=400&q=80", category: "healthy", restaurant: "Healthy Corner", whatsapp: "+254702752033" },
-    { id: "food11", name: "Fruit Bowl", price: 150, description: "Mixed seasonal fruits", image: "https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=400&q=80", category: "healthy", restaurant: "Healthy Corner", whatsapp: "+254702752033" },
-    { id: "food12", name: "Smoothie", price: 120, description: "Fresh fruit smoothie", image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=400&q=80", category: "healthy", restaurant: "Healthy Corner", whatsapp: "+254702752033" }
+    // Healthy Corner - Temporarily hidden
+    //{ id: "food9", name: "Caesar Salad", price: 220, description: "Fresh romaine lettuce salad", image: "https://images.unsplash.com/photo-1512621776951-a500c9a57435?auto=format&fit=crop&w=400&q=80", category: "healthy", restaurant: "Healthy Corner", whatsapp: "+254702752033" },
+    //{ id: "food10", name: "Grilled Chicken", price: 280, description: "Lean grilled chicken breast", image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=400&q=80", category: "healthy", restaurant: "Healthy Corner", whatsapp: "+254702752033" },
+    //{ id: "food11", name: "Fruit Bowl", price: 150, description: "Mixed seasonal fruits", image: "https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=400&q=80", category: "healthy", restaurant: "Healthy Corner", whatsapp: "+254702752033" },
+    //{ id: "food12", name: "Smoothie", price: 120, description: "Fresh fruit smoothie", image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=400&q=80", category: "healthy", restaurant: "Healthy Corner", whatsapp: "+254702752033" }
   ];
 
   const categories = ["all", "local", "fastfood", "healthy"];
