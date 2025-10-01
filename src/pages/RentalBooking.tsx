@@ -24,7 +24,7 @@ const RentalBooking = () => {
         .from('rentals')
         .select(`
           *,
-          rental_photos:rental_photos (
+          rental_photos (
             image_url,
             is_primary
           )
