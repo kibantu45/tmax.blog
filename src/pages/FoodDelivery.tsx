@@ -18,7 +18,7 @@ const FoodDelivery = () => {
     { id: "food1", name: "Ugali fish & Sukuma Wiki", price: 150, description: "Traditional Kenyan meal", image: "https://i.ibb.co/Ng9txnbf/ugali.jpg", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food2", name: "Nyama Choma", price: 300, description: "Grilled meat with sides", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food3", name: "Pilau Rice", price: 200, description: "Spiced rice with meat", image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=400&q=80", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
-    { id: "food4", name: "Chapati & Beans", price: 120, description: "Flatbread with beans", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?auto=format&fit=crop&w=400&q=80", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
+    { id: "food4", name: "Chapati", price: 15, description: "one chapati", image: "/lovable-uploads/chapati.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     
     // Quick Bites
     { id: "food5", name: "Chicken Burger", price: 250, description: "Crispy chicken burger", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80", category: "fastfood", restaurant: "Quick Bites", whatsapp: "+254702752033" },
