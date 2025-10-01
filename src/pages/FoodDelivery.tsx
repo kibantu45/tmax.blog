@@ -15,8 +15,8 @@ const FoodDelivery = () => {
 
   const allMenuItems = [
     // Campus Eats
-    { id: "food1", name: "Smocha", price: 55/65, description: "55 for 1 chapati 65 for 2 chapatis", image: "/lovable-uploads/smocha.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
-    { id: "food2", name: "Fries", price: 100/140, description: "hot plain fries", image: "/lovable-uploads/chipo.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
+    { id: "food1", name: "Smocha", price: 55, description: "55 for 1 chapati 65 for 2 chapatis", image: "/lovable-uploads/smocha.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
+    { id: "food2", name: "Fries", price: 80, description: "hot plain fries", image: "/lovable-uploads/chipo.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food3", name: "viazi karai", price: 50, description: "you can get for 50 70 and 100", image: "/lovable-uploads/viazikarai.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food4", name: "Chapati", price: 15, description: "one chapati", image: "/lovable-uploads/chapati.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     
