@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,22 @@ const Login = () => {
   const { signIn } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Listen for email verification success
+    const handleVerificationSuccess = () => {
+      toast({
+        title: "Account Verified!",
+        description: "Your email has been verified successfully. You can now log in.",
+      });
+    };
+
+    window.addEventListener('auth-verification-success', handleVerificationSuccess);
+    
+    return () => {
+      window.removeEventListener('auth-verification-success', handleVerificationSuccess);
+    };
+  }, [toast]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

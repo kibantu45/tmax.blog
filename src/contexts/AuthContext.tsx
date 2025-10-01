@@ -40,13 +40,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (event === 'SIGNED_IN' && session?.user?.email_confirmed_at) {
           // Only redirect if this is specifically from email verification
           const urlParams = new URLSearchParams(window.location.search);
-          if (urlParams.get('type') === 'confirmation') {
-            // Clear any URL parameters and redirect to login
+          if (urlParams.get('type') === 'signup') {
+            // Show success message
+            const successEvent = new CustomEvent('auth-verification-success');
+            window.dispatchEvent(successEvent);
+            
+            // Clear any URL parameters and redirect to login after a short delay
             window.history.replaceState({}, document.title, window.location.pathname);
-            // Small delay to ensure state is updated
             setTimeout(() => {
               window.location.href = '/login';
-            }, 100);
+            }, 1500);
           }
         }
       }
@@ -63,30 +66,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    // Check for existing user by email through profiles table first
-    const { data: profiles } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('email', email);
-
-    if (profiles && profiles.length > 0) {
-      return { error: { message: 'Account already exists. Please go to login page.' } };
-    }
-
-    // Try to sign in to check if user exists in auth system
-    const { data: existingAuthUser, error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password: 'test_dummy_password_123_nonexistent'
-    });
-
-    // If there's no error on the signin attempt, it means the user exists
-    if (!signInError || (signInError && !signInError.message.includes('Invalid login credentials'))) {
-      return { error: { message: 'Account already exists. Please go to login page.' } };
-    }
-
     const redirectUrl = `${window.location.origin}/login`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -96,6 +78,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         },
       },
     });
+
+    // Check if user already exists and is confirmed
+    if (data?.user && data.user.identities && data.user.identities.length === 0) {
+      return { error: { message: 'Account already exists. Please go to login page.' } };
+    }
+
     return { error };
   };
 
