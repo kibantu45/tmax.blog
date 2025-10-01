@@ -15,9 +15,9 @@ const FoodDelivery = () => {
 
   const allMenuItems = [
     // Campus Eats
-    { id: "food1", name: "Ugali fish & Sukuma Wiki", price: 150, description: "Traditional Kenyan meal", image: "https://i.ibb.co/Ng9txnbf/ugali.jpg", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
-    { id: "food2", name: "Nyama Choma", price: 300, description: "Grilled meat with sides", image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
-    { id: "food3", name: "Pilau Rice", price: 200, description: "Spiced rice with meat", image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=400&q=80", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
+    { id: "food1", name: "Smocha", price: 55/65, description: "55 for 1 chapati 65 for 2 chapatis", image: "/lovable-uploads/smocha.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
+    { id: "food2", name: "Fries", price: 100/140, description: "hot plain fries", image: "/lovable-uploads/chipo.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
+    { id: "food3", name: "viazi karai", price: 50, description: "you can get for 50 70 and 100", image: "/lovable-uploads/viazikarai.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     { id: "food4", name: "Chapati", price: 15, description: "one chapati", image: "/lovable-uploads/chapati.jfif", category: "local", restaurant: "Campus Eats", whatsapp: "+254702752033" },
     
     // Quick Bites
